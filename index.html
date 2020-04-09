@@ -4,20 +4,63 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<script type="module" src="index.js"></script>
-	<title>Document</title>
+	<title>DFTW Chat Client</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="index.js" type="module"></script>
 </head>
 
 <body>
-	<section>
-		<p>lorem ipsum</p>
-	</section>
-	<section>
-		<p>lorem ipsum</p>
-	</section>
-	<section>
-		<p>lorem ipsum</p>
-	</section>
+	<div>
+		<h3>signup form</h3>
+		<form id="signupForm">
+			<div>
+				<label>Alias:</label>
+				<input type="text" name="alias" required />
+			</div>
+			<div>
+				<label>Email:</label>
+				<input type="email" name="email" required />
+			</div>
+			<div>
+				<label>Password:</label>
+				<input type="password" name="password" required />
+			</div>
+			<div>
+				<input type="submit" value="Sign Up">
+			</div>
+			<div>
+				<span class="error" aria-live="polite"></span>
+			</div>
+		</form>
+	</div>
+	<div>
+		<h3>login form</h3>
+		<form id="loginForm">
+			<div>
+				<label>Alias:</label>
+				<input type="text" name="alias" required />
+			</div>
+			<div>
+				<label>Password:</label>
+				<input type="password" name="password" required />
+			</div>
+			<div>
+				<input type="submit" value="Login">
+			</div>
+			<div>
+				<span class="error" aria-live="polite"></span>
+			</div>
+		</form>
+	</div>
+	<div>
+		<h3>logout</h3>
+		<Button id="logoutButton">Logout</Button>
+	</div>
+	<!-- TODO(lukemurray): remove this -->
+	<div>
+		<h3>test</h3>
+		<Button id="testButton">Test</Button>
+	</div>
 </body>
 
 </html>
