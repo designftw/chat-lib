@@ -3,7 +3,7 @@ import ChatClient from "./js/chatClient.js";
 
 
 function initialize() {
-	let client = new ChatClient('http://localhost:3000');
+	let client = new ChatClient('https://localhost:3000');
 
 	// handle signup form
 	const signupForm = document.getElementById('signupForm');
