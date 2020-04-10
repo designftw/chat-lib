@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>DFTW Chat Client</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="index.js" type="module"></script>
+</head>
+
+<body>
+	<nav>
+		<a href="signup.html">Sign Up</a>
+		<a href="login.html">Login</a>
+	</nav>
+	<h1>Signup</h1>
+	<form id="signupForm">
+		<div>
+			<label>Alias:
+				<input type="text" name="alias" required />
+			</label>
+		</div>
+		<div>
+			<label>Email:
+				<input type="email" name="email" required />
+			</label>
+		</div>
+		<div>
+			<label>Password:
+				<input type="password" name="password" required />
+			</label>
+		</div>
+		<div>
+			<input type="submit" value="Sign Up">
+		</div>
+		<div>
+			<span class="error" aria-live="polite"></span>
+		</div>
+	</form>
+</body>
+
+</html>
