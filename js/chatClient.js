@@ -66,10 +66,11 @@ class ChatClient extends EventTarget {
 
   /**
    *
-   * @param {Alias} alias
+   * @param {string} aliasName
+   * @returns {Promise<any>} a validation message
    */
-  openWebSocketFor(alias) {
-    return this.api.webSocket.openWebSocketFor(alias);
+  openWebSocketFor(aliasName) {
+    return this.api.webSocket.openWebSocketFor(aliasName);
   }
 
   /**

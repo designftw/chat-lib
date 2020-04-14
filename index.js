@@ -13,6 +13,7 @@ let client = undefined;
 
 const store = {};
 window.ChatStore = store;
+window.Client = client;
 
 // update the alias list to the alises in the store
 function setAliasList() {

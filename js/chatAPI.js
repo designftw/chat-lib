@@ -79,31 +79,32 @@ class WebSocketEndpoint {
      * Private object mapping alias ids to open web sockets.
      * @type {Object.<number, WebSocket>}
      */
-    this._aliasIdToWebSocket = {};
+    this._aliasNameToWebSocket = {};
   }
 
   /**
    * Returns an open web socket which can be used to send and receive messages.
-   * @param {Alias} alias the alias to get the web socket for.
+   * @param {string} aliasName the alias to get the web socket for.
    * @returns {Promise<WebSocket>}
    */
-  _getWebSocketForAlias(alias) {
+  _getWebSocketForAlias(aliasName) {
     // if the socket exists return it
-    if (this._aliasIdToWebSocket.hasOwnProperty(alias.id)) {
-      return Promise.resolve(this._aliasIdToWebSocket[alias.id]);
+    if (this._aliasNameToWebSocket.hasOwnProperty(aliasName)) {
+      return Promise.resolve(this._aliasNameToWebSocket[aliasName]);
     }
     return new Promise((resolve, reject) => {
       let socket = new WebSocket(
-        `${this.store.host.replace("https://", "wss://")}/realtime?alias=${
-          alias.name
-        }`
+        `${this.store.host.replace(
+          "https://",
+          "wss://"
+        )}/realtime?alias=${aliasName}`
       );
       // handle the open event
       socket.addEventListener(
         "open",
         () => {
-          this._aliasIdToWebSocket[alias.id] = socket;
-          console.log("opened socket for", alias.name);
+          this._aliasNameToWebSocket[aliasName] = socket;
+          console.log("opened socket for", aliasName);
           resolve(socket);
         },
         { once: true }
@@ -113,7 +114,7 @@ class WebSocketEndpoint {
         "error",
         (err) => {
           // TODO(lukemurray): handle reject vs error after open.
-          console.log("socket error for", alias.name, err);
+          console.log("socket error for", aliasName, err);
           reject(err);
         },
         { once: true }
@@ -122,13 +123,13 @@ class WebSocketEndpoint {
         "close",
         () => {
           // TODO(lukemurray): handle close
-          console.log("closed socket for", alias.name);
+          console.log("closed socket for", aliasName);
         },
         { once: true }
       );
       socket.addEventListener("message", (e) => {
         // TODO(lukemurray): handle message
-        console.log("received message for socket", alias.name, e.data);
+        console.log("received message for socket", aliasName, e.data);
         const data = JSON.parse(e.data);
         console.log("got message", e.data);
         if (data.type === "new_message") {
@@ -145,10 +146,10 @@ class WebSocketEndpoint {
 
   /**
    *
-   * @param {Alias} alias an alias to open a web socket for
+   * @param {string} aliasName an alias to open a web socket for
    */
-  openWebSocketFor(alias) {
-    return this._getWebSocketForAlias(alias).then((res) => ({
+  openWebSocketFor(aliasName) {
+    return this._getWebSocketForAlias(aliasName).then((res) => ({
       message: "successfully opened web socket",
     }));
   }
