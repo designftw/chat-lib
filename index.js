@@ -1,22 +1,23 @@
 // @ts-nocheck
 import ChatClient from "./js/chatClient.js";
 
-// TODO(lukemurray): change to chat server url
-// const SERVER_HOST = "https://messaging-server.csail.mit.edu";
 const SERVER_HOST = "https://128.52.128.220";
-// const SERVER_HOST = "https://localhost:3000";
 
 /**
  * Called when the document is loaded. Initializes functionality
  */
-function initialize() {
+async function initialize() {
   let client = new ChatClient(SERVER_HOST);
-
   createSignupHandler(client);
   createLoginHandler(client);
   createLogoutHandler(client);
-  // TODO(lukemurray): remove this
-  createTestHandler(client);
+  const isLoggedIn = await client.isLoggedIn();
+  toggleLoginUI(isLoggedIn);
+
+  const aliases = await client.getAliasesForAccount();
+  /**
+   * ADD CLIENT CODE HERE
+   */
 }
 
 // initialize when the dom is loaded
@@ -29,16 +30,26 @@ document.addEventListener(
 );
 
 /**
- * Create a handler for the test button
- * @param {ChatClient} client the chat client for the application
+ * Show and hide the log in ui.
+ * @param {boolean} isLoggedIn true if the user is currently logged in
  */
-function createTestHandler(client) {
-  const testButton = document.querySelector("#testButton");
-  if (testButton !== null) {
-    testButton.addEventListener("click", function (event) {
-      event.preventDefault();
-      client.api.aliases.getAliasesForAccount();
-    });
+function toggleLoginUI(isLoggedIn) {
+  const logoutButton = document.querySelector("#logoutButton");
+  const loginButton = document.querySelector("#loginButton");
+  const signupButton = document.querySelector("#signUpButton");
+
+  if (isLoggedIn) {
+    // hide login ui
+    loginButton.classList.add("isHidden");
+    signupButton.classList.add("isHidden");
+    // show logout ui
+    logoutButton.classList.remove("isHidden");
+  } else {
+    // show login ui
+    loginButton.classList.remove("isHidden");
+    signupButton.classList.remove("isHidden");
+    // hide logout ui
+    logoutButton.classList.add("isHidden");
   }
 }
 
@@ -82,7 +93,6 @@ function createLoginHandler(client) {
       .login(email, password)
       .then(() => {
         loginForm.querySelector(".error").innerHTML = "";
-        console.log("logged in");
         loginDialog.close();
       })
       .catch((err) => {

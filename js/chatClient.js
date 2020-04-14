@@ -1,6 +1,6 @@
 import ChatClientStore from "./chatClientStore.js";
 import ChatAPI from "./chatAPI.js";
-import { Account } from "./models.js";
+import { Account, Alias, Message } from "./models.js";
 
 /**
  * The ChatClient is the interface for interacting with the ChatServer.
@@ -46,7 +46,8 @@ class ChatClient {
    */
   login(email, password) {
     return this.api.auth.login(email, password).then((account) => {
-      this.store.setAccount(account);
+      this.store.loggedIn = true;
+      this.store.account = account;
       return account;
     });
   }
@@ -55,7 +56,11 @@ class ChatClient {
    * Logout of an existing account
    */
   logout() {
-    return this.api.auth.logout();
+    return this.api.auth.logout().then((res) => {
+      this.store.loggedIn = false;
+      this.store.account = undefined;
+      return res;
+    });
   }
 
   /**
@@ -64,10 +69,97 @@ class ChatClient {
   isLoggedIn() {
     return this.api.auth.isLoggedIn().then((result) => {
       if (result.isLoggedIn) {
-        this.store.setAccount(result.account);
+        this.store.account = result.account;
+      } else {
+        this.store.account = undefined;
       }
+      this.store.loggedIn = result.isLoggedIn;
       return result.isLoggedIn;
     });
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @param {Alias[]} [interlocutors]
+   * @param {Date} [sinceTime]
+   * @returns {Promise<Message[]>}
+   */
+  getMessagesForAlias(alias, interlocutors, sinceTime) {
+    return this.api.messages.getMessagesForAlias(
+      alias,
+      interlocutors,
+      sinceTime
+    );
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @param {Alias[]} recipients
+   * @param {string} payload
+   * @returns {Promise<Message>}
+   */
+  sendMessage(alias, recipients, payload) {
+    return this.api.messages.sendMessage(alias, recipients, payload);
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @param {Message} message
+   * @param {string} payload
+   * @returns {Promise<Message>}
+   */
+  editMessage(alias, message, payload) {
+    return this.api.messages.updateMessage(alias, message.id, payload);
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @param {Message} message
+   * @returns {Promise<any>}
+   */
+  deleteMessage(alias, message) {
+    return this.api.messages.deleteMessage(alias, message.id);
+  }
+
+  /**
+   * @returns {Promise<Alias[]>}
+   */
+  getAliasesForAccount() {
+    return this.api.aliases.getAliasesForAccount();
+  }
+
+  /**
+   *
+   * @param {string} name
+   * @param {string} payload
+   * @returns {Promise<Alias>}
+   */
+  createAlias(name, payload) {
+    return this.api.aliases.createAlias(name, payload);
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @param {string} [name]
+   * @param {string} [payload]
+   * @returns {Promise<Alias>}
+   */
+  updateAlias(alias, name, payload) {
+    return this.api.aliases.updateAlias(alias, name, payload);
+  }
+
+  /**
+   *
+   * @param {Alias} alias
+   * @returns {Promise<any>}
+   */
+  deleteAlias(alias) {
+    return this.api.aliases.deleteAlias(alias);
   }
 }
 

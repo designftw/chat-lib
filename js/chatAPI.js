@@ -275,7 +275,7 @@ class AliasesEndpoint {
       .then((response) => response.json())
       .then((aliasesArray) => {
         return aliasesArray.map((aliasDTO) => {
-          createAliasFromAliasDTO(aliasDTO);
+          return createAliasFromAliasDTO(aliasDTO);
         });
       });
   }
@@ -333,13 +333,19 @@ class AliasesEndpoint {
    * Update an existing alias by its name.
    *
    * Raises an error if the alias does not exist or belong to the currently logged in account.
-   * @param {string} prevName the name of the alias to update.
-   * @param {string} newName the updated name of the alias. can be the old name.
-   * @param {string} newPayload the updated payload of the alias. can be the old payload.
+   * @param {Alias} alias the alias to update.
+   * @param {string} [newName] optional updated name of the alias. if not included alias retains the same name.
+   * @param {string} [newPayload] optional updated payload of the alias. if not included alias retains the same payload.
    * @returns {Promise<Alias>}
    */
-  updateAlias(prevName, newName, newPayload) {
-    let route = `aliases/${prevName}`;
+  updateAlias(alias, newName, newPayload) {
+    let route = `aliases/${alias.name}`;
+    if (newName === undefined) {
+      newName = alias.name;
+    }
+    if (newPayload === undefined) {
+      newPayload = alias.payload;
+    }
     return fetch(
       `${this.store.host}/${route}`,
 
@@ -360,11 +366,11 @@ class AliasesEndpoint {
    * Delete an existing alias by its name
    *
    * Raises an error if the alias does not exist or belong to the currently logged in account.
-   * @param {string} aliasName the name of the alias to delete.
+   * @param {Alias} alias the alias to delete.
    * @returns {Promise<any>} a validation message.
    */
-  deleteAlias(aliasName) {
-    let route = `aliases/${aliasName}`;
+  deleteAlias(alias) {
+    let route = `aliases/${alias.name}`;
     return fetch(
       `${this.store.host}/${route}`,
       createDefaultRequestInit({ method: "DELETE" })

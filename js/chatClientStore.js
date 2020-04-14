@@ -4,12 +4,13 @@ import { Account } from "./models.js";
  * The store is an object passed by reference which is used to access global state
  * of the chat application.
  */
-class ChatClientStore {
+class ChatClientStore extends EventTarget {
   /**
    * ChatClientStore constructor.
    * @param {string} host see [ChatClientStore's host property]{@link ChatClientStore#host}
    */
   constructor(host) {
+    super();
     /**
      * The host of the chat server. Includes the hostname and port.
      * For example https://mozilla.org:4000.
@@ -30,26 +31,13 @@ class ChatClientStore {
      * Whether or not the client is currently logged in
      */
     this.loggedIn = false;
-  }
 
-  /**
-   * Set the account on the ChatClientStore.
-   * See [ChatClientStore's account property]{@link ChatClientStore#account}
-   *
-   * @param {Account | undefined} account
-   */
-  setAccount(account) {
-    this.account = account;
-  }
-
-  /**
-   * Set the account on the ChatClientStore.
-   * See [ChatClientStore's account property]{@link ChatClientStore#account}
-   *
-   * @param {boolean} loggedIn
-   */
-  setLoggedIn(loggedIn) {
-    this.loggedIn = loggedIn;
+    return new Proxy(this, {
+      set(target, property, value) {
+        console.log("setting", property, "to", value, "on store");
+        return true;
+      },
+    });
   }
 }
 

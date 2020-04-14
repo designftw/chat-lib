@@ -28,7 +28,6 @@ export function createDefaultRequestInit(options) {
       : null,
     redirect: "follow",
     credentials: "include",
-    mode: "no-cors",
   };
 }
 
