@@ -73,7 +73,10 @@ function createJSONEncodedBody(body) {
  */
 function createFormEncodedHeaders(headers = undefined) {
   let defaultPostHeaders = createHeadersFromObject(headers);
-  defaultPostHeaders.append("Content-Type", "application/json");
+  defaultPostHeaders.append(
+    "Content-Type",
+    "application/x-www-form-urlencoded"
+  );
   return defaultPostHeaders;
 }
 
