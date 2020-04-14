@@ -126,7 +126,7 @@ class ChatClient extends EventTarget {
   getAliasesForAccount() {
     return this.api.aliases.getAliasesForAccount().then(async (aliases) => {
       for (let alias of aliases) {
-        await this.api.webSocket.openWebSocketFor(alias);
+        await this.api.webSocket.openWebSocketFor(alias.name);
       }
 
       return aliases;
