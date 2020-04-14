@@ -431,7 +431,7 @@ class MessagesEndpoint {
     let route = `messages`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     if (interlocutors !== undefined) {
       headers = { ...headers, interlocutors: JSON.stringify(interlocutors) };
@@ -462,7 +462,7 @@ class MessagesEndpoint {
   sendMessage(ownAlias, recipientNames, messagePayload) {
     let route = `messages`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = {
       payload: messagePayload,
@@ -494,7 +494,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -516,7 +516,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = { payload };
     return fetch(
@@ -545,7 +545,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -586,7 +586,7 @@ class PrivatePayloadsEndpoint {
   createPayload(ownAlias, model, payload) {
     let route = `payloads`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = { payload, entity_id: model.id + "" };
     return fetch(
@@ -614,7 +614,7 @@ class PrivatePayloadsEndpoint {
   getPayload(ownAlias, model) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -637,7 +637,7 @@ class PrivatePayloadsEndpoint {
   updatePayload(ownAlias, model, newPayload) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = { payload: newPayload };
     return fetch(
@@ -665,7 +665,7 @@ class PrivatePayloadsEndpoint {
   deletePayload(ownAlias, model) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -700,7 +700,7 @@ class FriendsEndpoint {
   getFriendsForAlias(ownAlias) {
     let route = `friends`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -722,7 +722,7 @@ class FriendsEndpoint {
   addFriend(ownAlias, newFriend) {
     let route = `friends`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = {
       alias_name: newFriend.name,
@@ -748,7 +748,7 @@ class FriendsEndpoint {
   removeFriend(ownAlias, friendToRemove) {
     let route = `friends`;
     let headers = {
-      "user-alias-id": ownAlias.id + "",
+      "user-alias-name": ownAlias.name,
     };
     const body = {
       alias_name: friendToRemove.name,
