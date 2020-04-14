@@ -1,29 +1,21 @@
 // @ts-nocheck
 import ChatClient from "./js/chatClient.js";
 
+// TODO(lukemurray): change to chat server url
+const SERVER_HOST = "https://messaging-server.csail.mit";
+// const SERVER_HOST = "https://localhost:3000";
+
 /**
  * Called when the document is loaded. Initializes functionality
  */
 function initialize() {
-  let client = new ChatClient("https://localhost:3000");
+  let client = new ChatClient(SERVER_HOST);
 
   createSignupHandler(client);
   createLoginHandler(client);
   createLogoutHandler(client);
   // TODO(lukemurray): remove this
   createTestHandler(client);
-
-  // if the client is logged in and not on main app page redirect to app page
-  client.isLoggedIn().then((isLoggedIn) => {
-    if (isLoggedIn) {
-      if (
-        window.location.pathname === "/login.html" ||
-        window.location.pathname === "signup.html"
-      ) {
-        navigateToHome();
-      }
-    }
-  });
 }
 
 // initialize when the dom is loaded
@@ -44,7 +36,7 @@ function createTestHandler(client) {
   if (testButton !== null) {
     testButton.addEventListener("click", function (event) {
       event.preventDefault();
-      client.api.aliases.getAccountAliases();
+      client.api.aliases.getAliasesForAccount();
     });
   }
 }
@@ -58,14 +50,9 @@ function createLogoutHandler(client) {
   if (logoutButton !== null) {
     logoutButton.addEventListener("click", function (event) {
       event.preventDefault();
-      client
-        .logout()
-        .then(() => {
-          navigateToLogin();
-        })
-        .catch(() => {
-          // TODO(lukemurray): handle failure
-        });
+      client.logout().catch(() => {
+        // TODO(lukemurray): handle failure
+      });
     });
   }
 }
@@ -75,25 +62,31 @@ function createLogoutHandler(client) {
  * @param {ChatClient} client the chat client for the application
  */
 function createLoginHandler(client) {
+  const loginButton = document.querySelector("#loginButton");
+  const loginDialog = document.querySelector("#loginDialog");
   const loginForm = document.querySelector("#loginForm");
-  if (loginForm !== null) {
-    loginForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      const email = loginForm.elements["email"].value;
-      const password = loginForm.elements["password"].value;
-      // login
-      client
-        .login(email, password)
-        .then(() => {
-          loginForm.querySelector(".error").innerHTML = "";
-          navigateToHome();
-        })
-        .catch((err) => {
-          // if there is an error display the error
-          loginForm.querySelector(".error").innerHTML = err.message;
-        });
-    });
-  }
+  const cancelLoginButton = loginForm.querySelector('[type="reset"]');
+  loginButton.addEventListener("click", () => {
+    loginDialog.showModal();
+  });
+  cancelLoginButton.addEventListener("click", () => {
+    loginDialog.close();
+  });
+  loginForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const email = loginForm.elements["email"].value;
+    const password = loginForm.elements["password"].value;
+    // login
+    client
+      .login(email, password)
+      .then(() => {
+        loginForm.querySelector(".error").innerHTML = "";
+      })
+      .catch((err) => {
+        // if there is an error display the error
+        loginForm.querySelector(".error").innerHTML = err.message;
+      });
+  });
 }
 
 /**
@@ -101,39 +94,30 @@ function createLoginHandler(client) {
  * @param {ChatClient} client the chat client for the application
  */
 function createSignupHandler(client) {
-  const signupForm = document.querySelector("#signupForm");
-  if (signupForm !== null) {
-    signupForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      // get the form values from the form
-      const alias = signupForm.elements["alias"].value;
-      const email = signupForm.elements["email"].value;
-      const password = signupForm.elements["password"].value;
-      // signup
-      client
-        .signup(alias, email, password)
-        .then(() => {
-          signupForm.querySelector(".error").innerHTML = "";
-          navigateToHome();
-        })
-        .catch((err) => {
-          // if there is an error display the error
-          signupForm.getElementsByClassName("error").innerHTML = err.message;
-        });
-    });
-  }
-}
-
-/**
- * Navigate to the login page programmatically
- */
-function navigateToLogin() {
-  window.location.replace("./login.html");
-}
-
-/**
- * Navigate to the home page programmatically
- */
-function navigateToHome() {
-  window.location.replace("./index.html");
+  const signupButton = document.querySelector("#signUpButton");
+  const signupDialog = document.querySelector("#signUpDialog");
+  const signupForm = document.querySelector("#signUpForm");
+  const cancelSignupButton = signupForm.querySelector('[type="reset"]');
+  signupButton.addEventListener("click", () => {
+    signupDialog.showModal();
+  });
+  cancelSignupButton.addEventListener("click", () => {
+    signupDialog.close();
+  });
+  signupForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const alias = signupForm.elements["alias"].value;
+    const email = signupForm.elements["email"].value;
+    const password = signupForm.elements["password"].value;
+    // signup
+    client
+      .signup(alias, email, password)
+      .then(() => {
+        signupForm.querySelector(".error").innerHTML = "";
+      })
+      .catch((err) => {
+        // if there is an error display the error
+        signupForm.getElementsByClassName("error").innerHTML = err.message;
+      });
+  });
 }

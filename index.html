@@ -10,11 +10,57 @@
 </head>
 
 <body>
-	<nav>
-		<Button id="logoutButton">Logout</Button>
-	</nav>
-	<!-- TODO(lukemurray): remove this -->
+	<dialog id="loginDialog">
+		<form id="loginForm" method="dialog">
+			<p>
+				<label>Email:
+					<input type="text" name="email" required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input type="password" name="password" required />
+				</label>
+			</p>
+			<p>
+				<Button type="reset">Cancel</Button>
+				<Button>Login</Button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
+	<dialog id="signUpDialog">
+		<form id="signUpForm" method="dialog">
+			<p>
+				<label>Alias:
+					<input type="text" name="alias" required />
+				</label>
+			</p>
+			<p>
+				<label>Email:
+					<input type="email" name="email" required />
+				</label>
+			</p>
+			<p>
+				<label>Password:
+					<input type="password" name="password" required />
+				</label>
+			</p>
+			<p>
+				<Button type="reset">Cancel</Button>
+				<Button>Sign Up</Button>
+			</p>
+			<p>
+				<span class="error" aria-live="polite"></span>
+			</p>
+		</form>
+	</dialog>
 	<div>
+		<Button id="loginButton">Login</Button>
+		<Button id="signUpButton">Sign Up</Button>
+		<Button id="logoutButton">Logout</Button>
 		<Button id="testButton">Test</Button>
 	</div>
 </body>

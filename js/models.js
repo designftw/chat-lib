@@ -1,51 +1,53 @@
+export class BaseModel {
+  constructor(id, createdAt, updatedAt) {
+    /**
+     * The id of the account.
+     *
+     * Unique across all accounts.
+     * @type {number}
+     */
+    // @ts-ignore
+    this.id = id;
+
+    /**
+     * The date that the model was created.
+     * @type {Date}
+     */
+    this.createdAt = createdAt;
+
+    /**
+     * The date that the model was last updated.
+     * @type {Date}
+     */
+    this.updatedAt = updatedAt;
+  }
+}
+
 /**
  * The account is used for logging into the chat server and accessing aliases.
  *
  * The account is not used for sending or receiving messages. All messages
  * are sent and received using aliases.
  */
-export class Account {
-	/**
-	 * Account model constructor.
-	 *
-	 * @param {string} id see [Account's id property]{@link Account#id}
-	 * @param {string} email see [Account's email property]{@link Account#email}
-	 * @param {Date} createdAt see [Account's createdAt property]{@link Account#createdAt}
-	 * @param {Date} updatedAt see [Account's updatedAt property]{@link Account#updatedAt}
-	 */
-	constructor(id, email, createdAt, updatedAt) {
-		/**
-		 * The id of the account.
-		 *
-		 * Unique across all accounts.
-		 * @type {string}
-		 */
-		this.id = id;
-
-		/**
-		 * The date that the model was created.
-		 * @type {Date}
-		 */
-		this.createdAt = createdAt;
-
-		/**
-		 * The date that the model was last updated.
-		 * @type {Date}
-		 */
-		this.updatedAt = updatedAt;
-
-		/**
-		 * The email address associated with the account.
-		 *
-		 * Unique across all accounts.
-		 * @type {string}
-		 */
-		this.email = email;
-
-	}
-
-
-
+export class Account extends BaseModel {
+  /**
+   * Account model constructor.
+   *
+   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+   * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+   * @param {string} email see [Account's email property]{@link Account#email}
+   */
+  constructor(id, createdAt, updatedAt, email) {
+    super(id, createdAt, updatedAt);
+    /**
+     * The email address associated with the account.
+     *
+     * Unique across all accounts.
+     * @type {string}
+     */
+    this.email = email;
+  }
 }
 
 /**
@@ -57,109 +59,102 @@ export class Account {
  * associating multiple email addresses with on gmail account, or having
  * multiple slack workspaces logged in.
  */
-export class Alias {
+export class Alias extends BaseModel {
+  /**
+   * Alias model constructor.
+   *
+   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+   * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+   * @param {string} name see [Alias's name property]{@link Alias#name}
+   * @param {string} payload see [Alias's payload property]{@link Alias#payload}
+   */
+  constructor(id, createdAt, updatedAt, name, payload) {
+    super(id, createdAt, updatedAt);
 
-	/**
-	 * Alias model constructor.
-	 *
-	 * @param {string} id see [Alias's id property]{@link Alias#id}
-	 * @param {string} name see [Alias's name property]{@link Alias#name}
-	 * @param {Date} createdAt see [Alias's createdAt property]{@link Alias#createdAt}
-	 * @param {Date} updatedAt see [Alias's updatedAt property]{@link Alias#updatedAt}
-	 * @param {string | null} payload see [Alias's payload property]{@link Alias#payload}
-	 */
-	constructor(id, name, createdAt, updatedAt, payload) {
-		/**
-		 * The id of the alias.
-		 *
-		 * Unique across all aliases.
-		 * @type {string}
-		 */
-		this.id = id;
+    /**
+     * The name associated with the alias. This is used to display
+     * the alias in the UI.
+     *
+     * Unique across all aliases.
+     * @type {string}
+     */
+    this.name = name;
 
-		/**
-		 * The date that the model was created.
-		 * @type {Date}
-		 */
-		this.createdAt = createdAt;
-
-		/**
-		 * The date that the model was last updated.
-		 * @type {Date}
-		 */
-		this.updatedAt = updatedAt;
-
-		/**
-		 * The name associated with the alias. This is used to display
-		 * the alias in the UI.
-		 *
-		 * Unique across all aliases.
-		 * @type {string}
-		 */
-		this.name = name;
-
-		/**
-		 * Private arbitrary metadata about an alias stored as a string.
-		 *
-		 * The payload is used so that users can store arbitrary metadata
-		 * with objects used in the chat application. For example a user
-		 * could mark an alias as important.
-		 * @type {string | null}
-		 */
-		this.payload = null;
-
-		/**
-		 * Friends of the alias.
-		 *
-		 * This field is only populated for aliases associated with the logged in account.
-		 * @type{Alias[] | null}
-		 */
-		this.friends = null;
-	}
+    /**
+     * Public arbitrary metadata about an alias stored as a string.
+     *
+     * The payload is used so that users can store arbitrary metadata
+     * with objects used in the chat application. For example a user
+     * could publicly assign availability to their alias, or provide a public
+     * link to an avatar.
+     * @type {string}
+     */
+    this.payload = payload;
+  }
 }
 
 /**
  * Represents a Message
  */
-export class Message {
-	constructor(id, createdAt, updatedAt, sender, recipients, payload) {
-		/**
-		 * The id of the message.
-		 *
-		 * Unique across all aliases.
-		 * @type {string}
-		 */
-		this.id = id;
+export class Message extends BaseModel {
+  /**
+   * Message model constructor.
+   *
+   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+   * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+   * @param {number} sender see [Message's sender property]{@link Message#sender}
+   * @param {number[]} recipients see [Message's recipients property]{@link Message#recipients}
+   * @param {string} payload see [Message's payload property]{@link Message#payload}
+   */
+  constructor(id, createdAt, updatedAt, sender, recipients, payload) {
+    super(id, createdAt, updatedAt);
+    /**
+     * The id of the Alias which sent the message. See [Alias's id Property]{@link Alias#id}
+     * @type {number}
+     */
+    this.sender = sender;
+    /**
+     * The ids of the Aliases which received the message. See [Alias's id Property]{@link Alias#id}
+     * @type {number[]}
+     */
+    this.recipients = recipients;
+    /**
+     * The data associated with the message.
+     *
+     * This could be just message text but could also be arbitrary JSON.
+     * @type {string}
+     */
+    this.payload = payload;
+  }
+}
 
-		/**
-		 * The date that the model was created.
-		 * @type {Date}
-		 */
-		this.createdAt = createdAt;
+/**
+ * Represents a private payload attached to an entity in the database.
+ */
+export class PrivatePayload extends BaseModel {
+  /**
+   * PrivatePayload model constructor.
+   *
+   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+   * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+   * @param {number} entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
+   * @param {string} payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
+   */
+  constructor(id, createdAt, updatedAt, entityId, payload) {
+    super(id, createdAt, updatedAt);
+    /**
+     * The id of the object this payload is attached to.
+     * @type {number}
+     */
+    this.entityId = entityId;
 
-		/**
-		 * The date that the model was last updated.
-		 * @type {Date}
-		 */
-		this.updatedAt = updatedAt;
-
-		/**
-		 * The sender of the message
-		 * @type{Alias}
-		 */
-		this.sender = sender;
-		/**
-		 * The recipient of the message
-		 * @type{Alias[]}
-		 */
-		this.recipients = recipients;
-		/**
-		 * The data associated with the message.
-		 *
-		 * This could be just message text but could also be arbitrary JSON.
-		 * @type{string}
-		 */
-		this.payload = payload;
-
-	}
+    /**
+     * The data associated with the private payload.
+     * @type {string}
+     */
+    this.payload = payload;
+  }
 }

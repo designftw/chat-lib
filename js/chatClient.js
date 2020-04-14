@@ -13,13 +13,13 @@ class ChatClient {
   constructor(host) {
     /**
      * A reference to the [ChatClientStore]{@link ChatClientStore} which contains global state of the chat application.
-     * @type{ChatClientStore}
+     * @type {ChatClientStore}
      */
     this.store = new ChatClientStore(host);
 
     /**
      * A reference to the [ChatAPI]{@link ChatAPI}, a helper class for communicating with the Chat Server.
-     * @type{ChatAPI}
+     * @type {ChatAPI}
      */
     this.api = new ChatAPI(this.store);
   }

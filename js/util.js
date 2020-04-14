@@ -1,56 +1,55 @@
+import { Alias, Account, Message, PrivatePayload } from "./models.js";
+
 /**
- * Create the default RequestInit used in post requests.
- * @param {Object?} body an object containing key values encoded in the body of the post request
- * @returns {RequestInit} the default request init object
+ * Options for creating the request init
+ * @typedef {Object} CreateDefaultRequestInitOptions
+ * @property {"POST" | "PUT" | "GET" | "DELETE"} method The HTTP method. One of POST, PUT, GET, DELETE.
+ * @property {Object.<string, string> | undefined} [headers] an optional object containing key values encoded in the headers of the request. The object should have string keys and string values.
+ * @property {Object.<string, string> | undefined} [body] an optional object containing key values encoded in the body of the request. The object should have string keys and string values.
  */
-export function createRequestInitForPostRequest(body = undefined) {
+
+/**
+ *
+ * @param {CreateDefaultRequestInitOptions} options Options used to created the request
+ * @returns {RequestInit} a request init for passing into fetch.
+ */
+export function createDefaultRequestInit(options) {
   return {
-    method: "POST",
-    headers: createDefaultHeadersForPostRequest(),
-    body: body ? urlEncodeObject(body) : null,
+    method: options.method,
+    headers:
+      // use url encoding for post and put otherwise use normal encoding
+      options.method === "POST" || options.method === "PUT"
+        ? createFormEncodedHeaders(options.headers)
+        : createJSONEncodedHeaders(options.headers),
+    body: options.body
+      ? options.method === "POST" || options.method === "PUT"
+        ? createFormEncodedBody(options.body)
+        : createJSONEncodedBody(options.body)
+      : null,
     redirect: "follow",
     credentials: "include",
   };
 }
 
 /**
- * Create the default RequestInit used in put requests.
- * @param {Object?} body an object containing key values encoded in the body of the put request
- * @returns {RequestInit} the default request init object
+ * Create Headers from an object.
+ * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  */
-export function createRequestInitForPutRequest(body = undefined) {
-  return { ...createRequestInitForPostRequest(body), method: "PUT" };
+function createHeadersFromObject(headers = undefined) {
+  let headersToAdd = new Headers();
+  if (headers !== undefined) {
+    for (let key of Object.keys(headers)) {
+      headersToAdd.append(key, headers[key]);
+    }
+  }
+  return headersToAdd;
 }
 
 /**
- * Create the default RequestInit used in get requests.
- * @returns {RequestInit} the default request init object
- */
-export function createRequestInitForGetRequest() {
-  return {
-    method: "GET",
-    redirect: "follow",
-    credentials: "include",
-  };
-}
-
-/**
- * Create the default RequestInit used in delete requests.
- * @returns {RequestInit} the default request init object
- */
-export function createRequestInitForDeleteRequest() {
-  return {
-    method: "DELETE",
-    redirect: "follow",
-    credentials: "include",
-  };
-}
-
-/**
- * Convert an object's keys and values into URLEncoded string suitable for a post request.
+ * Convert an object's keys and values into URLEncoded string suitable for a form encoded request.
  * @param {Object} body the object to be url encoded
  */
-function urlEncodeObject(body) {
+function createFormEncodedBody(body) {
   let urlEncodedBody = new URLSearchParams();
   for (let key of Object.keys(body)) {
     urlEncodedBody.append(key, body[key]);
@@ -59,16 +58,36 @@ function urlEncodeObject(body) {
 }
 
 /**
- * Create the default headers used in post requests.
+ * Convert an object's keys and values into a json string for a json request
+ * @param {Object} body the object to be url encoded
+ */
+function createJSONEncodedBody(body) {
+  return JSON.stringify(body);
+}
+
+/**
+ * Create the default headers used in POST and PUT requests.
+ * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  * @returns {Headers}
  */
-function createDefaultHeadersForPostRequest() {
-  let defaultPostHeaders = new Headers();
+function createFormEncodedHeaders(headers = undefined) {
+  let defaultPostHeaders = createHeadersFromObject(headers);
   defaultPostHeaders.append(
     "Content-Type",
     "application/x-www-form-urlencoded"
   );
   return defaultPostHeaders;
+}
+
+/**
+ * Create the default headers used in GET and DELETE requests.
+ * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
+ * @returns {Headers}
+ */
+function createJSONEncodedHeaders(headers = undefined) {
+  let defaultHeaders = createHeadersFromObject(headers);
+  defaultHeaders.append("Content-Type", "application/json");
+  return defaultHeaders;
 }
 
 /**
@@ -93,4 +112,64 @@ export function getErrorFromResponse(response) {
     }
     throw responseOrError;
   });
+}
+
+/**
+ * Create an account account from parsed json of an account returned from the ChatServer.
+ * @param {any} accountDTO parsed json account returned from the ChatServer
+ * @returns {Account} an alias model
+ */
+export function createAccountFromAccountDTO(accountDTO) {
+  return new Account(
+    accountDTO.id,
+    new Date(accountDTO.createdAt),
+    new Date(accountDTO.updatedAt),
+    accountDTO.email
+  );
+}
+
+/**
+ * Create an alias model from parsed json of an alias returned from the ChatServer.
+ * @param {any} aliasDTO parsed json alias returned from the ChatServer
+ * @returns {Alias} an alias model
+ */
+export function createAliasFromAliasDTO(aliasDTO) {
+  return new Alias(
+    aliasDTO.id,
+    aliasDTO.createdAt,
+    aliasDTO.updatedAt,
+    aliasDTO.name,
+    aliasDTO.payload
+  );
+}
+
+/**
+ * Create a message model from parsed json of a message returned from the ChatServer.
+ * @param {any} messageDTO parsed json message returned from the ChatServer.
+ * @returns {Message} a message model
+ */
+export function createMessageFromMessageDTO(messageDTO) {
+  return new Message(
+    messageDTO.id,
+    new Date(messageDTO.createdAt),
+    new Date(messageDTO.updatedAt),
+    messageDTO.sender,
+    messageDTO.recipients,
+    messageDTO.payload
+  );
+}
+
+/**
+ * Create a privatePayload model from parsed json of a privatePayload returned from the ChatServer.
+ * @param {any} privatePayloadDTO parsed json privatePayload returned from the ChatServer.
+ * @returns {PrivatePayload} a privatePayload model.
+ */
+export function createPrivatePayloadFromPayloadDTO(privatePayloadDTO) {
+  return new PrivatePayload(
+    privatePayloadDTO.id,
+    new Date(privatePayloadDTO.createdAt),
+    new Date(privatePayloadDTO.updatedAt),
+    privatePayloadDTO.entityId,
+    privatePayloadDTO.payload
+  );
 }
