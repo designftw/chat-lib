@@ -4,20 +4,128 @@ import ChatClient from "./js/chatClient.js";
 const SERVER_HOST = "https://128.52.128.220";
 
 /**
+ *
+ * @type {ChatClient | undefined}
+ */
+let client = undefined;
+
+// my example start
+
+const store = {};
+window.ChatStore = store;
+
+// update the alias list to the alises in the store
+function setAliasList() {
+  let select = document.getElementById("accountAliasList");
+  const currentlySelectedIndex = select.selectedIndex;
+  let previouslySelectedAliasName = "";
+  if (currentlySelectedIndex != -1) {
+    previouslySelectedAliasName = select.options[currentlySelectedIndex].value;
+  }
+  while (select.length !== 0) {
+    select.remove(select.length - 1);
+  }
+  for (let alias of store.aliases) {
+    const newOption = new Option(alias.name);
+    if (alias.name === previouslySelectedAliasName) {
+      newOption.selected = true;
+    }
+    select.add(newOption);
+  }
+  if (currentlySelectedIndex === -1) {
+    select.options[0].selected = true;
+  }
+}
+
+// get the currently selected alias
+function getCurrentlySelectedAlias() {
+  let select = document.getElementById("accountAliasList");
+  const currentlySelectedIndex = select.selectedIndex;
+  if (currentlySelectedIndex === -1) {
+    return undefined;
+  }
+  const currentlySelectedAliasName =
+    select.options[currentlySelectedIndex].value;
+  return store.aliases.find(
+    (alias) => alias.name == currentlySelectedAliasName
+  );
+}
+
+async function initMyExample(account) {
+  store.account = account;
+  const aliases = await client.getAliasesForAccount();
+  store.aliases = aliases;
+  setAliasList();
+}
+
+function handleSendMessage() {
+  const toInput = document.querySelector("#sendMessageTo");
+  const messageInput = document.querySelector("#sendMessagePayload");
+  const sendMessageForm = document.querySelector("#sendMessageForm");
+  sendMessageForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const to = toInput.value.split(",");
+    const message = messageInput.value;
+    const from = getCurrentlySelectedAlias();
+    console.log("sending message", from, to, message);
+    const sentMessage = await client.sendMessage(from, to, message);
+    console.log("sent message", sentMessage);
+  });
+}
+
+function handleGetMessages() {
+  const getMessageButton = document.querySelector("#getMessageButton");
+  getMessageButton.addEventListener("click", async () => {
+    let messages = await client.getMessagesForAlias(
+      getCurrentlySelectedAlias()
+    );
+    console.log(messages);
+  });
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    handleSendMessage();
+    handleGetMessages();
+  },
+  false
+);
+
+// my example end
+
+function onAccountLoaded(account) {
+  /**
+   * Students can add code here
+   */
+  initMyExample(account);
+}
+
+/**
  * Called when the document is loaded. Initializes functionality
  */
 async function initialize() {
-  let client = new ChatClient(SERVER_HOST);
+  client = new ChatClient(SERVER_HOST);
   createSignupHandler(client);
   createLoginHandler(client);
   createLogoutHandler(client);
-  const isLoggedIn = await client.isLoggedIn();
-  toggleLoginUI(isLoggedIn);
 
-  const aliases = await client.getAliasesForAccount();
-  /**
-   * ADD CLIENT CODE HERE
-   */
+  // check if the client is logged in
+  const loginResult = await client.isLoggedIn();
+  toggleLoginUI(loginResult.isLoggedIn);
+
+  // if client is logged in call account loaded
+  if (loginResult.isLoggedIn) {
+    onAccountLoaded(loginResult.account);
+  }
+  // otherwise wait for the client to log in
+  client.addEventListener("login", (e) => {
+    onAccountLoaded(e.detail);
+    toggleLoginUI(true);
+  });
+  client.addEventListener("logout", (e) => {
+    toggleLoginUI(false);
+  });
 }
 
 // initialize when the dom is loaded
@@ -40,8 +148,12 @@ function toggleLoginUI(isLoggedIn) {
 
   if (isLoggedIn) {
     // hide login ui
-    loginButton.classList.add("isHidden");
-    signupButton.classList.add("isHidden");
+    if (!loginButton.classList.contains("isHidden")) {
+      loginButton.classList.add("isHidden");
+    }
+    if (!signupButton.classList.contains("isHidden")) {
+      signupButton.classList.add("isHidden");
+    }
     // show logout ui
     logoutButton.classList.remove("isHidden");
   } else {
@@ -49,7 +161,9 @@ function toggleLoginUI(isLoggedIn) {
     loginButton.classList.remove("isHidden");
     signupButton.classList.remove("isHidden");
     // hide logout ui
-    logoutButton.classList.add("isHidden");
+    if (!logoutButton.classList.contains("isHidden")) {
+      logoutButton.classList.add("isHidden");
+    }
   }
 }
 

@@ -130,6 +130,7 @@ class WebSocketEndpoint {
         // TODO(lukemurray): handle message
         console.log("received message for socket", alias.name, e.data);
         const data = JSON.parse(e.data);
+        console.log("got message", e.data);
         if (data.type === "new_message") {
           const newMessageId = data.messageId;
           // TODO(lukemurray): dispatch new message event
@@ -140,6 +141,16 @@ class WebSocketEndpoint {
         }
       });
     });
+  }
+
+  /**
+   *
+   * @param {Alias} alias an alias to open a web socket for
+   */
+  openWebSocketFor(alias) {
+    return this._getWebSocketForAlias(alias).then((res) => ({
+      message: "successfully opened web socket",
+    }));
   }
 }
 
@@ -408,7 +419,7 @@ class MessagesEndpoint {
    * interlocutors, or by any of the interlocutors to Jack. Note this does not mean that the message
    * has to be sent to all of the interlocutors to be here. Any pair suffices.
    * @param {Alias} ownAlias an alias associated with the currently logged in account
-   * @param {Alias[] | undefined} interlocutors An optional list of aliases which are either the sender or receiver of the returned messages..
+   * @param {string[] | undefined} interlocutors An optional list of aliases which are either the sender or receiver of the returned messages..
    * @param {Date | undefined} sinceTime An optional date which filters messages to those which were sent after this time.
    * @returns {Promise<Message[]>} The messages which pass the filters.
    */
@@ -444,23 +455,24 @@ class MessagesEndpoint {
   /**
    * Send a new message from ownAlias to recipients. The payload is a potentially jsonified string.
    * @param {Alias} ownAlias an alias associated with the currently logged in account.
-   * @param {Alias[]} recipients the recipients of the message
+   * @param {string[]} recipientNames the recipients of the message
    * @param {string} messagePayload the payload of the message
    * @returns {Promise<Message>} The sent message.
    */
-  sendMessage(ownAlias, recipients, messagePayload) {
+  sendMessage(ownAlias, recipientNames, messagePayload) {
     let route = `messages`;
     let headers = {
       "user-alias-id": ownAlias.id + "",
+    };
+    const body = {
+      payload: messagePayload,
+      recipients: JSON.stringify(recipientNames),
     };
     return fetch(
       `${this.store.host}/${route}`,
       createDefaultRequestInit({
         method: "POST",
-        body: {
-          payload: messagePayload,
-          recipients: JSON.stringify(recipients.map((v) => v.name)),
-        },
+        body,
         headers,
       })
     )

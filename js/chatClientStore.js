@@ -35,6 +35,9 @@ class ChatClientStore extends EventTarget {
     return new Proxy(this, {
       set(target, property, value) {
         console.log("setting", property, "to", value, "on store");
+        if (property === "account") {
+          target.dispatchEvent(new Event(`accountChanged`));
+        }
         return true;
       },
     });

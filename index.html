@@ -23,8 +23,8 @@
 				</label>
 			</p>
 			<p>
-				<Button type="reset">Cancel</Button>
-				<Button>Login</Button>
+				<button type="reset">Cancel</button>
+				<button>Login</button>
 			</p>
 			<p>
 				<span class="error" aria-live="polite"></span>
@@ -49,8 +49,8 @@
 				</label>
 			</p>
 			<p>
-				<Button type="reset">Cancel</Button>
-				<Button>Sign Up</Button>
+				<button type="reset">Cancel</button>
+				<button>Sign Up</button>
 			</p>
 			<p>
 				<span class="error" aria-live="polite"></span>
@@ -58,10 +58,35 @@
 		</form>
 	</dialog>
 	<div>
-		<Button id="loginButton">Login</Button>
-		<Button id="signUpButton">Sign Up</Button>
-		<Button id="logoutButton">Logout</Button>
-		<Button id="testButton">Test</Button>
+		<button id="loginButton">Login</button>
+		<button id="signUpButton">Sign Up</button>
+		<button id="logoutButton">Logout</button>
+		<div id="currentAlias">
+			<label>Current/From/Edit Alias
+				<select id="accountAliasList"></select>
+			</label>
+		</div>
+		<div>
+			<h2>Send Message</h2>
+			<form id="sendMessageForm">
+				<p>
+					<label>
+						To<input type="text" id="sendMessageTo">
+					</label>
+				</p>
+				<p>
+					<label>
+						Message<input type="text" id="sendMessagePayload">
+					</label>
+				</p>
+				<p>
+					<button id="sendMessageSubmit">Submit</button>
+				</p>
+			</form>
+		</div>
+		<div>
+			<button id="getMessageButton">Get Messages</button>
+		</div>
 	</div>
 
 
