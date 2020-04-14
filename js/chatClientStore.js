@@ -19,9 +19,6 @@ class ChatClientStore {
      */
     this.host = host;
 
-    // TODO(lukemurray): RESOLVE THIS
-    this.webSocketHost = "wss://128.52.128.220:3000";
-
     /**
      * The currently logged in account. If there is no logged in account this is undefined.
      *

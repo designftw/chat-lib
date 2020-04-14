@@ -94,7 +94,9 @@ class WebSocketEndpoint {
     }
     return new Promise((resolve, reject) => {
       let socket = new WebSocket(
-        `${this.store.webSocketHost}/realtime?alias=${alias.name}`
+        `${this.store.host.replace("https://", "wss://")}/realtime?alias=${
+          alias.name
+        }`
       );
       // handle the open event
       socket.addEventListener(

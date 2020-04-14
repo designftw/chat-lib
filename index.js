@@ -2,7 +2,8 @@
 import ChatClient from "./js/chatClient.js";
 
 // TODO(lukemurray): change to chat server url
-const SERVER_HOST = "https://messaging-server.csail.mit.edu";
+// const SERVER_HOST = "https://messaging-server.csail.mit.edu";
+const SERVER_HOST = "https://128.52.128.220/";
 // const SERVER_HOST = "https://localhost:3000";
 
 /**
