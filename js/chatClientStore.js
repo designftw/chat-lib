@@ -19,22 +19,40 @@ class ChatClientStore {
      */
     this.host = host;
 
+    // TODO(lukemurray): RESOLVE THIS
+    this.webSocketHost = "wss://128.52.128.220:3000";
+
     /**
      * The currently logged in account. If there is no logged in account this is undefined.
      *
      * @type {Account | undefined}
      */
     this.account = undefined;
+
+    /**
+     * Whether or not the client is currently logged in
+     */
+    this.loggedIn = false;
   }
 
   /**
    * Set the account on the ChatClientStore.
    * See [ChatClientStore's account property]{@link ChatClientStore#account}
    *
-   * @param account {Account | undefined}
+   * @param {Account | undefined} account
    */
   setAccount(account) {
     this.account = account;
+  }
+
+  /**
+   * Set the account on the ChatClientStore.
+   * See [ChatClientStore's account property]{@link ChatClientStore#account}
+   *
+   * @param {boolean} loggedIn
+   */
+  setLoggedIn(loggedIn) {
+    this.loggedIn = loggedIn;
   }
 }
 

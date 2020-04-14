@@ -94,7 +94,7 @@ class WebSocketEndpoint {
     }
     return new Promise((resolve, reject) => {
       let socket = new WebSocket(
-        `wss://${this.store.host}/realtime?alias=${alias.name}`
+        `${this.store.webSocketHost}/realtime?alias=${alias.name}`
       );
       // handle the open event
       socket.addEventListener(
@@ -282,8 +282,8 @@ class AliasesEndpoint {
    * Create a new alias associated with the currently logged in account.
    *
    * Raises an error if the alias already exists.
-   * @param name {string} the name of the alias to create
-   * @param payload {string } payload to attach to the new alias
+   * @param {string} name the name of the alias to create
+   * @param {string } payload payload to attach to the new alias
    * @returns {Promise<Alias>}
    */
   createAlias(name, payload) {
@@ -311,7 +311,7 @@ class AliasesEndpoint {
    * Get an existing alias by its name.
    *
    * Raises an error if the alias does not exist.
-   * @param aliasName {string} the name of the alias to get.
+   * @param {string} aliasName the name of the alias to get.
    * @returns {Promise<Alias>}
    */
   getAlias(aliasName) {
@@ -331,9 +331,9 @@ class AliasesEndpoint {
    * Update an existing alias by its name.
    *
    * Raises an error if the alias does not exist or belong to the currently logged in account.
-   * @param prevName {string} the name of the alias to update.
-   * @param newName {string} the updated name of the alias. can be the old name.
-   * @param newPayload {string} the updated payload of the alias. can be the old payload.
+   * @param {string} prevName the name of the alias to update.
+   * @param {string} newName the updated name of the alias. can be the old name.
+   * @param {string} newPayload the updated payload of the alias. can be the old payload.
    * @returns {Promise<Alias>}
    */
   updateAlias(prevName, newName, newPayload) {
@@ -358,7 +358,7 @@ class AliasesEndpoint {
    * Delete an existing alias by its name
    *
    * Raises an error if the alias does not exist or belong to the currently logged in account.
-   * @param aliasName {string} the name of the alias to delete.
+   * @param {string} aliasName the name of the alias to delete.
    * @returns {Promise<any>} a validation message.
    */
   deleteAlias(aliasName) {

@@ -2,7 +2,7 @@
 import ChatClient from "./js/chatClient.js";
 
 // TODO(lukemurray): change to chat server url
-const SERVER_HOST = "https://messaging-server.csail.mit";
+const SERVER_HOST = "https://messaging-server.csail.mit.edu";
 // const SERVER_HOST = "https://localhost:3000";
 
 /**
@@ -81,6 +81,8 @@ function createLoginHandler(client) {
       .login(email, password)
       .then(() => {
         loginForm.querySelector(".error").innerHTML = "";
+        console.log("logged in");
+        loginDialog.close();
       })
       .catch((err) => {
         // if there is an error display the error
@@ -114,6 +116,7 @@ function createSignupHandler(client) {
       .signup(alias, email, password)
       .then(() => {
         signupForm.querySelector(".error").innerHTML = "";
+        signupDialog.close();
       })
       .catch((err) => {
         // if there is an error display the error

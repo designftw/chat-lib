@@ -46,7 +46,6 @@ class ChatClient {
    */
   login(email, password) {
     return this.api.auth.login(email, password).then((account) => {
-      this;
       this.store.setAccount(account);
       return account;
     });
