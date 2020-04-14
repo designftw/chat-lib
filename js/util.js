@@ -5,7 +5,7 @@ import { Alias, Account, Message, PrivatePayload } from "./models.js";
  * @typedef {Object} CreateDefaultRequestInitOptions
  * @property {"POST" | "PUT" | "GET" | "DELETE"} method The HTTP method. One of POST, PUT, GET, DELETE.
  * @property {Object.<string, string> | undefined} [headers] an optional object containing key values encoded in the headers of the request. The object should have string keys and string values.
- * @property {Object.<string, string> | undefined} [body] an optional object containing key values encoded in the body of the request. The object should have string keys and string values.
+ * @property {Object.<string, any> | undefined} [body] an optional object containing key values encoded in the body of the request. The object should have string keys and string values.
  */
 
 /**

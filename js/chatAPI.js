@@ -8,6 +8,7 @@ import {
   getErrorFromResponse,
   createDefaultRequestInit,
 } from "./util.js";
+import ChatClient from "./chatClient.js";
 
 /**
  * The interface for interacting with the ChatServer API.
@@ -17,13 +18,20 @@ class ChatAPI {
    * ChatAPI constructor.
    *
    * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ChatClient} client see [ChatClient]{@link ChatClient}
    */
-  constructor(store) {
+  constructor(store, client) {
     /**
      * See [ChatClient's store property]{@link ChatClient#store}
      * @type {ChatClientStore}
      */
     this.store = store;
+
+    /**
+     * See [ChatClient]{@link ChatClient}
+     * @type {ChatClient}
+     */
+    this.client = client;
 
     /**
      * Helper class for authorization routes.
@@ -55,7 +63,7 @@ class ChatAPI {
      */
     this.friends = new FriendsEndpoint(store);
 
-    this.webSocket = new WebSocketEndpoint(store);
+    this.webSocket = new WebSocketEndpoint(store, client);
   }
 }
 
@@ -67,13 +75,20 @@ class WebSocketEndpoint {
    * WebSocketEndpoint constructor.
    *
    * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ChatClient} client see [ChatClient]{@link ChatClient}
    */
-  constructor(store) {
+  constructor(store, client) {
     /**
      * See [ChatClient's store property]{@link ChatClient#store}
      * @type {ChatClientStore}
      */
     this.store = store;
+
+    /**
+     * See [ChatClient]{@link ChatClient}
+     * @type {ChatClient}
+     */
+    this.client = client;
 
     /**
      * Private object mapping alias ids to open web sockets.
@@ -104,7 +119,6 @@ class WebSocketEndpoint {
         "open",
         () => {
           this._aliasNameToWebSocket[aliasName] = socket;
-          console.log("opened socket for", aliasName);
           resolve(socket);
         },
         { once: true }
@@ -113,8 +127,6 @@ class WebSocketEndpoint {
       socket.addEventListener(
         "error",
         (err) => {
-          // TODO(lukemurray): handle reject vs error after open.
-          console.log("socket error for", aliasName, err);
           reject(err);
         },
         { once: true }
@@ -122,23 +134,36 @@ class WebSocketEndpoint {
       socket.addEventListener(
         "close",
         () => {
-          // TODO(lukemurray): handle close
-          console.log("closed socket for", aliasName);
+          delete this._aliasNameToWebSocket[aliasName];
         },
         { once: true }
       );
       socket.addEventListener("message", (e) => {
-        // TODO(lukemurray): handle message
-        console.log("received message for socket", aliasName, e.data);
         const data = JSON.parse(e.data);
-        console.log("got message", e.data);
         if (data.type === "new_message") {
-          const newMessageId = data.messageId;
-          // TODO(lukemurray): dispatch new message event
+          this.client.dispatchEvent(
+            new CustomEvent("onNewMessage", {
+              detail: {
+                messageId: data.messageId,
+                aliasName,
+              },
+            })
+          );
         }
         if (data.type === "message_update") {
-          const newMessageId = data.messageId;
-          // TODO(lukemurray): dispatch updated message event
+          this.client.dispatchEvent(
+            new CustomEvent("onMessageUpdate", {
+              detail: {
+                messageId: data.messageId,
+                aliasName,
+              },
+            })
+          );
+        }
+        if (data.type === "unauthorized") {
+          new CustomEvent("onUnauthorizedAccess", {
+            detail: { message: data.message, aliasName },
+          });
         }
       });
     });
@@ -489,7 +514,7 @@ class MessagesEndpoint {
   /**
    * Get a single message by it's id.
    * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
-   * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
+   * @param {string} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @returns {Promise<Message>} The message associated with the passed in id.
    */
   getMessage(ownAlias, messageId) {

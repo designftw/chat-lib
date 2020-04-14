@@ -3,6 +3,14 @@ import ChatAPI from "./chatAPI.js";
 import { Account, Alias, Message } from "./models.js";
 
 /**
+ * Supports the following custom events
+ *
+ * onNewMessage: detail is {messageId, aliasName}
+ * onMessageUpdate: detail is {messageId, aliasName}
+ * onUnauthorizedAccess: detail is {message, aliasName}
+ */
+
+/**
  * The ChatClient is the interface for interacting with the ChatServer.
  */
 class ChatClient extends EventTarget {
@@ -22,7 +30,7 @@ class ChatClient extends EventTarget {
      * A reference to the [ChatAPI]{@link ChatAPI}, a helper class for communicating with the Chat Server.
      * @type {ChatAPI}
      */
-    this.api = new ChatAPI(this.store);
+    this.api = new ChatAPI(this.store, this);
   }
 
   /**
@@ -86,6 +94,16 @@ class ChatClient extends EventTarget {
       interlocutors,
       sinceTime
     );
+  }
+
+  /**
+   *
+   * @param {string} alias
+   * @param {string} messageId
+   * @returns {Promise<Message>}
+   */
+  getMessage(alias, messageId) {
+    return this.api.messages.getMessage(alias, messageId);
   }
 
   /**

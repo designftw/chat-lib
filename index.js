@@ -53,6 +53,23 @@ async function initMyExample(account) {
   const aliases = await client.getAliasesForAccount();
   store.aliases = aliases;
   setAliasList();
+  client.addEventListener("onNewMessage", async (e) => {
+    const newMessage = await client.getMessage(
+      e.detail.aliasName,
+      e.detail.messageId
+    );
+    console.log("onNewMessage", newMessage);
+  });
+  client.addEventListener("onMessageUpdate", async (e) => {
+    const updatedMessage = await client.getMessage(
+      e.detail.aliasName,
+      e.detail.messageId
+    );
+    console.log("onMessageUpdate", updatedMessage);
+  });
+  client.addEventListener("onUnauthorizedAccess", async (e) => {
+    console.log("unauthorized access for", e.detail.aliasName);
+  });
 }
 
 function handleSendMessage() {
@@ -64,9 +81,7 @@ function handleSendMessage() {
     const to = toInput.value.split(",");
     const message = messageInput.value;
     const from = getCurrentlySelectedAlias();
-    console.log("sending message", from, to, message);
     const sentMessage = await client.sendMessage(from, to, message);
-    console.log("sent message", sentMessage);
   });
 }
 
