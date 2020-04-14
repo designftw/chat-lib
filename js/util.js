@@ -16,16 +16,8 @@ import { Alias, Account, Message, PrivatePayload } from "./models.js";
 export function createDefaultRequestInit(options) {
   return {
     method: options.method,
-    headers:
-      // use url encoding for post and put otherwise use normal encoding
-      options.method === "POST" || options.method === "PUT"
-        ? createFormEncodedHeaders(options.headers)
-        : createJSONEncodedHeaders(options.headers),
-    body: options.body
-      ? options.method === "POST" || options.method === "PUT"
-        ? createFormEncodedBody(options.body)
-        : createJSONEncodedBody(options.body)
-      : null,
+    headers: createJSONEncodedHeaders(options.headers),
+    body: options.body ? createJSONEncodedBody(options.body) : null,
     redirect: "follow",
     credentials: "include",
   };
@@ -46,37 +38,11 @@ function createHeadersFromObject(headers = undefined) {
 }
 
 /**
- * Convert an object's keys and values into URLEncoded string suitable for a form encoded request.
- * @param {Object} body the object to be url encoded
- */
-function createFormEncodedBody(body) {
-  let urlEncodedBody = new URLSearchParams();
-  for (let key of Object.keys(body)) {
-    urlEncodedBody.append(key, body[key]);
-  }
-  return urlEncodedBody;
-}
-
-/**
  * Convert an object's keys and values into a json string for a json request
  * @param {Object} body the object to be url encoded
  */
 function createJSONEncodedBody(body) {
   return JSON.stringify(body);
-}
-
-/**
- * Create the default headers used in POST and PUT requests.
- * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
- * @returns {Headers}
- */
-function createFormEncodedHeaders(headers = undefined) {
-  let defaultPostHeaders = createHeadersFromObject(headers);
-  defaultPostHeaders.append(
-    "Content-Type",
-    "application/x-www-form-urlencoded"
-  );
-  return defaultPostHeaders;
 }
 
 /**

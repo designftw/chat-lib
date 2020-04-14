@@ -418,7 +418,7 @@ class MessagesEndpoint {
    * If there are multiple interlocutors this method returns all messages sent by Jack to any of the
    * interlocutors, or by any of the interlocutors to Jack. Note this does not mean that the message
    * has to be sent to all of the interlocutors to be here. Any pair suffices.
-   * @param {Alias} ownAlias an alias associated with the currently logged in account
+   * @param {string} ownAlias an alias associated with the currently logged in account
    * @param {string[] | undefined} interlocutors An optional list of aliases which are either the sender or receiver of the returned messages..
    * @param {Date | undefined} sinceTime An optional date which filters messages to those which were sent after this time.
    * @returns {Promise<Message[]>} The messages which pass the filters.
@@ -431,7 +431,7 @@ class MessagesEndpoint {
     let route = `messages`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     if (interlocutors !== undefined) {
       headers = { ...headers, interlocutors: JSON.stringify(interlocutors) };
@@ -454,7 +454,7 @@ class MessagesEndpoint {
 
   /**
    * Send a new message from ownAlias to recipients. The payload is a potentially jsonified string.
-   * @param {Alias} ownAlias an alias associated with the currently logged in account.
+   * @param {string} ownAlias an alias associated with the currently logged in account.
    * @param {string[]} recipientNames the recipients of the message
    * @param {string} messagePayload the payload of the message
    * @returns {Promise<Message>} The sent message.
@@ -462,11 +462,12 @@ class MessagesEndpoint {
   sendMessage(ownAlias, recipientNames, messagePayload) {
     let route = `messages`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
+    console.log("recipient names", recipientNames);
     const body = {
       payload: messagePayload,
-      recipients: JSON.stringify(recipientNames),
+      recipients: recipientNames,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -486,7 +487,7 @@ class MessagesEndpoint {
 
   /**
    * Get a single message by it's id.
-   * @param {Alias} ownAlias the alias associated with the message id, either the sender or recipient.
+   * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
    * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @returns {Promise<Message>} The message associated with the passed in id.
    */
@@ -494,7 +495,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -507,7 +508,7 @@ class MessagesEndpoint {
 
   /**
    * Update a single message by it's id.
-   * @param {Alias} ownAlias the alias associated with the message id, either the sender or recipient.
+   * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
    * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @param {string} payload The new payload to be associated with the message. See [Message's payload property]{@link Message#payload}
    * @returns {Promise<Message>} The updated message
@@ -516,7 +517,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     const body = { payload };
     return fetch(
@@ -537,7 +538,7 @@ class MessagesEndpoint {
 
   /**
    * Delete a single message by it's id.
-   * @param {Alias} ownAlias the alias associated with the message id, either the sender or recipient.
+   * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
    * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @returns {Promise<any>} A validation message.
    */
@@ -545,7 +546,7 @@ class MessagesEndpoint {
     let route = `messages/${messageId}`;
     // create the headers for the message get request
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -578,7 +579,7 @@ class PrivatePayloadsEndpoint {
 
   /**
    * Create a new private payload.
-   * @param {Alias} ownAlias the alias associated with the private payload.
+   * @param {string} ownAlias the alias associated with the private payload.
    * @param {Message | Alias} model an entity to attach a private payload to.
    * @param {string} payload the payload, private to the passed in alias, to be attached to the passed in model.
    * @returns {Promise<PrivatePayload>} the newly created private payload.
@@ -586,7 +587,7 @@ class PrivatePayloadsEndpoint {
   createPayload(ownAlias, model, payload) {
     let route = `payloads`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     const body = { payload, entity_id: model.id + "" };
     return fetch(
@@ -607,14 +608,14 @@ class PrivatePayloadsEndpoint {
 
   /**
    * Get the payload associated with the passed in alias and entity.
-   * @param {Alias} ownAlias the alias associated with the private payload.
+   * @param {string} ownAlias the alias associated with the private payload.
    * @param {Message | Alias} model the entity associated with the private payload.
    * @returns {Promise<PrivatePayload>} the requested PrivatePayload model.
    */
   getPayload(ownAlias, model) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -629,7 +630,7 @@ class PrivatePayloadsEndpoint {
 
   /**
    * Update the payload associated with the passed in alias and entity.
-   * @param {Alias} ownAlias the alias associated with the private payload.
+   * @param {string} ownAlias the alias associated with the private payload.
    * @param {Message | Alias} model the entity associated with the private payload.
    * @param {string} newPayload the new payload to attach to the alias and model
    * @returns {Promise<PrivatePayload>} the updated private payload model.
@@ -637,7 +638,7 @@ class PrivatePayloadsEndpoint {
   updatePayload(ownAlias, model, newPayload) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     const body = { payload: newPayload };
     return fetch(
@@ -658,14 +659,14 @@ class PrivatePayloadsEndpoint {
 
   /**
    * Delete the payload associated with the passed in alias and entity.
-   * @param {Alias} ownAlias the alias associated with the private payload.
+   * @param {string} ownAlias the alias associated with the private payload.
    * @param {Message | Alias} model the entity associated with the private payload.
    * @returns {Promise<any>} a validation message.
    */
   deletePayload(ownAlias, model) {
     let route = `payloads/${model.id}`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -695,12 +696,12 @@ class FriendsEndpoint {
 
   /**
    * Get all the friends of the passed in alias.
-   * @param {Alias} ownAlias the alias who's friends will be retrieved.
+   * @param {string} ownAlias the alias who's friends will be retrieved.
    */
   getFriendsForAlias(ownAlias) {
     let route = `friends`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -715,17 +716,17 @@ class FriendsEndpoint {
 
   /**
    * Add a new friend to the friend list of ownAlias.
-   * @param {Alias} ownAlias the alias adding a friend.
-   * @param {Alias} newFriend the new friend of the ownAlias.
+   * @param {string} ownAlias the alias adding a friend.
+   * @param {string} newFriend the new friend of the ownAlias.
    * @returns {Promise<any>} a validation message.
    */
   addFriend(ownAlias, newFriend) {
     let route = `friends`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     const body = {
-      alias_name: newFriend.name,
+      alias_name: newFriend,
     };
     return fetch(
       `${this.store.host}/${route}`,
@@ -741,17 +742,17 @@ class FriendsEndpoint {
 
   /**
    * Remove a friend from the friend list of ownAlias.
-   * @param {Alias} ownAlias the alias removing a friend.
-   * @param {Alias} friendToRemove the friend to remove from ownAlias's friend list.
+   * @param {string} ownAlias the alias removing a friend.
+   * @param {string} friendToRemove the friend to remove from ownAlias's friend list.
    * @returns {Promise<any>} a validation message.
    */
   removeFriend(ownAlias, friendToRemove) {
     let route = `friends`;
     let headers = {
-      "user-alias-name": ownAlias.name,
+      "user-alias-name": ownAlias,
     };
     const body = {
-      alias_name: friendToRemove.name,
+      alias_name: friendToRemove,
     };
     return fetch(
       `${this.store.host}/${route}`,

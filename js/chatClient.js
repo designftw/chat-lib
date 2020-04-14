@@ -74,7 +74,7 @@ class ChatClient extends EventTarget {
 
   /**
    *
-   * @param {Alias} alias
+   * @param {string} alias
    * @param {string[]} [interlocutors]
    * @param {Date} [sinceTime]
    * @returns {Promise<Message[]>}
@@ -89,7 +89,7 @@ class ChatClient extends EventTarget {
 
   /**
    *
-   * @param {Alias} alias
+   * @param {string} alias
    * @param {string[]} recipientNames
    * @param {string} payload
    * @returns {Promise<Message>}
@@ -100,7 +100,7 @@ class ChatClient extends EventTarget {
 
   /**
    *
-   * @param {Alias} alias
+   * @param {string} alias
    * @param {Message} message
    * @param {string} payload
    * @returns {Promise<Message>}
@@ -111,7 +111,7 @@ class ChatClient extends EventTarget {
 
   /**
    *
-   * @param {Alias} alias
+   * @param {string} alias
    * @param {Message} message
    * @returns {Promise<any>}
    */

@@ -44,11 +44,7 @@ function getCurrentlySelectedAlias() {
   if (currentlySelectedIndex === -1) {
     return undefined;
   }
-  const currentlySelectedAliasName =
-    select.options[currentlySelectedIndex].value;
-  return store.aliases.find(
-    (alias) => alias.name == currentlySelectedAliasName
-  );
+  return select.options[currentlySelectedIndex].value;
 }
 
 async function initMyExample(account) {
