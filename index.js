@@ -12,8 +12,6 @@ let client = undefined;
 // my example start
 
 const store = {};
-window.ChatStore = store;
-window.Client = client;
 
 // update the alias list to the alises in the store
 function setAliasList() {
@@ -49,6 +47,8 @@ function getCurrentlySelectedAlias() {
 }
 
 async function initMyExample(account) {
+  window._store = store;
+  window._client = client;
   store.account = account;
   const aliases = await client.getAliasesForAccount();
   store.aliases = aliases;

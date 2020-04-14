@@ -119,8 +119,8 @@ export function createMessageFromMessageDTO(messageDTO) {
     messageDTO.id,
     new Date(messageDTO.createdAt),
     new Date(messageDTO.updatedAt),
-    messageDTO.sender,
-    messageDTO.recipients,
+    createAliasFromAliasDTO(messageDTO.sender),
+    messageDTO.recipients.map(createAliasFromAliasDTO),
     messageDTO.payload
   );
 }

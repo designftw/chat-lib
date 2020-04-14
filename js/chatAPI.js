@@ -482,7 +482,7 @@ class MessagesEndpoint {
       .then((response) => response.json())
       .then((responseDTO) => {
         const messageDTO = responseDTO.data;
-        return createMessageFromMessageDTO(messageDTO);
+        return this.getMessage(ownAlias, messageDTO.id);
       });
   }
 
@@ -533,7 +533,7 @@ class MessagesEndpoint {
       .then((response) => response.json())
       .then((resultDTO) => {
         const messageDTO = resultDTO.data;
-        return createMessageFromMessageDTO(messageDTO);
+        return this.getMessage(ownAlias, messageDTO.id);
       });
   }
 
