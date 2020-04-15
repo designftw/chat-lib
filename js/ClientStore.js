@@ -1,13 +1,11 @@
-import { Account } from "./models.js";
-
 /**
  * The store is an object passed by reference which is used to access global state
  * of the chat application.
  */
-class ChatClientStore extends EventTarget {
+class ClientStore extends EventTarget {
   /**
-   * ChatClientStore constructor.
-   * @param {string} host see [ChatClientStore's host property]{@link ChatClientStore#host}
+   * ClientStore constructor.
+   * @param {string} host see [ClientStore's host property]{@link ClientStore#host}
    */
   constructor(host) {
     super();
@@ -22,4 +20,4 @@ class ChatClientStore extends EventTarget {
   }
 }
 
-export default ChatClientStore;
+export default ClientStore;

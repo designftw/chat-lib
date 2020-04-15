@@ -1,4 +1,4 @@
-import ChatClientStore from "./chatClientStore.js";
+import ClientStore from "./ClientStore.js";
 import { Account, Alias, Message, PrivatePayload } from "./models.js";
 import {
   createAccountFromAccountDTO,
@@ -8,28 +8,28 @@ import {
   getErrorFromResponse,
   createDefaultRequestInit,
 } from "./util.js";
-import ChatClient from "./chatClient.js";
+import Client from "./Client.js";
 
 /**
  * The interface for interacting with the ChatServer API.
  */
-class ChatAPI {
+class API {
   /**
-   * ChatAPI constructor.
+   * API constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
-   * @param {ChatClient} client see [ChatClient]{@link ChatClient}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
+   * @param {Client} client see [Client]{@link Client}
    */
   constructor(store, client) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
 
     /**
-     * See [ChatClient]{@link ChatClient}
-     * @type {ChatClient}
+     * See [Client]{@link Client}
+     * @type {Client}
      */
     this.client = client;
 
@@ -74,19 +74,19 @@ class WebSocketEndpoint {
   /**
    * WebSocketEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
-   * @param {ChatClient} client see [ChatClient]{@link ChatClient}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
+   * @param {Client} client see [Client]{@link Client}
    */
   constructor(store, client) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
 
     /**
-     * See [ChatClient]{@link ChatClient}
-     * @type {ChatClient}
+     * See [Client]{@link Client}
+     * @type {Client}
      */
     this.client = client;
 
@@ -152,7 +152,17 @@ class WebSocketEndpoint {
         }
         if (data.type === "message_update") {
           this.client.dispatchEvent(
-            new CustomEvent("onMessageUpdate", {
+            new CustomEvent("onUpdateMessage", {
+              detail: {
+                messageId: data.messageId,
+                aliasName,
+              },
+            })
+          );
+        }
+        if (data.type === "message_deleted") {
+          this.client.dispatchEvent(
+            new CustomEvent("onDeleteMessage", {
               detail: {
                 messageId: data.messageId,
                 aliasName,
@@ -187,12 +197,12 @@ class AuthEndpoint {
   /**
    * AuthEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
    */
   constructor(store) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
   }
@@ -288,12 +298,12 @@ class AliasesEndpoint {
   /**
    * AliasesEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
    */
   constructor(store) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
   }
@@ -403,11 +413,11 @@ class AliasesEndpoint {
    * Delete an existing alias by its name
    *
    * Raises an error if the alias does not exist or belong to the currently logged in account.
-   * @param {Alias} alias the alias to delete.
+   * @param {string} aliasName the alias to delete.
    * @returns {Promise<any>} a validation message.
    */
-  deleteAlias(alias) {
-    let route = `aliases/${alias.name}`;
+  deleteAlias(aliasName) {
+    let route = `aliases/${aliasName.name}`;
     return fetch(
       `${this.store.host}/${route}`,
       createDefaultRequestInit({ method: "DELETE" })
@@ -424,12 +434,12 @@ class MessagesEndpoint {
   /**
    * AliasesEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
    */
   constructor(store) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
   }
@@ -490,7 +500,6 @@ class MessagesEndpoint {
     let headers = {
       "user-alias-name": ownAlias,
     };
-    console.log("recipient names", recipientNames);
     const body = {
       payload: messagePayload,
       recipients: recipientNames,
@@ -535,7 +544,7 @@ class MessagesEndpoint {
   /**
    * Update a single message by it's id.
    * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
-   * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
+   * @param {string} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @param {string} payload The new payload to be associated with the message. See [Message's payload property]{@link Message#payload}
    * @returns {Promise<Message>} The updated message
    */
@@ -565,7 +574,7 @@ class MessagesEndpoint {
   /**
    * Delete a single message by it's id.
    * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
-   * @param {number} messageId The Message Id. see [Message's id property]{@link Message#id}
+   * @param {string} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @returns {Promise<any>} A validation message.
    */
   deleteMessage(ownAlias, messageId) {
@@ -593,12 +602,12 @@ class PrivatePayloadsEndpoint {
   /**
    * PrivatePayloadEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
    */
   constructor(store) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
   }
@@ -710,12 +719,12 @@ class FriendsEndpoint {
   /**
    * FriendsEndpoint constructor.
    *
-   * @param {ChatClientStore} store see [ChatClient's store property]{@link ChatClient#store}
+   * @param {ClientStore} store see [Client's store property]{@link Client#store}
    */
   constructor(store) {
     /**
-     * See [ChatClient's store property]{@link ChatClient#store}
-     * @type {ChatClientStore}
+     * See [Client's store property]{@link Client#store}
+     * @type {ClientStore}
      */
     this.store = store;
   }
@@ -793,4 +802,4 @@ class FriendsEndpoint {
   }
 }
 
-export default ChatAPI;
+export default API;

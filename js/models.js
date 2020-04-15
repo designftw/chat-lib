@@ -1,12 +1,20 @@
+/**
+ * Base class for all models
+ */
 export class BaseModel {
+  /**
+   * Constructor for the base model.
+   * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+   * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+   */
   constructor(id, createdAt, updatedAt) {
     /**
-     * The id of the account.
+     * The id of the model.
      *
-     * Unique across all accounts.
-     * @type {number}
+     * Unique across all models of the same type.
+     * @type {string}
      */
-    // @ts-ignore
     this.id = id;
 
     /**
@@ -33,7 +41,7 @@ export class Account extends BaseModel {
   /**
    * Account model constructor.
    *
-   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
    * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
    * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
    * @param {string} email see [Account's email property]{@link Account#email}
@@ -101,7 +109,7 @@ export class Message extends BaseModel {
   /**
    * Message model constructor.
    *
-   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
    * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
    * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
    * @param {Alias} sender see [Message's sender property]{@link Message#sender}
@@ -137,7 +145,7 @@ export class PrivatePayload extends BaseModel {
   /**
    * PrivatePayload model constructor.
    *
-   * @param {number} id see [BaseModel's id property]{@link BaseModel#id}
+   * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
    * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
    * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
    * @param {number} entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
