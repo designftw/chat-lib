@@ -14,7 +14,10 @@ import { Account, Alias, Message } from "./models.js";
  */
 
 /**
- * Delete Message Event
+ * Delete Message Event. Called when a message is deleted.
+ *
+ * When a message is deleted it no longer exists on the server so you cannot call
+ * [getMessageById]{@link Client#getMessageById} to get information about a deleted message.
  * @event onDeleteMessage
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was deleted.
@@ -22,6 +25,10 @@ import { Account, Alias, Message } from "./models.js";
 
 /**
  * Update Message Event
+ *
+ * Called when a message is updated. For example if the payload changes. Use
+ * [getMessageById]{@link Client#getMessageById} to get information about the updatedMessage such as the
+ * new payload.
  * @event onUpdateMessage
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was updated.
@@ -29,6 +36,9 @@ import { Account, Alias, Message } from "./models.js";
 
 /**
  * New Message Event
+ *
+ * Called when a new message is available. Call [getMessageById]{@link Client#getMessageById} to get
+ * information about the new message.
  * @event onNewMessage
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was created.

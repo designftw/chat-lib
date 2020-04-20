@@ -4,13 +4,13 @@ The messaging client is designed to hide some of the complexity of sending and r
 
 ## Data Model
 
-The data model consists of four types of models `Account`, `Alias`, `Message`, and `PrivatePayload`. Each model has a unique `id` and a Date for `createdAt` and `updatedAt` which correspond to the time the model was created and last updated respectively.
+The data model consists of four types of models [`Account`](Account.html), [`Alias`](Alias.html), [`Message`](Message.html), and [`PrivatePayload`](Account.html). Each model has a unique `id` and a Date for `createdAt` and `updatedAt` which correspond to the time the model was created and last updated respectively.
 
 ### Accounts and Aliases
 
 The [Account](Account.html) is used for logging into the messaging client and is associated with an email address. The account is not displayed to other users, it is only used for signing in and managing aliases. An account can be associated with multiple aliases.
 
-An [Alias](Alias.html) can be the sender or recipient of a message. Since each account has access to multiple aliases a user can send or receive messages as multiple aliases. The ability to send or receive messages as multiple aliases enables interesting paradigms such as having a work account and a personal account in the same messaging app.
+An [Alias](Alias.html) can be the sender or recipient of a message. Since each account has access to multiple aliases a user can send or receive messages as multiple aliases. The ability to send or receive messages as multiple aliases enables interesting paradigms such as having a work alias and a personal alias in the same messaging app.
 
 ### Messages
 
@@ -31,7 +31,9 @@ The client which receives this message could call `JSON.parse`, check the type o
 
 ## Getting Started
 
-The interface we expose is the [Client](Client.html). In the starter code the Client is exposed in the `onAccountLoggedIn` method. When in doubt check out the documentation or ask the course staff.
+The interface we expose is the [Client](Client.html). It should be possible to complete the assignment by using the methods on the Client to create, read, update, and delete data. In the starter code the Client is exposed in the `onAccountLoggedIn` method. When in doubt check out the documentation or ask the course staff.
+
+The client exposes three events which will be useful for displaying a live chat. [onDeleteMessage](global.html#event:onDeleteMessage), [onNewMessage](global.html#event:onNewMessage), [onUpdateMessage](global.html#event:onUpdateMessage).
 
 <!-- ### Private Payloads
 

@@ -148,14 +148,14 @@ export class PrivatePayload extends BaseModel {
    * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
    * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
    * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-   * @param {number} entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
+   * @param {string} entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
    * @param {string} payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
    */
   constructor(id, createdAt, updatedAt, entityId, payload) {
     super(id, createdAt, updatedAt);
     /**
      * The id of the object this payload is attached to.
-     * @type {number}
+     * @type {string}
      */
     this.entityId = entityId;
 

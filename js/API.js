@@ -212,7 +212,7 @@ class AuthEndpoint {
    * @param {string} alias The name of the initial alias if signup is successful.
    * @param {string} email The email address associated with the account.
    * @param {string} password The password associated with the account.
-   * @returns {Promise<Object>} A success message upon successful login
+   * @returns {Promise<any>} A success message upon successful login
    */
   signup(alias, email, password) {
     let route = "signup";
@@ -417,7 +417,7 @@ class AliasesEndpoint {
    * @returns {Promise<any>} a validation message.
    */
   deleteAlias(aliasName) {
-    let route = `aliases/${aliasName.name}`;
+    let route = `aliases/${aliasName}`;
     return fetch(
       `${this.store.host}/${route}`,
       createDefaultRequestInit({ method: "DELETE" })
@@ -615,7 +615,7 @@ class PrivatePayloadsEndpoint {
   /**
    * Create a new private payload.
    * @param {string} ownAlias the alias associated with the private payload.
-   * @param {Message | Alias} model an entity to attach a private payload to.
+   * @param {Message | Alias | Account} model an entity to attach a private payload to.
    * @param {string} payload the payload, private to the passed in alias, to be attached to the passed in model.
    * @returns {Promise<PrivatePayload>} the newly created private payload.
    */
@@ -732,6 +732,7 @@ class FriendsEndpoint {
   /**
    * Get all the friends of the passed in alias.
    * @param {string} ownAlias the alias who's friends will be retrieved.
+   * @returns {Promise<Alias[]>} an array of aliases which are friends with the passed in alias
    */
   getFriendsForAlias(ownAlias) {
     let route = `friends`;
