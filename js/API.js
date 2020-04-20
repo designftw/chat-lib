@@ -615,16 +615,16 @@ class PrivatePayloadsEndpoint {
   /**
    * Create a new private payload.
    * @param {string} ownAlias the alias associated with the private payload.
-   * @param {Message | Alias | Account} model an entity to attach a private payload to.
+   * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload is attached to.
    * @param {string} payload the payload, private to the passed in alias, to be attached to the passed in model.
    * @returns {Promise<PrivatePayload>} the newly created private payload.
    */
-  createPayload(ownAlias, model, payload) {
+  createPayload(ownAlias, entityId, payload) {
     let route = `payloads`;
     let headers = {
       "user-alias-name": ownAlias,
     };
-    const body = { payload, entity_id: model.id + "" };
+    const body = { payload, entity_id: entityId };
     return fetch(
       `${this.store.host}/${route}`,
       createDefaultRequestInit({
@@ -644,11 +644,11 @@ class PrivatePayloadsEndpoint {
   /**
    * Get the payload associated with the passed in alias and entity.
    * @param {string} ownAlias the alias associated with the private payload.
-   * @param {Message | Alias} model the entity associated with the private payload.
+   * @param {string} entityId the [id]{@link BaseModel#id} of the entity the returned payload is attached to.
    * @returns {Promise<PrivatePayload>} the requested PrivatePayload model.
    */
-  getPayload(ownAlias, model) {
-    let route = `payloads/${model.id}`;
+  getPayload(ownAlias, entityId) {
+    let route = `payloads/${entityId}`;
     let headers = {
       "user-alias-name": ownAlias,
     };
@@ -666,12 +666,12 @@ class PrivatePayloadsEndpoint {
   /**
    * Update the payload associated with the passed in alias and entity.
    * @param {string} ownAlias the alias associated with the private payload.
-   * @param {Message | Alias} model the entity associated with the private payload.
+   * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload to update is attached to.
    * @param {string} newPayload the new payload to attach to the alias and model
    * @returns {Promise<PrivatePayload>} the updated private payload model.
    */
-  updatePayload(ownAlias, model, newPayload) {
-    let route = `payloads/${model.id}`;
+  updatePayload(ownAlias, entityId, newPayload) {
+    let route = `payloads/${entityId}`;
     let headers = {
       "user-alias-name": ownAlias,
     };
@@ -695,11 +695,11 @@ class PrivatePayloadsEndpoint {
   /**
    * Delete the payload associated with the passed in alias and entity.
    * @param {string} ownAlias the alias associated with the private payload.
-   * @param {Message | Alias} model the entity associated with the private payload.
+   * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload to delete is attached to.
    * @returns {Promise<any>} a validation message.
    */
-  deletePayload(ownAlias, model) {
-    let route = `payloads/${model.id}`;
+  deletePayload(ownAlias, entityId) {
+    let route = `payloads/${entityId}`;
     let headers = {
       "user-alias-name": ownAlias,
     };
@@ -731,7 +731,7 @@ class FriendsEndpoint {
 
   /**
    * Get all the friends of the passed in alias.
-   * @param {string} ownAlias the alias who's friends will be retrieved.
+   * @param {string} ownAlias the alias whose friends will be retrieved.
    * @returns {Promise<Alias[]>} an array of aliases which are friends with the passed in alias
    */
   getFriendsForAlias(ownAlias) {
