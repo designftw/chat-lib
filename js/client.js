@@ -187,6 +187,15 @@ class Client extends EventTarget {
   }
 
   /**
+   * Get an alias by its name
+   * @param {string} aliasName the name of the alias to get
+   * @returns {Promise<Alias>} The Alias model associated with the passed in name
+   */
+  getAlias(aliasName) {
+    return this.api.aliases.getAlias(aliasName);
+  }
+
+  /**
    * Create a new alias with the passed in aliasName and payload.
    * @param {string} aliasName the name of the new alias
    * @param {string} payload the payload on the new alias.

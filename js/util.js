@@ -73,6 +73,7 @@ export function getErrorFromResponse(response) {
   }).catch((responseOrError) => {
     if (responseOrError instanceof Response) {
       return responseOrError.json().then((errorJSON) => {
+        console.warn("api error", errorJSON.message);
         throw new Error(errorJSON.message);
       });
     }
