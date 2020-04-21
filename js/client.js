@@ -299,6 +299,33 @@ class Client extends EventTarget {
   removeFriend(ownAlias, prevFriendAlias) {
     return this.api.friends.removeFriend(ownAlias, prevFriendAlias);
   }
+
+  /**
+   * Given an array of Messages group the messages by unique groups of sender
+   * and recipient aliases. For example if Alice sends Bob a message and Bob
+   * sends Alice a message both of those messages are in the same group since
+   * the set of sender and recipient aliases contains {Alice, Bob} for each
+   * message.
+   *
+   * @param {Message[]} messages the messages to group by unique groups of senders and recipients.
+   * @returns {Message[][]} an array where each element is a set of messages with a unique set of senders and recipients.
+   */
+  groupMessagesByUniqueRecipients(messages) {
+    const msgKeyedByInterlocutorSets = messages.reduce(
+      (
+        r,
+        v,
+        i,
+        a,
+        k = [...new Set([v.sender.id, ...v.recipients.map((c) => c.id)])]
+          .sort()
+          .join("")
+      ) => ((r[k] || (r[k] = [])).push(v), r),
+      {}
+    );
+
+    return Object.values(msgKeyedByInterlocutorSets);
+  }
 }
 
 export default Client;

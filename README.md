@@ -55,11 +55,29 @@ The currently logged in account can access the friends list for any of it's alia
 
 ## Getting Started
 
-The interface we expose is the [Client](Client.html). It should be possible to complete the assignment by using the methods on the Client to create, read, update, and delete data.
+The interface we expose is the [Client](Client.html). It should be possible to complete the entire assignment by using the methods on the Client to create, read, update, and delete data.
 
-The client exposes three events which will be useful for displaying a live chat. [onDeleteMessage](global.html#event:onDeleteMessage), [onNewMessage](global.html#event:onNewMessage), [onUpdateMessage](global.html#event:onUpdateMessage).
+In the starter code when the user logs in, the function `onAccountLoggedIn` is called with a client which can manage aliases associated with the logged in account.
 
-In the starter code the Client is exposed in the `onAccountLoggedIn` method. When in doubt check out the documentation or ask the course staff.
+The first method you will want to call on the client is [`client.getAliasesForAccount()`](Client.html#getAliasesForAccount). This method returns a promise which resolves to an array of all the aliases associated with the logged in account. The documentation contains the return types and argument types for all of the methods on the client so you can access this information yourselves.
+
+Using one of the aliases returned by [`client.getAliasesForAccount()`](Client.html#getAliasesForAccount) you will want to get the messages for the alias using [`client.getMessagesForAlias()`](Client.html#getMessagesForAlias). The documentation shows that this method takes in a string argument `aliasName` and two optional parameters.
+
+> _Why do most of the client methods take an alias name as the first argument?_
+
+> Because the client can be used to manage multiple aliases the methods on the client need an argument to specify which alias is being accessed. If you have a work alias and a personal alias you would get the messages for the work alias by passing the name of the work alias as the first argument. This pattern is repeated throughout the client.
+
+Now that you have a list of messages associated with an alias you may want to group them by unique groups of recipients. We have provided a method in the client which performs this called [groupMessagesByUniqueRecipients](Client.html#groupMessagesByUniqueRecipients). You could alternatively provide your own grouping strategy using properties on the message payloads, or write your own function. This method is just for convenience and prototyping.
+
+How about sending messages? Let's say the logged in client manages an alias named `Alice` and wants to send the alias named `Bob` a message that has the payload `Hello World`. You can call [`client.sendMessage('Alice', ['Bob'], 'Hello World')`](Client.html#sendMessage). The first argument specifies the local alias which is going to send the message, the second argument is a list of recipients, and the third argument is the message payload.
+
+Finally how can you receive messages? The client exposes three events which will be useful for displaying a live updating chat. [onDeleteMessage](global.html#event:onDeleteMessage), [onNewMessage](global.html#event:onNewMessage), [onUpdateMessage](global.html#event:onUpdateMessage). If the client wants to update the UI whenever it should display a new message, the client can listen to the `onNewMessage` event using `client.addEventListener('onNewMessage', e => console.log(e.detail))` (the console log is just a placeholder!). The event's detail property contains the `messageId` of the new message and the `aliasName` the message should be retrieved for. The client can then get all the information about the new message by calling [`client.getMessageById(aliasName, messageId)`](Client.html#getMessageById).
+
+Hopefully that gives you a head start on implementing basic messaging functionality. When in doubt first check the console to see if an error is being logged, next look at the network tab in the console to see if your requests are failing, finally reach out to course staff.
+
+### PS
+
+We highly encourage you to reach out to each other via slack/piazza or other means and share aliases so that you can message each other while developing the client.
 
 <!-- ### Private Payloads
 
