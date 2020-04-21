@@ -18,7 +18,9 @@ A [Message](Message.html) is sent from one Alias to one or more recipient aliase
 
 ### Payloads
 
-[Aliases](Alias.html) and [Messages](Message.html) have a payload field which can be set by the owner of the Alias and the sender of the Message respectively. The payload contains an arbitrary string. This seems like a limitation but it really is not. Almost any javascript object can be passed as a string using `JSON.parse` and `JSON.stringify`. `JSON.parse` takes a string of json and parses it into an object. `JSON.stringify` takes a javascript object and converts it to a json string. An image message could be sent using a payload such as the following.
+[Aliases](Alias.html) and [Messages](Message.html) have a payload field which can be set by the owner of the Alias and the sender of the Message respectively. The payload contains an arbitrary string. This seems like a limitation but it really is not. Almost any javascript object can be converted to a string and from a string using `JSON.parse` and `JSON.stringify`.
+
+`JSON.parse` takes a string of json and parses it into an object. `JSON.stringify` takes a javascript object and converts it to a json string. An image message could be sent using a payload such as the following.
 
 ```json
 {
