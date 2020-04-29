@@ -543,7 +543,7 @@ class MessagesEndpoint {
 
   /**
    * Update a single message by it's id.
-   * @param {string} ownAlias the alias associated with the message id, either the sender or recipient.
+   * @param {string} ownAlias the alias associated with the message id. Must be the sender of the message.
    * @param {string} messageId The Message Id. see [Message's id property]{@link Message#id}
    * @param {string} payload The new payload to be associated with the message. See [Message's payload property]{@link Message#payload}
    * @returns {Promise<Message>} The updated message
