@@ -160,7 +160,7 @@ class WebSocketEndpoint {
             })
           );
         }
-        if (data.type === "message_deleted") {
+        if (data.type === "message_delete") {
           this.client.dispatchEvent(
             new CustomEvent("onDeleteMessage", {
               detail: {
