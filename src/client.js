@@ -1,6 +1,9 @@
 import ClientStore from "./ClientStore.js";
 import API from "./API.js";
-import { Account, Alias, Message, PrivatePayload } from "./models.js";
+import Account from "./Account.js";
+import Alias from "./Alias.js";
+import Message from "./Message.js";
+import PrivatePayload from "./PrivatePayload.js";
 
 /**
  * onUnauthorizedAccess: detail is {message, aliasName}
@@ -50,7 +53,7 @@ import { Account, Alias, Message, PrivatePayload } from "./models.js";
  * @fires onUpdateMessage
  * @fires onNewMessage
  */
-class Client extends EventTarget {
+export default class Client extends EventTarget {
   /**
    * Client constructor.
    * @param {string} host see [ClientStore's host property]{@link ClientStore#host}
@@ -327,5 +330,3 @@ class Client extends EventTarget {
     return Object.values(msgKeyedByInterlocutorSets);
   }
 }
-
-export default Client;

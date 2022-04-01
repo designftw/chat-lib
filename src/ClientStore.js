@@ -2,7 +2,7 @@
  * The store is an object passed by reference which is used to access global state
  * of the chat application.
  */
-class ClientStore extends EventTarget {
+export default class ClientStore extends EventTarget {
   /**
    * ClientStore constructor.
    * @param {string} host see [ClientStore's host property]{@link ClientStore#host}
@@ -19,5 +19,3 @@ class ClientStore extends EventTarget {
     this.host = host;
   }
 }
-
-export default ClientStore;

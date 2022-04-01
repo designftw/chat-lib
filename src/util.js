@@ -1,4 +1,7 @@
-import { Alias, Account, Message, PrivatePayload } from "./models.js";
+import Account from "./Account.js";
+import Alias from "./Alias.js";
+import Message from "./Message.js";
+import PrivatePayload from "./PrivatePayload.js";
 
 /**
  * Options for creating the request init

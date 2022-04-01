@@ -1,5 +1,9 @@
 import ClientStore from "./ClientStore.js";
-import { Account, Alias, Message, PrivatePayload } from "./models.js";
+import Account from "./Account.js";
+import Alias from "./Alias.js";
+import Message from "./Message.js";
+import PrivatePayload from "./PrivatePayload.js";
+
 import {
   createAccountFromAccountDTO,
   createAliasFromAliasDTO,
