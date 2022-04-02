@@ -4,7 +4,7 @@
   "description": "chat library for designftw.",
   "main": "index.js",
   "scripts": {
-    "docs": "jsdoc --configure .jsdoc.config.js"
+    "docs": "node_modules/.bin/jsdoc --configure .jsdoc.config.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "url": "https://github.com/designftw/chat-lib/issues"
   },
   "homepage": "https://github.com/designftw/chat-lib#readme",
-  "dependencies": {
+  "devDependencies": {
     "@ckeditor/jsdoc-plugins": "^30.1.0",
     "jsdoc": "^3.6.10"
   }
