@@ -1,0 +1,24 @@
+{
+  "name": "chat-lib",
+  "version": "0.0.1",
+  "description": "chat library for designftw.",
+  "main": "index.js",
+  "scripts": {
+    "docs": "jsdoc --configure .jsdoc.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/designftw/chat-lib.git"
+  },
+  "keywords": [],
+  "author": "Luke Murray",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/designftw/chat-lib/issues"
+  },
+  "homepage": "https://github.com/designftw/chat-lib#readme",
+  "dependencies": {
+    "@ckeditor/jsdoc-plugins": "^30.1.0",
+    "jsdoc": "^3.6.10"
+  }
+}

@@ -1,8 +1,12 @@
-# Structure
+## Installation
 
-- the js folder contains javascript served by some remote server
-- the starter folder contains starter code for students
+1. Install dependencies
 
-before releasing to students update the import url and host url in the starter code.
+`npm install`
 
-- to get the code running install `fd`, `entr`, `live-server`, `jsdoc` and run `start.sh`.
+## Scripts
+
+The package.json file contains several scripts.
+They can be run using `npm run <script name>`.
+
+- `docs`: Generate the documentation and add it to the docs folder. After running this script you can view documentation by opening [`docs/index.html`](docs/index.html).
