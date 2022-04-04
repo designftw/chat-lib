@@ -122,11 +122,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
   getMessagesForAlias(aliasName, interlocutors, sinceTime) {
-    return this.api.messages.getMessagesForAlias(
-      aliasName,
-      interlocutors,
-      sinceTime
-    );
+    return this.api.messages.getMessagesForAlias(aliasName, interlocutors, sinceTime);
   }
 
   /**
