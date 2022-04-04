@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "chat library for designftw.",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "docs": "rimraf docs && jsdoc --configure .jsdoc.config.js && copyfiles src/* docs"
   },
