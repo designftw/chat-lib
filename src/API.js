@@ -250,8 +250,8 @@ class AuthEndpoint {
     )
       .then(getErrorFromResponse)
       .then((res) => res.json())
-      .then((accountDTO) => {
-        return createAccountFromAccountDTO(accountDTO);
+      .then((res) => {
+        return createAccountFromAccountDTO(res.account);
       });
   }
 

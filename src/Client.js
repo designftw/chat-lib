@@ -78,7 +78,7 @@ export default class Client extends EventTarget {
    * @param {string} alias The name of the initial alias if signup is successful.
    * @param {string} email The email address associated with the account.
    * @param {string} password The password associated with the account.
-   * @returns {Promise<any>} A validation message
+   * @returns {Promise<{message: string}>} A validation message
    */
   signup(alias, email, password) {
     return this.api.auth.signup(alias, email, password);
