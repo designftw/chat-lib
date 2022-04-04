@@ -1,6 +1,5 @@
 module.exports = {
   source: {
-    // include all js files in the src directory
     include: ["src"],
   },
   opts: {
@@ -10,6 +9,10 @@ module.exports = {
     destination: "docs",
     // use the readme as the home page for jsdoc
     readme: "README.md",
+    // use clean-jsdoc theme for a better user experience
+    template: "node_modules/clean-jsdoc-theme",
+    // show what jsdoc is doing
+    verbose: true,
   },
   plugins: [
     // fix for https://github.com/jsdoc/jsdoc/issues/1132

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/designftw/chat-lib#readme",
   "devDependencies": {
     "@ckeditor/jsdoc-plugins": "^30.1.0",
-    "jsdoc": "^3.6.10"
+    "jsdoc": "^3.6.10",
+    "clean-jsdoc-theme": "^3.3.4"
   }
 }
