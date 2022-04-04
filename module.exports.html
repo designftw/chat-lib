@@ -31,7 +31,7 @@
 
 
     <title>
-      BaseModel
+      exports
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        BaseModel
+        exports
       </h1>
       
 
@@ -115,12 +115,12 @@
         
         <h2>
         
-        BaseModel
+        exports
         
         </h2>
         
         
-            <div class="class-description">Base class for all models</div>
+            <div class="class-description">The aliases endpoint of the chat server.</div>
         
     
 </header>
@@ -135,9 +135,9 @@
         <h2>Constructor</h2>
     
 
-    <h4 class="name" id="BaseModel">
-        <a href="#BaseModel">#</a>
-        <span class="type-signature"></span>new BaseModel<span class="signature">(id, createdAt, updatedAt)</span><span class="type-signature"></span>
+    <h4 class="name" id="exports">
+        <a href="#exports">#</a>
+        <span class="type-signature"></span>new exports<span class="signature">(store)</span><span class="type-signature"></span>
     </h4>
 
     
@@ -145,7 +145,7 @@
 
 
     <div class="description">
-        Constructor for the base model.
+        AliasesEndpoint constructor.
     </div>
 
 
@@ -182,13 +182,13 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>store</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
 
 
             
@@ -198,53 +198,7 @@
 
             
 
-            <td class="description last">see <a href="BaseModel.html#id">BaseModel's id property</a></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>createdAt</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">see <a href="BaseModel.html#createdAt">BaseModel's createdAt property</a></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>updatedAt</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">see <a href="BaseModel.html#updatedAt">BaseModel's updatedAt property</a></td>
+            <td class="description last">see <a href="Client.html#store">Client's store property</a></td>
         </tr>
 
     
@@ -289,7 +243,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="BaseModel.js.html">BaseModel.js</a>, <a href="BaseModel.js.html#line4">line 4</a>
+                <a href="AliasesEndpoint.js.html">AliasesEndpoint.js</a>, <a href="AliasesEndpoint.js.html#line10">line 10</a>
             </li></ul></dd>
         </div>
     
@@ -336,16 +290,16 @@
 
         
             
-<h4 class="name" id="createdAt">
-    <a href="#createdAt">#</a>
-    <span class="type-signature"></span>createdAt<span class="type-signature"> :Date</span>
+<h4 class="name" id="store">
+    <a href="#store">#</a>
+    <span class="type-signature"></span>store<span class="type-signature"> :<a href="ClientStore.html">ClientStore</a></span>
 </h4>
 
 
 
 
 <div class="description">
-    The date that the model was created.
+    See <a href="Client.html#store">Client's store property</a>
 </div>
 
 
@@ -355,7 +309,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Date</span>
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
 
 
             </li>
@@ -398,175 +352,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="BaseModel.js.html">BaseModel.js</a>, <a href="BaseModel.js.html#line24">line 24</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="id">
-    <a href="#id">#</a>
-    <span class="type-signature"></span>id<span class="type-signature"> :string</span>
-</h4>
-
-
-
-
-<div class="description">
-    The id of the model.
-
-Unique across all models of the same type.
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="BaseModel.js.html">BaseModel.js</a>, <a href="BaseModel.js.html#line18">line 18</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="updatedAt">
-    <a href="#updatedAt">#</a>
-    <span class="type-signature"></span>updatedAt<span class="type-signature"> :Date</span>
-</h4>
-
-
-
-
-<div class="description">
-    The date that the model was last updated.
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">Date</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="BaseModel.js.html">BaseModel.js</a>, <a href="BaseModel.js.html#line30">line 30</a>
+                <a href="AliasesEndpoint.js.html">AliasesEndpoint.js</a>, <a href="AliasesEndpoint.js.html#line21">line 21</a>
             </li></ul></dd>
         </div>
     

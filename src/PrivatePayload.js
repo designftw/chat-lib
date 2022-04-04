@@ -15,6 +15,7 @@ export default class PrivatePayload extends BaseModel {
 	 */
 	constructor(id, createdAt, updatedAt, entityId, payload) {
 		super(id, createdAt, updatedAt);
+
 		/**
 		 * The id of the object this payload is attached to.
 		 * @type {string}
