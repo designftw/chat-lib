@@ -19,25 +19,11 @@ import PrivatePayload from "./PrivatePayload.js";
 export function createDefaultRequestInit(options) {
   return {
     method: options.method,
-    headers: createJSONEncodedHeaders(options.headers),
+    headers: options.headers,
     body: options.body ? createJSONEncodedBody(options.body) : null,
     redirect: "follow",
     credentials: "include",
   };
-}
-
-/**
- * Create Headers from an object.
- * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
- */
-function createHeadersFromObject(headers = undefined) {
-  let headersToAdd = new Headers();
-  if (headers !== undefined) {
-    for (let key of Object.keys(headers)) {
-      headersToAdd.append(key, headers[key]);
-    }
-  }
-  return headersToAdd;
 }
 
 /**
@@ -46,17 +32,6 @@ function createHeadersFromObject(headers = undefined) {
  */
 function createJSONEncodedBody(body) {
   return JSON.stringify(body);
-}
-
-/**
- * Create the default headers used in GET and DELETE requests.
- * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
- * @returns {Headers}
- */
-function createJSONEncodedHeaders(headers = undefined) {
-  let defaultHeaders = createHeadersFromObject(headers);
-  defaultHeaders.append("Content-Type", "application/json");
-  return defaultHeaders;
 }
 
 /**
