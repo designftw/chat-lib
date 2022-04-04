@@ -12,7 +12,7 @@ import {
   getErrorFromResponse,
   createDefaultRequestInit,
 } from "./util.js";
-import Client from "./Client.js";
+import Client from "./client.js";
 
 /**
  * The interface for interacting with the ChatServer API.
