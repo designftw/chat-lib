@@ -76,6 +76,12 @@ class API {
  */
 class WebSocketEndpoint {
   /**
+   * Private object mapping alias ids to open web sockets.
+   * @type {Object.<number, WebSocket>}
+   */
+  #aliasNameToWebSocket;
+
+  /**
    * WebSocketEndpoint constructor.
    *
    * @param {ClientStore} store see [Client's store property]{@link Client#store}
@@ -94,11 +100,7 @@ class WebSocketEndpoint {
      */
     this.client = client;
 
-    /**
-     * Private object mapping alias ids to open web sockets.
-     * @type {Object.<number, WebSocket>}
-     */
-    this._aliasNameToWebSocket = {};
+    this.#aliasNameToWebSocket = {};
   }
 
   /**
@@ -106,10 +108,10 @@ class WebSocketEndpoint {
    * @param {string} aliasName the alias to get the web socket for.
    * @returns {Promise<WebSocket>}
    */
-  _getWebSocketForAlias(aliasName) {
+  #getWebSocketForAlias(aliasName) {
     // if the socket exists return it
-    if (this._aliasNameToWebSocket.hasOwnProperty(aliasName)) {
-      return Promise.resolve(this._aliasNameToWebSocket[aliasName]);
+    if (this.#aliasNameToWebSocket.hasOwnProperty(aliasName)) {
+      return Promise.resolve(this.#aliasNameToWebSocket[aliasName]);
     }
     return new Promise((resolve, reject) => {
       let socket = new WebSocket(
@@ -122,7 +124,7 @@ class WebSocketEndpoint {
       socket.addEventListener(
         "open",
         () => {
-          this._aliasNameToWebSocket[aliasName] = socket;
+          this.#aliasNameToWebSocket[aliasName] = socket;
           resolve(socket);
         },
         { once: true }
@@ -138,7 +140,7 @@ class WebSocketEndpoint {
       socket.addEventListener(
         "close",
         () => {
-          delete this._aliasNameToWebSocket[aliasName];
+          delete this.#aliasNameToWebSocket[aliasName];
         },
         { once: true }
       );
@@ -188,7 +190,7 @@ class WebSocketEndpoint {
    * @param {string} aliasName an alias to open a web socket for
    */
   openWebSocketFor(aliasName) {
-    return this._getWebSocketForAlias(aliasName).then((res) => ({
+    return this.#getWebSocketForAlias(aliasName).then((res) => ({
       message: "successfully opened web socket",
     }));
   }
