@@ -16,6 +16,7 @@ export default class Message extends BaseModel {
 	 */
 	constructor(id, createdAt, updatedAt, sender, recipients, payload) {
 		super(id, createdAt, updatedAt);
+
 		/**
 		 * The id of the Alias which sent the message. See [Alias's id Property]{@link Alias#id}
 		 * @type {Alias}
