@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: WebSocketEndpoint</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: WebSocketEndpoint</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>WebSocketEndpoint<span class="signature">(store, client)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Helper class for communicating with web sockets on the chat server.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="WebSocketEndpoint"><span class="type-signature"></span>new WebSocketEndpoint<span class="signature">(store, client)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    WebSocketEndpoint constructor.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>store</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Client.html#store">Client's store property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Client.html">Client</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="Client.html">Client</a></span></h4>
+
+
+
+
+<div class="description">
+    See <a href="Client.html">Client</a>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="store"><span class="type-signature"></span>store<span class="type-signature"> :<a href="ClientStore.html">ClientStore</a></span></h4>
+
+
+
+
+<div class="description">
+    See <a href="Client.html#store">Client's store property</a>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line95">line 95</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="openWebSocketFor"><span class="type-signature"></span>openWebSocketFor<span class="signature">(aliasName)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>aliasName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an alias to open a web socket for</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Alias.html">Alias</a></li><li><a href="AliasesEndpoint.html">AliasesEndpoint</a></li><li><a href="API.html">API</a></li><li><a href="AuthEndpoint.html">AuthEndpoint</a></li><li><a href="BaseModel.html">BaseModel</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientStore.html">ClientStore</a></li><li><a href="FriendsEndpoint.html">FriendsEndpoint</a></li><li><a href="Message.html">Message</a></li><li><a href="MessagesEndpoint.html">MessagesEndpoint</a></li><li><a href="PrivatePayload.html">PrivatePayload</a></li><li><a href="PrivatePayloadsEndpoint.html">PrivatePayloadsEndpoint</a></li><li><a href="WebSocketEndpoint.html">WebSocketEndpoint</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:onDeleteMessage">onDeleteMessage</a></li><li><a href="global.html#event:onNewMessage">onNewMessage</a></li><li><a href="global.html#event:onUpdateMessage">onUpdateMessage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createAccountFromAccountDTO">createAccountFromAccountDTO</a></li><li><a href="global.html#createAliasFromAliasDTO">createAliasFromAliasDTO</a></li><li><a href="global.html#createDefaultRequestInit">createDefaultRequestInit</a></li><li><a href="global.html#createHeadersFromObject">createHeadersFromObject</a></li><li><a href="global.html#createJSONEncodedBody">createJSONEncodedBody</a></li><li><a href="global.html#createJSONEncodedHeaders">createJSONEncodedHeaders</a></li><li><a href="global.html#createMessageFromMessageDTO">createMessageFromMessageDTO</a></li><li><a href="global.html#createPrivatePayloadFromPayloadDTO">createPrivatePayloadFromPayloadDTO</a></li><li><a href="global.html#getErrorFromResponse">getErrorFromResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 04 2022 14:16:40 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

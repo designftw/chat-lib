@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>DFTW Messaging Client</h1>
+<p>The messaging client is designed to hide some of the complexity of sending and receiving messages while also retaining flexibility so students can implement their prototypes.</p>
+<h2>Data Model</h2>
+<p>The data model consists of four types of models <a href="Account.html"><code>Account</code></a>, <a href="Alias.html"><code>Alias</code></a>, <a href="Message.html"><code>Message</code></a>, and <a href="Account.html"><code>PrivatePayload</code></a>. Each model has a unique <code>id</code> and a Date for <code>createdAt</code> and <code>updatedAt</code> which correspond to the time the model was created and last updated respectively.</p>
+<h3>Accounts and Aliases</h3>
+<p>The <a href="Account.html">Account</a> is used for logging into the messaging client and is associated with an email address. The account is not displayed to other users, it is only used for signing in and managing aliases. An account can be associated with multiple aliases.</p>
+<p>An <a href="Alias.html">Alias</a> can be the sender or recipient of a message. Since each account has access to multiple aliases a user can send or receive messages as multiple aliases. The ability to send or receive messages as multiple aliases enables interesting paradigms such as having a work alias and a personal alias in the same messaging app.</p>
+<h3>Messages</h3>
+<p>A <a href="Message.html">Message</a> is sent from one Alias to one or more recipient aliases. The message has a sender, recipients, and a payload.</p>
+<h3>Payloads</h3>
+<p><a href="Alias.html">Aliases</a> and <a href="Message.html">Messages</a> have a payload field which can be set by the owner of the Alias and the sender of the Message respectively. The payload contains an arbitrary string. This seems like a limitation but it really is not. Almost any javascript object can be converted to a string and from a string using <code>JSON.parse</code> and <code>JSON.stringify</code>.</p>
+<p><code>JSON.parse</code> takes a string of json and parses it into an object. <code>JSON.stringify</code> takes a javascript object and converts it to a json string. An image message could be sent using a payload such as the following.</p>
+<pre class="prettyprint source lang-json"><code>{
+  &quot;type&quot;: &quot;image&quot;,
+  &quot;url&quot;: &quot;https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg&quot;
+}
+</code></pre>
+<p>The client which receives this message could call <code>JSON.parse</code>, check the type of the message and display the URL.</p>
+<h4>Tips for Using Payloads</h4>
+<p>For a message the naive way to use a payload is to set the payload to be the text contents of the message. For example Alice can send Bob a message using <code>client.sendMessage('Alice', ['Bob'], 'foo')</code> and Alice and Bob get message models which have <code>{payload: &quot;foo&quot;}</code> as well as other properties. However if Alice want to add more data to her messages such as an <code>urgent</code> flag or an <code>image url</code> then sending a string may get complicated. Instead we recommend following the <a href="https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle">Open-closed principle</a> and sending messages as stringified objects and using properties to identify fields. For example a message containing the text foo and an urgent flag could have a payload <code>{text: &quot;foo&quot;, urgent: True}</code>. Alice could then send this message to Bob using <code>client.sendMessage('Alice', ['Bob'], JSON.stringify({text: 'foo', urgent: True}))</code>.</p>
+<p><em>You do not need to use alias payloads to implement basic message functionality.</em></p>
+<p>For an alias the payload can be used to provide additional public information. For example the payload could contain an <code>avatar_url</code>, a <code>status</code> or any number of other fields.</p>
+<h3>Private Payloads</h3>
+<p><em>You do not need to use private payloads to implement basic message functionality.</em></p>
+<p>A private payload is similar to a payload on a message or an account but is only visible to the alias which sets the payload. A private payload can be attached by an alias to any message, account, or alias. A private payload is a string which can contain arbitrary JSON.</p>
+<h4>Tips for Using Private Payloads</h4>
+<p>A private payload attached by an alias to an account can be used to store account specific settings, for example the <code>theme</code> of the messenger app.</p>
+<p>A private payload attached by an alias to another alias could be used to store a nickname for the alias, or <code>isFriend</code> flag.</p>
+<h3>Friends</h3>
+<p>The currently logged in account can access the friends list for any of it's aliases. The friends list is simply a list of aliases that are friends of the passed in alias. Friendship is not bidirectional. If Alice adds Bob to her friend list then Alice's friend list will contain Bob but Bob's friend list does not contain Alice. The friends list does not affect the sending or receiving of messages. The friends list is simply a convenience function which lists known contacts of an alias. You do not need to use the friends list functionality in your client. You could actually implement your own friends list using private payloads.</p>
+<h2>Getting Started</h2>
+<p>The interface we expose is the <a href="Client.html">Client</a>. It should be possible to complete the entire assignment by using the methods on the Client to create, read, update, and delete data.</p>
+<p>In the starter code when the user logs in, the function <code>onAccountLoggedIn</code> is called with a client which can manage aliases associated with the logged in account.</p>
+<p>The first method you will want to call on the client is <a href="Client.html#getAliasesForAccount"><code>client.getAliasesForAccount()</code></a>. This method returns a promise which resolves to an array of all the aliases associated with the logged in account. The documentation contains the return types and argument types for all of the methods on the client so you can access this information yourselves.</p>
+<p>Using one of the aliases returned by <a href="Client.html#getAliasesForAccount"><code>client.getAliasesForAccount()</code></a> you will want to get the messages for the alias using <a href="Client.html#getMessagesForAlias"><code>client.getMessagesForAlias()</code></a>. The documentation shows that this method takes in a string argument <code>aliasName</code> and two optional parameters.</p>
+<blockquote>
+<p><em>Why do most of the client methods take an alias name as the first argument?</em></p>
+</blockquote>
+<blockquote>
+<p>Because the client can be used to manage multiple aliases the methods on the client need an argument to specify which alias is being accessed. If you have a work alias and a personal alias you would get the messages for the work alias by passing the name of the work alias as the first argument. This pattern is repeated throughout the client.</p>
+</blockquote>
+<p>Now that you have a list of messages associated with an alias you may want to group them by unique groups of recipients. We have provided a method in the client which performs this called <a href="Client.html#groupMessagesByUniqueRecipients">groupMessagesByUniqueRecipients</a>. You could alternatively provide your own grouping strategy using properties on the message payloads, or write your own function. This method is just for convenience and prototyping.</p>
+<p>How about sending messages? Let's say the logged in client manages an alias named <code>Alice</code> and wants to send the alias named <code>Bob</code> a message that has the payload <code>Hello World</code>. You can call <a href="Client.html#sendMessage"><code>client.sendMessage('Alice', ['Bob'], 'Hello World')</code></a>. The first argument specifies the local alias which is going to send the message, the second argument is a list of recipients, and the third argument is the message payload.</p>
+<p>Finally how can you receive messages? The client exposes three events which will be useful for displaying a live updating chat. <a href="global.html#event:onDeleteMessage">onDeleteMessage</a>, <a href="global.html#event:onNewMessage">onNewMessage</a>, <a href="global.html#event:onUpdateMessage">onUpdateMessage</a>. If the client wants to update the UI whenever it should display a new message, the client can listen to the <code>onNewMessage</code> event using <code>client.addEventListener('onNewMessage', e =&gt; console.log(e.detail))</code> (the console log is just a placeholder!). The event's detail property contains the <code>messageId</code> of the new message and the <code>aliasName</code> the message should be retrieved for. The client can then get all the information about the new message by calling <a href="Client.html#getMessageById"><code>client.getMessageById(aliasName, messageId)</code></a>.</p>
+<p>Hopefully that gives you a head start on implementing basic messaging functionality. When in doubt first check the console to see if an error is being logged, next look at the network tab in the console to see if your requests are failing, finally reach out to course staff.</p>
+<h3>PS</h3>
+<p>We highly encourage you to reach out to each other via slack/piazza or other means and share aliases so that you can message each other while developing the client.</p>
+<!-- ### Private Payloads
+
+[PrivatePayloads](PrivatePayload.html) are similar to the public payload on Alias and Message. However [PrivatePayloads] are only accessible by the alias which creates the payload. An Alias can create a PrivatePayload on  --></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Alias.html">Alias</a></li><li><a href="AliasesEndpoint.html">AliasesEndpoint</a></li><li><a href="API.html">API</a></li><li><a href="AuthEndpoint.html">AuthEndpoint</a></li><li><a href="BaseModel.html">BaseModel</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientStore.html">ClientStore</a></li><li><a href="FriendsEndpoint.html">FriendsEndpoint</a></li><li><a href="Message.html">Message</a></li><li><a href="MessagesEndpoint.html">MessagesEndpoint</a></li><li><a href="PrivatePayload.html">PrivatePayload</a></li><li><a href="PrivatePayloadsEndpoint.html">PrivatePayloadsEndpoint</a></li><li><a href="WebSocketEndpoint.html">WebSocketEndpoint</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:onDeleteMessage">onDeleteMessage</a></li><li><a href="global.html#event:onNewMessage">onNewMessage</a></li><li><a href="global.html#event:onUpdateMessage">onUpdateMessage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createAccountFromAccountDTO">createAccountFromAccountDTO</a></li><li><a href="global.html#createAliasFromAliasDTO">createAliasFromAliasDTO</a></li><li><a href="global.html#createDefaultRequestInit">createDefaultRequestInit</a></li><li><a href="global.html#createHeadersFromObject">createHeadersFromObject</a></li><li><a href="global.html#createJSONEncodedBody">createJSONEncodedBody</a></li><li><a href="global.html#createJSONEncodedHeaders">createJSONEncodedHeaders</a></li><li><a href="global.html#createMessageFromMessageDTO">createMessageFromMessageDTO</a></li><li><a href="global.html#createPrivatePayloadFromPayloadDTO">createPrivatePayloadFromPayloadDTO</a></li><li><a href="global.html#getErrorFromResponse">getErrorFromResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 04 2022 14:16:40 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Message</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Message</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>Message<span class="signature">(id, createdAt, updatedAt, sender, recipients, payload)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Represents a Message</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="Message"><span class="type-signature"></span>new Message<span class="signature">(id, createdAt, updatedAt, sender, recipients, payload)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Message model constructor.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#id">BaseModel's id property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#createdAt">BaseModel's createdAt property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updatedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#updatedAt">BaseModel's updatedAt property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sender</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Alias.html">Alias</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Message.html#sender">Message's sender property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>recipients</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Alias.html">Alias</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Message.html#recipients">Message's recipients property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>payload</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Message.html#payload">Message's payload property</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Message.js.html">Message.js</a>, <a href="Message.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="payload"><span class="type-signature"></span>payload<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    The data associated with the message.
+
+This could be just message text but could also be arbitrary JSON.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Message.js.html">Message.js</a>, <a href="Message.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="recipients"><span class="type-signature"></span>recipients<span class="type-signature"> :Array.&lt;<a href="Alias.html">Alias</a>></span></h4>
+
+
+
+
+<div class="description">
+    The ids of the Aliases which received the message. See Alias's id Property
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;<a href="Alias.html">Alias</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Message.js.html">Message.js</a>, <a href="Message.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="sender"><span class="type-signature"></span>sender<span class="type-signature"> :<a href="Alias.html">Alias</a></span></h4>
+
+
+
+
+<div class="description">
+    The id of the Alias which sent the message. See Alias's id Property
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Alias.html">Alias</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Message.js.html">Message.js</a>, <a href="Message.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Alias.html">Alias</a></li><li><a href="AliasesEndpoint.html">AliasesEndpoint</a></li><li><a href="API.html">API</a></li><li><a href="AuthEndpoint.html">AuthEndpoint</a></li><li><a href="BaseModel.html">BaseModel</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientStore.html">ClientStore</a></li><li><a href="FriendsEndpoint.html">FriendsEndpoint</a></li><li><a href="Message.html">Message</a></li><li><a href="MessagesEndpoint.html">MessagesEndpoint</a></li><li><a href="PrivatePayload.html">PrivatePayload</a></li><li><a href="PrivatePayloadsEndpoint.html">PrivatePayloadsEndpoint</a></li><li><a href="WebSocketEndpoint.html">WebSocketEndpoint</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:onDeleteMessage">onDeleteMessage</a></li><li><a href="global.html#event:onNewMessage">onNewMessage</a></li><li><a href="global.html#event:onUpdateMessage">onUpdateMessage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createAccountFromAccountDTO">createAccountFromAccountDTO</a></li><li><a href="global.html#createAliasFromAliasDTO">createAliasFromAliasDTO</a></li><li><a href="global.html#createDefaultRequestInit">createDefaultRequestInit</a></li><li><a href="global.html#createHeadersFromObject">createHeadersFromObject</a></li><li><a href="global.html#createJSONEncodedBody">createJSONEncodedBody</a></li><li><a href="global.html#createJSONEncodedHeaders">createJSONEncodedHeaders</a></li><li><a href="global.html#createMessageFromMessageDTO">createMessageFromMessageDTO</a></li><li><a href="global.html#createPrivatePayloadFromPayloadDTO">createPrivatePayloadFromPayloadDTO</a></li><li><a href="global.html#getErrorFromResponse">getErrorFromResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 04 2022 14:16:40 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

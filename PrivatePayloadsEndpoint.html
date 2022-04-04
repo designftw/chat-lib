@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: PrivatePayloadsEndpoint</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: PrivatePayloadsEndpoint</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>PrivatePayloadsEndpoint<span class="signature">(store)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">The Private Payload endpoint of the chat server</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="PrivatePayloadsEndpoint"><span class="type-signature"></span>new PrivatePayloadsEndpoint<span class="signature">(store)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    PrivatePayloadEndpoint constructor.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>store</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Client.html#store">Client's store property</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line607">line 607</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="store"><span class="type-signature"></span>store<span class="type-signature"> :<a href="ClientStore.html">ClientStore</a></span></h4>
+
+
+
+
+<div class="description">
+    See <a href="Client.html#store">Client's store property</a>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="ClientStore.html">ClientStore</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line618">line 618</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createPayload"><span class="type-signature"></span>createPayload<span class="signature">(ownAlias, entityId, payload)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Create a new private payload.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ownAlias</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the alias associated with the private payload.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>entityId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload is attached to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>payload</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the payload, private to the passed in alias, to be attached to the passed in model.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line628">line 628</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the newly created private payload.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deletePayload"><span class="type-signature"></span>deletePayload<span class="signature">(ownAlias, entityId)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Delete the payload associated with the passed in alias and entity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ownAlias</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the alias associated with the private payload.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>entityId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload to delete is attached to.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line707">line 707</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    a validation message.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;any></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getPayload"><span class="type-signature"></span>getPayload<span class="signature">(ownAlias, entityId)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the payload associated with the passed in alias and entity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ownAlias</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the alias associated with the private payload.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>entityId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the returned payload is attached to.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line656">line 656</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the requested PrivatePayload model.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updatePayload"><span class="type-signature"></span>updatePayload<span class="signature">(ownAlias, entityId, newPayload)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update the payload associated with the passed in alias and entity.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ownAlias</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the alias associated with the private payload.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>entityId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload to update is attached to.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newPayload</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the new payload to attach to the alias and model</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="API.js.html">API.js</a>, <a href="API.js.html#line679">line 679</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the updated private payload model.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="PrivatePayload.html">PrivatePayload</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Alias.html">Alias</a></li><li><a href="AliasesEndpoint.html">AliasesEndpoint</a></li><li><a href="API.html">API</a></li><li><a href="AuthEndpoint.html">AuthEndpoint</a></li><li><a href="BaseModel.html">BaseModel</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientStore.html">ClientStore</a></li><li><a href="FriendsEndpoint.html">FriendsEndpoint</a></li><li><a href="Message.html">Message</a></li><li><a href="MessagesEndpoint.html">MessagesEndpoint</a></li><li><a href="PrivatePayload.html">PrivatePayload</a></li><li><a href="PrivatePayloadsEndpoint.html">PrivatePayloadsEndpoint</a></li><li><a href="WebSocketEndpoint.html">WebSocketEndpoint</a></li></ul><h3>Events</h3><ul><li><a href="global.html#event:onDeleteMessage">onDeleteMessage</a></li><li><a href="global.html#event:onNewMessage">onNewMessage</a></li><li><a href="global.html#event:onUpdateMessage">onUpdateMessage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createAccountFromAccountDTO">createAccountFromAccountDTO</a></li><li><a href="global.html#createAliasFromAliasDTO">createAliasFromAliasDTO</a></li><li><a href="global.html#createDefaultRequestInit">createDefaultRequestInit</a></li><li><a href="global.html#createHeadersFromObject">createHeadersFromObject</a></li><li><a href="global.html#createJSONEncodedBody">createJSONEncodedBody</a></li><li><a href="global.html#createJSONEncodedHeaders">createJSONEncodedHeaders</a></li><li><a href="global.html#createMessageFromMessageDTO">createMessageFromMessageDTO</a></li><li><a href="global.html#createPrivatePayloadFromPayloadDTO">createPrivatePayloadFromPayloadDTO</a></li><li><a href="global.html#getErrorFromResponse">getErrorFromResponse</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Apr 04 2022 14:16:40 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
