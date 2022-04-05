@@ -31,7 +31,7 @@
 
 
     <title>
-      ClientStore
+      WebSocketEndpoint.js
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        ClientStore
+        WebSocketEndpoint.js
       </h1>
       
 
@@ -106,286 +106,123 @@
 
 
 
-
-<section>
-
-
-<header>
     
-        
-        <h2>
-        
-        ClientStore
-        
-        </h2>
-        
-        
-            <div class="class-description">The store is an object passed by reference which is used to access global state
-of the chat application.</div>
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-        <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="ClientStore">
-        <a href="#ClientStore">#</a>
-        <span class="type-signature"></span>new ClientStore<span class="signature">(host)</span><span class="type-signature"></span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        ClientStore constructor.
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>host</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">see <a href="ClientStore.html#host">ClientStore's host property</a></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="ClientStore.js.html">ClientStore.js</a>, <a href="ClientStore.js.html#line5">line 5</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="host">
-    <a href="#host">#</a>
-    <span class="type-signature"></span>host<span class="type-signature"> :string</span>
-</h4>
-
-
-
-
-<div class="description">
-    The host of the chat server. Includes the hostname and port.
-For example https://mozilla.org:4000.
-
-See https://developer.mozilla.org/en-US/docs/Web/API/URL/host
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="ClientStore.js.html">ClientStore.js</a>, <a href="ClientStore.js.html#line19">line 19</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ClientStore from "./ClientStore.js";
+import Client from "./Client.js";
+
+/**
+ * Helper class for communicating with web sockets on the chat server.
+ */
+export default class WebSocketEndpoint {
+	/**
+	 * Private object mapping alias ids to open web sockets.
+	 * @type {Object.&lt;number, WebSocket>}
+	 */
+	#aliasNameToWebSocket = {};
+
+	/**
+	 * WebSocketEndpoint constructor.
+	 *
+	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Client]{@link Client}
+	 */
+	constructor(store, client) {
+		/**
+		 * See [Client's store property]{@link Client#store}
+		 * @type {ClientStore}
+		 */
+		this.store = store;
+
+		/**
+		 * See [Client]{@link Client}
+		 * @type {Client}
+		 */
+		this.client = client;
+	}
+
+	/**
+	 * Returns an open web socket which can be used to send and receive messages.
+	 * @param {string} aliasName the alias to get the web socket for.
+	 * @returns {Promise&lt;WebSocket>}
+	 */
+	#getWebSocketForAlias(aliasName) {
+		// if the socket exists return it
+		if (this.#aliasNameToWebSocket.hasOwnProperty(aliasName)) {
+			return Promise.resolve(this.#aliasNameToWebSocket[aliasName]);
+		}
+
+		return new Promise((resolve, reject) => {
+			let url = new URL(`/realtime?alias=${aliasName}`, this.store.host);
+			url.protocol = "wss:";
+
+			let socket = new WebSocket(url);
+
+			// handle the open event
+			socket.addEventListener("open", () => {
+				this.#aliasNameToWebSocket[aliasName] = socket;
+				resolve(socket);
+			}, { once: true });
+
+			// handle the error event
+			socket.addEventListener("error", reject, { once: true });
+
+			socket.addEventListener("close", evt => {
+				delete this.#aliasNameToWebSocket[aliasName];
+			}, { once: true });
+
+			socket.addEventListener("message", evt => {
+				const data = JSON.parse(evt.data);
+				let messageEvent;
+
+				if (data.type === "new_message") {
+					messageEvent = "onNewMessage";
+				}
+				else if (data.type === "message_update") {
+					messageEvent = "onUpdateMessage";
+				}
+				else if (data.type === "message_delete") {
+					messageEvent = "onDeleteMessage";
+				}
+
+				if (messageEvent) {
+					let e = new CustomEvent(messageEvent, {
+						detail: {
+							messageId: data.messageId,
+							aliasName,
+						},
+					});
+					this.client.dispatchEvent(e);
+				}
+
+				if (data.type === "unauthorized") {
+					let e = new CustomEvent("onUnauthorizedAccess", {
+						detail: {
+							message: data.message,
+							aliasName
+						},
+					});
+					this.client.dispatchEvent(e);
+				}
+			});
+		});
+	}
+
+	/**
+	 *
+	 * @param {string} aliasName an alias to open a web socket for
+	 */
+	async openWebSocketFor(aliasName) {
+		await this.#getWebSocketForAlias(aliasName);
+
+		return {
+			message: "successfully opened web socket",
+		};
+	}
+}</code></pre>
+        </article>
+    </section>
 
 
 
