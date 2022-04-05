@@ -66,13 +66,13 @@ export default class WebSocketEndpoint {
 				let messageEvent;
 
 				if (data.type === "new_message") {
-					messageEvent = "onNewMessage";
+					messageEvent = "message";
 				}
 				else if (data.type === "message_update") {
-					messageEvent = "onUpdateMessage";
+					messageEvent = "messageupdate";
 				}
 				else if (data.type === "message_delete") {
-					messageEvent = "onDeleteMessage";
+					messageEvent = "messagedelete";
 				}
 
 				if (messageEvent) {
@@ -86,7 +86,7 @@ export default class WebSocketEndpoint {
 				}
 
 				if (data.type === "unauthorized") {
-					let e = new CustomEvent("onUnauthorizedAccess", {
+					let e = new CustomEvent("autherror", {
 						detail: {
 							message: data.message,
 							aliasName
