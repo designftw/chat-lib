@@ -108,12 +108,10 @@ class WebSocketEndpoint {
       return Promise.resolve(this.#aliasNameToWebSocket[aliasName]);
     }
     return new Promise((resolve, reject) => {
-      let socket = new WebSocket(
-        `${this.store.host.replace(
-          "https://",
-          "wss://"
-        )}/realtime?alias=${aliasName}`
-      );
+      let url = new URL(`/realtime?alias=${aliasName}`, this.store.host);
+      url.protocol = "wss:";
+
+      let socket = new WebSocket(url);
 
       // handle the open event
       socket.addEventListener("open", () => {
