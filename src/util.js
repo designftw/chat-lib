@@ -109,21 +109,6 @@ export function createAccountFromAccountDTO(accountDTO) {
 }
 
 /**
- * Create an alias model from parsed json of an alias returned from the ChatServer.
- * @param {any} aliasDTO parsed json alias returned from the ChatServer
- * @returns {Alias} an alias model
- */
-export function createAliasFromAliasDTO(aliasDTO) {
-  return new Alias(
-    aliasDTO.id,
-    aliasDTO.createdAt,
-    aliasDTO.updatedAt,
-    aliasDTO.name,
-    aliasDTO.payload
-  );
-}
-
-/**
  * Create a message model from parsed json of a message returned from the ChatServer.
  * @param {any} messageDTO parsed json message returned from the ChatServer.
  * @returns {Message} a message model
@@ -133,8 +118,8 @@ export function createMessageFromMessageDTO(messageDTO) {
     messageDTO.id,
     new Date(messageDTO.createdAt),
     new Date(messageDTO.updatedAt),
-    createAliasFromAliasDTO(messageDTO.sender),
-    messageDTO.recipients.map(createAliasFromAliasDTO),
+    new Alias(messageDTO.sender),
+    messageDTO.recipients.map(recipient => new Alias(recipient)),
     messageDTO.payload
   );
 }
