@@ -1,12 +1,18 @@
 import ClientStore from "./ClientStore.js";
-import API from "./API.js";
 import Account from "./Account.js";
 import Alias from "./Alias.js";
 import Message from "./Message.js";
 import PrivatePayload from "./PrivatePayload.js";
 
+import WebSocketEndpoint from "./WebSocketEndpoint.js";
+import AuthEndpoint from "./AuthEndpoint.js";
+import AliasesEndpoint from "./AliasesEndpoint.js";
+import MessagesEndpoint from "./MessagesEndpoint.js";
+import PrivatePayloadsEndpoint from "./PrivatePayloadsEndpoint.js";
+import FriendsEndpoint from "./FriendsEndpoint.js";
+
 /**
- * onUnauthorizedAccess: detail is {message, aliasName}
+ * autherror: detail is {message, aliasName}
  */
 
 /**
@@ -21,7 +27,7 @@ import PrivatePayload from "./PrivatePayload.js";
  *
  * When a message is deleted it no longer exists on the server so you cannot call
  * [getMessageById]{@link Client#getMessageById} to get information about a deleted message.
- * @event onDeleteMessage
+ * @event messagedelete
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was deleted.
  */
@@ -32,7 +38,7 @@ import PrivatePayload from "./PrivatePayload.js";
  * Called when a message is updated. For example if the payload changes. Use
  * [getMessageById]{@link Client#getMessageById} to get information about the updatedMessage such as the
  * new payload.
- * @event onUpdateMessage
+ * @event messageupdate
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was updated.
  */
@@ -42,16 +48,16 @@ import PrivatePayload from "./PrivatePayload.js";
  *
  * Called when a new message is available. Call [getMessageById]{@link Client#getMessageById} to get
  * information about the new message.
- * @event onNewMessage
+ * @event message
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was created.
  */
 
 /**
  * The Client is the interface for interacting with the ChatServer.
- * @fires onDeleteMessage
- * @fires onUpdateMessage
- * @fires onNewMessage
+ * @fires messagedelete
+ * @fires messageupdate
+ * @fires message
  */
 export default class Client extends EventTarget {
   /**
@@ -66,11 +72,41 @@ export default class Client extends EventTarget {
      */
     this.store = new ClientStore(host);
 
-    /**
-     * A reference to the [API]{@link API}, a helper class for communicating with the Chat Server.
-     * @type {API}
-     */
-    this.api = new API(this.store, this);
+     /**
+      * Helper class for authorization routes.
+      * @type {AuthEndpoint}
+      */
+     this.auth = new AuthEndpoint(this.store);
+
+     /**
+      * Helper class for alias routes.
+      * @type {AliasesEndpoint}
+      */
+     this.aliases = new AliasesEndpoint(this.store);
+
+     /**
+      * Helper class for message routes.
+      * @type {MessagesEndpoint}
+      */
+     this.messages = new MessagesEndpoint(this.store);
+
+     /**
+      * Helper class for private payload routes.
+      * @type {PrivatePayloadsEndpoint}
+      */
+     this.privatePayloads = new PrivatePayloadsEndpoint(this.store);
+
+     /**
+      * Helper class for friends routes.
+      * @type {FriendsEndpoint}
+      */
+     this.friends = new FriendsEndpoint(this.store);
+
+     this.webSocket = new WebSocketEndpoint(this.store);
+
+    for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
+      this.api.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
+    }
   }
 
   /**
@@ -81,7 +117,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<{message: string}>} A validation message
    */
   signup(alias, email, password) {
-    return this.api.auth.signup(alias, email, password);
+    return this.auth.signup(alias, email, password);
   }
 
   /**
@@ -91,7 +127,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Account>} Upon success returns the account which was logged in.
    */
   login(email, password) {
-    return this.api.auth.login(email, password).then((res) => {
+    return this.auth.login(email, password).then((res) => {
       this.dispatchEvent(new CustomEvent("login", { detail: res }));
       return res;
     });
@@ -102,14 +138,14 @@ export default class Client extends EventTarget {
    */
   logout() {
     this.dispatchEvent(new Event("logout"));
-    return this.api.auth.logout();
+    return this.auth.logout();
   }
 
   /**
    * Check if the user is currently logged in
    */
   isLoggedIn() {
-    return this.api.auth.isLoggedIn();
+    return this.auth.isLoggedIn();
   }
 
   /**
@@ -122,7 +158,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
   getMessagesForAlias(aliasName, interlocutors, sinceTime) {
-    return this.api.messages.getMessagesForAlias(aliasName, interlocutors, sinceTime);
+    return this.messages.getMessagesForAlias(aliasName, interlocutors, sinceTime);
   }
 
   /**
@@ -134,7 +170,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Message>} The model of the message with the associated id.
    */
   getMessageById(aliasName, messageId) {
-    return this.api.messages.getMessage(aliasName, messageId);
+    return this.messages.getMessage(aliasName, messageId);
   }
 
   /**
@@ -147,7 +183,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Message>} The model of the sent message.
    */
   sendMessage(aliasName, recipientNames, payload) {
-    return this.api.messages.sendMessage(aliasName, recipientNames, payload);
+    return this.messages.sendMessage(aliasName, recipientNames, payload);
   }
 
   /**
@@ -158,7 +194,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Message>} The model of the updated message.
    */
   updateMessage(aliasName, messageId, payload) {
-    return this.api.messages.updateMessage(aliasName, messageId, payload);
+    return this.messages.updateMessage(aliasName, messageId, payload);
   }
 
   /**
@@ -168,7 +204,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} a validation message.
    */
   deleteMessage(aliasName, messageId) {
-    return this.api.messages.deleteMessage(aliasName, messageId);
+    return this.messages.deleteMessage(aliasName, messageId);
   }
 
   /**
@@ -176,9 +212,9 @@ export default class Client extends EventTarget {
    * @returns {Promise<Alias[]>} An array of Alias models.
    */
   getAliasesForAccount() {
-    return this.api.aliases.getAliasesForAccount().then(async (aliases) => {
+    return this.aliases.getAliasesForAccount().then(async (aliases) => {
       for (let alias of aliases) {
-        await this.api.webSocket.openWebSocketFor(alias.name);
+        await this.webSocket.openWebSocketFor(alias.name);
       }
 
       return aliases;
@@ -191,7 +227,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Alias>} The Alias model associated with the passed in name
    */
   getAlias(aliasName) {
-    return this.api.aliases.getAlias(aliasName);
+    return this.aliases.getAlias(aliasName);
   }
 
   /**
@@ -201,7 +237,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Alias>} The Alias model of the newly created alias.
    */
   createAlias(aliasName, payload) {
-    return this.api.aliases.createAlias(aliasName, payload);
+    return this.aliases.createAlias(aliasName, payload);
   }
 
   /**
@@ -212,7 +248,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Alias>} The Alias model of the newly updated alias.
    */
   updateAlias(alias, name, payload) {
-    return this.api.aliases.updateAlias(alias, name, payload);
+    return this.aliases.updateAlias(alias, name, payload);
   }
 
   /**
@@ -221,7 +257,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} A validation message.
    */
   deleteAlias(aliasName) {
-    return this.api.aliases.deleteAlias(aliasName);
+    return this.aliases.deleteAlias(aliasName);
   }
 
   /**
@@ -232,7 +268,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<PrivatePayload>} the new private payload.
    */
   createPrivatePayload(aliasName, entityId, payload) {
-    return this.api.privatePayloads.createPayload(aliasName, entityId, payload);
+    return this.privatePayloads.createPayload(aliasName, entityId, payload);
   }
 
   /**
@@ -242,7 +278,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<PrivatePayload>} the private payload associated with the passed in alias and entity.
    */
   getPrivatePayload(aliasName, entityId) {
-    return this.api.privatePayloads.getPayload(aliasName, entityId);
+    return this.privatePayloads.getPayload(aliasName, entityId);
   }
 
   /**
@@ -253,7 +289,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<PrivatePayload>} the updated private payload.
    */
   updatePrivatePayload(aliasName, entityId, newPayload) {
-    return this.api.privatePayloads.updatePayload(
+    return this.privatePayloads.updatePayload(
       aliasName,
       entityId,
       newPayload
@@ -267,7 +303,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} A validation message.
    */
   deletePrivatePayload(aliasName, entityId) {
-    return this.api.privatePayloads.deletePayload(aliasName, entityId);
+    return this.privatePayloads.deletePayload(aliasName, entityId);
   }
 
   /**
@@ -276,7 +312,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Alias[]>} an array of aliases. These are the passed in alias's friends.
    */
   getFriendsForAlias(ownAlias) {
-    return this.api.friends.getFriendsForAlias(ownAlias);
+    return this.friends.getFriendsForAlias(ownAlias);
   }
 
   /**
@@ -286,7 +322,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} a validation message.
    */
   addFriend(ownAlias, newFriendAlias) {
-    return this.api.friends.addFriend(ownAlias, newFriendAlias);
+    return this.friends.addFriend(ownAlias, newFriendAlias);
   }
 
   /**
@@ -296,7 +332,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} a validation message.
    */
   removeFriend(ownAlias, prevFriendAlias) {
-    return this.api.friends.removeFriend(ownAlias, prevFriendAlias);
+    return this.friends.removeFriend(ownAlias, prevFriendAlias);
   }
 
   /**

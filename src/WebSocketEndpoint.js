@@ -1,10 +1,9 @@
 import ClientStore from "./ClientStore.js";
-import Client from "./Client.js";
 
 /**
  * Helper class for communicating with web sockets on the chat server.
  */
-export default class WebSocketEndpoint {
+export default class WebSocketEndpoint extends EventTarget {
 	/**
 	 * Private object mapping alias ids to open web sockets.
 	 * @type {Object.<number, WebSocket>}
@@ -15,20 +14,15 @@ export default class WebSocketEndpoint {
 	 * WebSocketEndpoint constructor.
 	 *
 	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
-	 * @param {Client} client see [Client]{@link Client}
 	 */
-	constructor(store, client) {
+	constructor(store) {
+		super();
+
 		/**
 		 * See [Client's store property]{@link Client#store}
 		 * @type {ClientStore}
 		 */
 		this.store = store;
-
-		/**
-		 * See [Client]{@link Client}
-		 * @type {Client}
-		 */
-		this.client = client;
 	}
 
 	/**
@@ -82,7 +76,7 @@ export default class WebSocketEndpoint {
 							aliasName,
 						},
 					});
-					this.client.dispatchEvent(e);
+					this.dispatchEvent(e);
 				}
 
 				if (data.type === "unauthorized") {
@@ -92,7 +86,7 @@ export default class WebSocketEndpoint {
 							aliasName
 						},
 					});
-					this.client.dispatchEvent(e);
+					this.dispatchEvent(e);
 				}
 			});
 		});
