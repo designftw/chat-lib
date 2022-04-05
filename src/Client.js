@@ -6,7 +6,7 @@ import Message from "./Message.js";
 import PrivatePayload from "./PrivatePayload.js";
 
 /**
- * onUnauthorizedAccess: detail is {message, aliasName}
+ * autherror: detail is {message, aliasName}
  */
 
 /**
@@ -21,7 +21,7 @@ import PrivatePayload from "./PrivatePayload.js";
  *
  * When a message is deleted it no longer exists on the server so you cannot call
  * [getMessageById]{@link Client#getMessageById} to get information about a deleted message.
- * @event onDeleteMessage
+ * @event messagedelete
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was deleted.
  */
@@ -32,7 +32,7 @@ import PrivatePayload from "./PrivatePayload.js";
  * Called when a message is updated. For example if the payload changes. Use
  * [getMessageById]{@link Client#getMessageById} to get information about the updatedMessage such as the
  * new payload.
- * @event onUpdateMessage
+ * @event messageupdate
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was updated.
  */
@@ -42,16 +42,16 @@ import PrivatePayload from "./PrivatePayload.js";
  *
  * Called when a new message is available. Call [getMessageById]{@link Client#getMessageById} to get
  * information about the new message.
- * @event onNewMessage
+ * @event message
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and alias name of the message which was created.
  */
 
 /**
  * The Client is the interface for interacting with the ChatServer.
- * @fires onDeleteMessage
- * @fires onUpdateMessage
- * @fires onNewMessage
+ * @fires messagedelete
+ * @fires messageupdate
+ * @fires message
  */
 export default class Client extends EventTarget {
   /**
