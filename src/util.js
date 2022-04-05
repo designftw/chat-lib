@@ -6,24 +6,34 @@ import PrivatePayload from "./PrivatePayload.js";
 /**
  * Options for creating the request init
  * @typedef {Object} CreateDefaultRequestInitOptions
- * @property {"POST" | "PUT" | "GET" | "DELETE"} method The HTTP method. One of POST, PUT, GET, DELETE.
+ * @property {"POST" | "PUT" | "GET" | "DELETE"} [method="GET"] The HTTP method. One of POST, PUT, GET, DELETE.
  * @property {Object.<string, string> | undefined} [headers] an optional object containing key values encoded in the headers of the request. The object should have string keys and string values.
  * @property {Object.<string, any> | undefined} [body] an optional object containing key values encoded in the body of the request. The object should have string keys and string values.
+ * @property {"json" | "text"} [responseType="json"] the type of response expected. Defaults to json.
  */
 
 /**
- *
- * @param {CreateDefaultRequestInitOptions} options Options used to created the request
- * @returns {RequestInit} a request init for passing into fetch.
+ * Send a request to an API endpoint
+ * @param {string} url
+ * @param {CreateDefaultRequestInitOptions} options
+ * @returns
  */
-export function createDefaultRequestInit(options) {
-  return {
-    method: options.method,
+export function request (url, {
+    responseType = "json",
+    method = "GET",
+    ...options
+  } = {}) {
+  let fetchOptions = {
+    method,
     headers: createJSONEncodedHeaders(options.headers),
     body: options.body ? createJSONEncodedBody(options.body) : null,
     redirect: "follow",
     credentials: "include",
   };
+
+  return fetch(url, fetchOptions)
+    .then(getErrorFromResponse)
+    .then(response => response[responseType]());
 }
 
 /**

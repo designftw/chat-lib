@@ -1,7 +1,6 @@
 import {
+	request,
 	createAccountFromAccountDTO,
-	getErrorFromResponse,
-	createDefaultRequestInit,
 	} from "./util.js";
 
 /**
@@ -28,18 +27,13 @@ export default class AuthEndpoint {
 	 * @param {string} password The password associated with the account.
 	 * @returns {Promise<any>} A success message upon successful login
 	 */
-	signup(alias, email, password) {
+	async signup(alias, email, password) {
 		let route = "signup";
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({
-				method: "POST",
-				body: { alias, email, password },
-			})
-		)
-		.then(getErrorFromResponse)
-		.then((res) => res.json());
+		return request(`${this.store.host}/${route}`, {
+			method: "POST",
+			body: { alias, email, password },
+		});
 	}
 
 	/**
@@ -48,37 +42,27 @@ export default class AuthEndpoint {
 	 * @param {string} password The password associated with the account.
 	 * @returns {Promise<Account>} Upon success returns the account which was logged in.
 	 */
-	login(email, password) {
+	async login(email, password) {
 		let route = "login";
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({
-				method: "POST",
-				body: { email, password },
-			})
-		)
-		.then(getErrorFromResponse)
-		.then((res) => res.json())
-		.then((res) => {
-			return createAccountFromAccountDTO(res.account);
+		let json = await request(`${this.store.host}/${route}`, {
+			method: "POST",
+			body: { email, password },
 		});
+
+		return createAccountFromAccountDTO(json.account);
 	}
 
 	/**
 	 * Logout of the currently logged in account
 	 * @returns {Promise<void>} Upon success returns nothing.
 	 */
-	logout() {
+	async logout() {
 		let route = "logout";
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({ method: "POST" })
-		)
-		.then(getErrorFromResponse)
-		.then((res) => {
-			return;
+		return request(`${this.store.host}/${route}`, {
+			responseType: "text",
+			method: "POST"
 		});
 	}
 
@@ -89,22 +73,16 @@ export default class AuthEndpoint {
 	 * account contains has the currently logged in account. If isLoggedIn is
 	 * false then account is undefined.
 	 */
-	isLoggedIn() {
+	async isLoggedIn() {
 		let route = "isloggedin";
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({ method: "GET" })
-		)
-		.then(getErrorFromResponse)
-		.then((res) => res.json())
-		.then((json) => {
-			return {
+		let json = await request(`${this.store.host}/${route}`);
+
+		return {
 			isLoggedIn: json.response,
 			account: json.data
 				? createAccountFromAccountDTO(json.data)
 				: undefined,
-			};
-		});
+		};
 	}
 }

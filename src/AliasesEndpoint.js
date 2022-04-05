@@ -1,7 +1,6 @@
 import {
+	request,
 	createAliasFromAliasDTO,
-	getErrorFromResponse,
-	createDefaultRequestInit,
 	} from "./util.js";
 
 /**
@@ -25,20 +24,12 @@ import {
 	 * Get all the aliases associated with the currently logged in account.
 	 * @returns {Promise<Alias[]>} the aliases associated with the currently logged in account
 	 */
-	getAliasesForAccount() {
+	async getAliasesForAccount() {
 		let route = "aliases";
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({ method: "GET" })
-		)
-			.then(getErrorFromResponse)
-			.then((response) => response.json())
-			.then((aliasesArray) => {
-				return aliasesArray.map((aliasDTO) => {
-					return createAliasFromAliasDTO(aliasDTO);
-				});
-			});
+		let aliasesArray = await request(`${this.store.host}/${route}`);
+
+		return aliasesArray.map(aliasDTO => createAliasFromAliasDTO(aliasDTO));
 	}
 
 	/**
@@ -49,25 +40,19 @@ import {
 	 * @param {string } payload payload to attach to the new alias
 	 * @returns {Promise<Alias>}
 	 */
-	createAlias(name, payload) {
+	async createAlias(name, payload) {
 		let route = "aliases";
-		return fetch(
-			`${this.store.host}/${route}`,
 
-			createDefaultRequestInit({
-			method: "POST",
-			body: {
-				name,
-				payload,
-			},
-			})
-		)
-			.then(getErrorFromResponse)
-			.then((response) => response.json())
-			.then((newAliasDTO) => {
-				const aliasDTO = newAliasDTO.data;
-				return createAliasFromAliasDTO(aliasDTO);
+		let newAliasDTO = await request(`${this.store.host}/${route}`, {
+				method: "POST",
+				body: {
+					name,
+					payload,
+				},
 			});
+
+		const aliasDTO = newAliasDTO.data;
+		return createAliasFromAliasDTO(aliasDTO);
 	}
 
 	/**
@@ -77,16 +62,12 @@ import {
 	 * @param {string} aliasName the name of the alias to get.
 	 * @returns {Promise<Alias>}
 	 */
-	getAlias(aliasName) {
+	async getAlias(aliasName) {
 		let route = `aliases/${aliasName}`;
 
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({ method: "GET" })
-		)
-			.then(getErrorFromResponse)
-			.then((response) => response.json())
-			.then(createAliasFromAliasDTO);
+		let json = await request(`${this.store.host}/${route}`);
+
+		return createAliasFromAliasDTO(json);
 	}
 
 	/**
@@ -98,23 +79,15 @@ import {
 	 * @param {string} [newPayload] optional updated payload of the alias. if not included alias retains the same payload.
 	 * @returns {Promise<Alias>}
 	 */
-	updateAlias(alias, newName = alias.name, newPayload = alias.payload) {
+	async updateAlias(alias, newName = alias.name, newPayload = alias.payload) {
 		let route = `aliases/${alias.name}`;
 
-		return fetch(
-			`${this.store.host}/${route}`,
-
-			createDefaultRequestInit({
-			method: "PUT",
-			body: { name: newName, payload: newPayload },
-			})
-		)
-			.then(getErrorFromResponse)
-			.then(response => response.json())
-			.then((updatedAliasDTO) => {
-				const aliasDTO = updatedAliasDTO.data;
-				return createAliasFromAliasDTO(aliasDTO);
+		let updatedAliasDTO = await request(`${this.store.host}/${route}`, {
+				method: "PUT",
+				body: { name: newName, payload: newPayload },
 			});
+
+		return createAliasFromAliasDTO(updatedAliasDTO.data);
 	}
 
 	/**
@@ -126,11 +99,7 @@ import {
 	 */
 	deleteAlias(aliasName) {
 		let route = `aliases/${aliasName}`;
-		return fetch(
-			`${this.store.host}/${route}`,
-			createDefaultRequestInit({ method: "DELETE" })
-		)
-			.then(getErrorFromResponse)
-			.then((response) => response.json());
+
+		return request(`${this.store.host}/${route}`, { method: "DELETE" });
 	}
 }
