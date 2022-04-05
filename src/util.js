@@ -16,7 +16,7 @@ import PrivatePayload from "./PrivatePayload.js";
  * Send a request to an API endpoint
  * @param {string} url
  * @param {CreateDefaultRequestInitOptions} options
- * @returns
+ * @returns {Promise<any>}
  */
 export function request (url, {
     responseType = "json",
