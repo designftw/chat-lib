@@ -105,7 +105,7 @@ export default class Client extends EventTarget {
      this.webSocket = new WebSocketEndpoint(this.store);
 
     for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
-      this.api.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
+      this.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
     }
   }
 
@@ -126,18 +126,17 @@ export default class Client extends EventTarget {
    * @param {string} password The password associated with the account.
    * @returns {Promise<Account>} Upon success returns the account which was logged in.
    */
-  login(email, password) {
-    return this.auth.login(email, password).then((res) => {
-      this.dispatchEvent(new CustomEvent("login", { detail: res }));
-      return res;
-    });
+  async login(email, password) {
+    let response = await this.auth.login(email, password);
+    this.dispatchEvent(new CustomEvent("login", { detail: res }));
+    return response;
   }
 
   /**
    * Logout of an existing account
    */
   logout() {
-    this.dispatchEvent(new Event("logout"));
+    this.dispatchEvent(new CustomEvent("logout"));
     return this.auth.logout();
   }
 
@@ -211,14 +210,14 @@ export default class Client extends EventTarget {
    * Get all the aliases for the currently logged in account.
    * @returns {Promise<Alias[]>} An array of Alias models.
    */
-  getAliasesForAccount() {
-    return this.aliases.getAliasesForAccount().then(async (aliases) => {
-      for (let alias of aliases) {
-        await this.webSocket.openWebSocketFor(alias.name);
-      }
+  async getAliasesForAccount() {
+    let aliases = await this.aliases.getAliasesForAccount();
 
-      return aliases;
-    });
+    for (let alias of aliases) {
+      await this.webSocket.openWebSocketFor(alias.name);
+    }
+
+    return aliases;
   }
 
   /**
