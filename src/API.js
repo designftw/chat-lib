@@ -62,6 +62,6 @@ export default class API {
      */
     this.friends = new FriendsEndpoint(store);
 
-    this.webSocket = new WebSocketEndpoint(store, client);
+    this.webSocket = new WebSocketEndpoint(store);
   }
 }

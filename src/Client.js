@@ -71,6 +71,10 @@ export default class Client extends EventTarget {
      * @type {API}
      */
     this.api = new API(this.store, this);
+
+    for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
+      this.api.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
+    }
   }
 
   /**
