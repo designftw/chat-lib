@@ -1,7 +1,6 @@
 import {
+	request,
 	createPrivatePayloadFromPayloadDTO,
-	getErrorFromResponse,
-	createDefaultRequestInit,
   } from "./util.js";
 
 /**
@@ -28,26 +27,19 @@ export default class PrivatePayloadsEndpoint {
 	 * @param {string} payload the payload, private to the passed in alias, to be attached to the passed in model.
 	 * @returns {Promise<PrivatePayload>} the newly created private payload.
 	 */
-	createPayload(ownAlias, entityId, payload) {
+	async createPayload(ownAlias, entityId, payload) {
 		let route = `payloads`;
-		let headers = {
-		"user-alias-name": ownAlias,
-		};
-		const body = { payload, entity_id: entityId };
-		return fetch(
-		`${this.store.host}/${route}`,
-		createDefaultRequestInit({
+
+		let resultDTO = await request(`${this.store.host}/${route}`, {
 			method: "POST",
-			body,
-			headers,
-		})
-		)
-		.then(getErrorFromResponse)
-		.then((response) => response.json())
-		.then((resultDTO) => {
-			const payloadDTO = resultDTO.data;
-			return createPrivatePayloadFromPayloadDTO(payloadDTO);
+			body: { payload, entity_id: entityId },
+			headers: {
+				"user-alias-name": ownAlias,
+			},
 		});
+
+		const payloadDTO = resultDTO.data;
+		return createPrivatePayloadFromPayloadDTO(payloadDTO);
 	}
 
 	/**
@@ -56,20 +48,16 @@ export default class PrivatePayloadsEndpoint {
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the returned payload is attached to.
 	 * @returns {Promise<PrivatePayload>} the requested PrivatePayload model.
 	 */
-	getPayload(ownAlias, entityId) {
+	async getPayload(ownAlias, entityId) {
 		let route = `payloads/${entityId}`;
-		let headers = {
-		"user-alias-name": ownAlias,
-		};
-		return fetch(
-		`${this.store.host}/${route}`,
-		createDefaultRequestInit({ method: "GET", headers: headers })
-		)
-		.then(getErrorFromResponse)
-		.then((response) => response.json())
-		.then((payloadDTO) => {
-			return createPrivatePayloadFromPayloadDTO(payloadDTO);
+
+		let payloadDTO = await request(`${this.store.host}/${route}`, {
+			headers: {
+				"user-alias-name": ownAlias,
+			}
 		});
+
+		return createPrivatePayloadFromPayloadDTO(payloadDTO);
 	}
 
 	/**
@@ -79,26 +67,19 @@ export default class PrivatePayloadsEndpoint {
 	 * @param {string} newPayload the new payload to attach to the alias and model
 	 * @returns {Promise<PrivatePayload>} the updated private payload model.
 	 */
-	updatePayload(ownAlias, entityId, newPayload) {
+	async updatePayload(ownAlias, entityId, newPayload) {
 		let route = `payloads/${entityId}`;
-		let headers = {
-		"user-alias-name": ownAlias,
-		};
-		const body = { payload: newPayload };
-		return fetch(
-		`${this.store.host}/${route}`,
-		createDefaultRequestInit({
+
+		let resultDTO = await request(`${this.store.host}/${route}`, {
 			method: "PUT",
-			body,
-			headers,
-		})
-		)
-		.then(getErrorFromResponse)
-		.then((response) => response.json())
-		.then((resultDTO) => {
-			const payloadDTO = resultDTO.data;
-			return createPrivatePayloadFromPayloadDTO(payloadDTO);
+			body: { payload: newPayload },
+			headers: {
+				"user-alias-name": ownAlias,
+			},
 		});
+
+		const payloadDTO = resultDTO.data;
+		return createPrivatePayloadFromPayloadDTO(payloadDTO);
 	}
 
 	/**
@@ -109,14 +90,12 @@ export default class PrivatePayloadsEndpoint {
 	 */
 	deletePayload(ownAlias, entityId) {
 		let route = `payloads/${entityId}`;
-		let headers = {
-		"user-alias-name": ownAlias,
-		};
-		return fetch(
-		`${this.store.host}/${route}`,
-		createDefaultRequestInit({ method: "DELETE", headers })
-		)
-		.then(getErrorFromResponse)
-		.then((response) => response.json());
+
+		return request(`${this.store.host}/${route}`, {
+			method: "DELETE",
+			headers: {
+				"user-alias-name": ownAlias,
+			},
+		});
 	}
 }

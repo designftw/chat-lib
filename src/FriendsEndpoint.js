@@ -1,7 +1,6 @@
 import {
+	request,
 	createAliasFromAliasDTO,
-	getErrorFromResponse,
-	createDefaultRequestInit,
   } from "./util.js";
 
 /**
@@ -26,20 +25,16 @@ export default class FriendsEndpoint {
 	 * @param {string} ownAlias the alias whose friends will be retrieved.
 	 * @returns {Promise<Alias[]>} an array of aliases which are friends with the passed in alias
 	 */
-	getFriendsForAlias(ownAlias) {
+	async getFriendsForAlias(ownAlias) {
 		let route = `friends`;
-		let headers = {
-			"user-alias-name": ownAlias,
-		};
-		return fetch(
-		`${this.store.host}/${route}`,
-		createDefaultRequestInit({ method: "GET", headers: headers })
-		)
-		.then(getErrorFromResponse)
-		.then((response) => response.json())
-		.then((friendsListDTO) =>
-			friendsListDTO.map((aliasDTO) => createAliasFromAliasDTO(aliasDTO))
-		);
+
+		let friendsListDTO = await request(`${this.store.host}/${route}`, {
+			headers: {
+				"user-alias-name": ownAlias,
+			}
+		});
+
+		return friendsListDTO.map(aliasDTO => createAliasFromAliasDTO(aliasDTO));
 	}
 
 	/**
@@ -49,21 +44,17 @@ export default class FriendsEndpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	async addFriend(ownAlias, newFriend) {
-		let response = await fetch(
-			`${this.store.host}/friends`,
-			createDefaultRequestInit({
-				method: "POST",
-				body: {
-					alias_name: newFriend,
-				},
-				headers: {
-					"user-alias-name": ownAlias
-				},
-			})
-		);
+		let route = `friends`;
 
-		response = await getErrorFromResponse(response);
-		return response.json();
+		return request(`${this.store.host}/${route}`, {
+			method: "POST",
+			body: {
+				alias_name: newFriend,
+			},
+			headers: {
+				"user-alias-name": ownAlias
+			},
+		});
 	}
 
 	/**
@@ -73,20 +64,16 @@ export default class FriendsEndpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	async removeFriend(ownAlias, friendToRemove) {
-		let response = await fetch(
-			`${this.store.host}/friends`,
-			createDefaultRequestInit({
-				method: "DELETE",
-				body: {
-					alias_name: friendToRemove,
-				},
-				headers: {
-					"user-alias-name": ownAlias,
-				},
-			})
-		);
+		let route = `friends`;
 
-		response = await getErrorFromResponse(response);
-		return response.json();
+		return request(`${this.store.host}/${route}`,{
+			method: "DELETE",
+			body: {
+				alias_name: friendToRemove,
+			},
+			headers: {
+				"user-alias-name": ownAlias,
+			},
+		});
 	}
 }
