@@ -1,6 +1,7 @@
+import Alias from "./Alias.js";
+
 import {
 	request,
-	createAliasFromAliasDTO,
 	} from "./util.js";
 
 /**
@@ -29,7 +30,7 @@ import {
 
 		let aliasesArray = await request(`${this.store.host}/${route}`);
 
-		return aliasesArray.map(aliasDTO => createAliasFromAliasDTO(aliasDTO));
+		return aliasesArray.map(aliasDTO => new Alias(aliasDTO));
 	}
 
 	/**
@@ -52,7 +53,7 @@ import {
 			});
 
 		const aliasDTO = newAliasDTO.data;
-		return createAliasFromAliasDTO(aliasDTO);
+		return new Alias(aliasDTO);
 	}
 
 	/**
@@ -67,7 +68,7 @@ import {
 
 		let json = await request(`${this.store.host}/${route}`);
 
-		return createAliasFromAliasDTO(json);
+		return new Alias(json);
 	}
 
 	/**
@@ -87,7 +88,7 @@ import {
 				body: { name: newName, payload: newPayload },
 			});
 
-		return createAliasFromAliasDTO(updatedAliasDTO.data);
+		return new Alias(updatedAliasDTO.data);
 	}
 
 	/**

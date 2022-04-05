@@ -1,6 +1,5 @@
 import {
 	request,
-	createAliasFromAliasDTO,
   } from "./util.js";
 
 /**
@@ -34,7 +33,7 @@ export default class FriendsEndpoint {
 			}
 		});
 
-		return friendsListDTO.map(aliasDTO => createAliasFromAliasDTO(aliasDTO));
+		return friendsListDTO.map(aliasDTO => new Alias(aliasDTO));
 	}
 
 	/**

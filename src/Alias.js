@@ -19,7 +19,7 @@ export default class Alias extends BaseModel {
 	 * @param {string} name see [Alias's name property]{@link Alias#name}
 	 * @param {string} payload see [Alias's payload property]{@link Alias#payload}
 	 */
-	constructor(id, createdAt, updatedAt, name, payload) {
+	constructor({id, createdAt, updatedAt, name, payload} = {}) {
 		super(id, createdAt, updatedAt);
 
 		/**
