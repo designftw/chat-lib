@@ -1,7 +1,5 @@
-import {
-	request,
-	createAccountFromAccountDTO,
-	} from "./util.js";
+import Account from "./Account.js";
+import { request } from "./util.js";
 
 /**
  * Helper class for authentication routes.
@@ -50,7 +48,7 @@ export default class AuthEndpoint {
 			body: { email, password },
 		});
 
-		return createAccountFromAccountDTO(json.account);
+		return new Account(json.account);
 	}
 
 	/**
@@ -80,9 +78,7 @@ export default class AuthEndpoint {
 
 		return {
 			isLoggedIn: json.response,
-			account: json.data
-				? createAccountFromAccountDTO(json.data)
-				: undefined,
+			account: json.data ? new Account(json.data) : undefined
 		};
 	}
 }

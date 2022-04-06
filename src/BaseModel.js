@@ -1,6 +1,6 @@
 /**
-* Base class for all models
-*/
+ * Base class for all models
+ */
 export default class BaseModel {
 	/**
 	 * Constructor for the base model.
@@ -10,23 +10,23 @@ export default class BaseModel {
 	 */
 	constructor(id, createdAt, updatedAt) {
 		/**
-		* The id of the model.
-		*
-		* Unique across all models of the same type.
-		* @type {string}
-		*/
+		 * The id of the model.
+		 *
+		 * Unique across all models of the same type.
+		 * @type {string}
+		 */
 		this.id = id;
 
 		/**
-		* The date that the model was created.
-		* @type {Date}
-		*/
-		this.createdAt = createdAt;
+		 * The date that the model was created.
+		 * @type {Date}
+		 */
+		this.createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
 
 		/**
-		* The date that the model was last updated.
-		* @type {Date}
-		*/
-		this.updatedAt = updatedAt;
+		 * The date that the model was last updated.
+		 * @type {Date}
+		 */
+		this.updatedAt = updatedAt instanceof Date ? updatedAt : new Date(updatedAt);
 	}
 }

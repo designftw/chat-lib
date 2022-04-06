@@ -7,13 +7,18 @@ export default class PrivatePayload extends BaseModel {
 	/**
 	 * PrivatePayload model constructor.
 	 *
-	 * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
-	 * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
-	 * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
-	 * @param {string} payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
+	 * @param {Object} options
+	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
+	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
+	 * @param {string} options.payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
 	 */
-	constructor(id, createdAt, updatedAt, entityId, payload) {
+	constructor(options = {}) {
+		if (options instanceof PrivatePayload) {
+			return options;
+		}
+		const { id, createdAt, updatedAt, entityId, payload } = options;
 		super(id, createdAt, updatedAt);
 
 		/**

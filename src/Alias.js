@@ -13,13 +13,18 @@ export default class Alias extends BaseModel {
 	/**
 	 * Alias model constructor.
 	 *
-	 * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
-	 * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
-	 * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} name see [Alias's name property]{@link Alias#name}
-	 * @param {string} payload see [Alias's payload property]{@link Alias#payload}
+	 * @param {Object} options
+	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
+	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+	 * @param {string} options.name see [Alias's name property]{@link Alias#name}
+	 * @param {string} options.payload see [Alias's payload property]{@link Alias#payload}
 	 */
-	constructor({id, createdAt, updatedAt, name, payload} = {}) {
+	constructor(options = {}) {
+		if (options instanceof Alias) {
+			return options;
+		}
+		const { id, createdAt, updatedAt, name, payload } = options;
 		super(id, createdAt, updatedAt);
 
 		/**

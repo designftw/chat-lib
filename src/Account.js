@@ -10,12 +10,17 @@ export default class Account extends BaseModel {
 	/**
 	 * Account model constructor.
 	 *
-	 * @param {string} id see [BaseModel's id property]{@link BaseModel#id}
-	 * @param {Date} createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
-	 * @param {Date} updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} email see [Account's email property]{@link Account#email}
+	 * @param {Object} options
+	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
+	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
+	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+	 * @param {string} options.email see [Account's email property]{@link Account#email}
 	 */
-	constructor(id, createdAt, updatedAt, email) {
+	constructor(options = {}) {
+		if (options instanceof Account) {
+			return options;
+		}
+		const { id, createdAt, updatedAt, email } = options;
 		super(id, createdAt, updatedAt);
 		/**
 		 * The email address associated with the account.
