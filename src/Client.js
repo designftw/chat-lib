@@ -197,12 +197,12 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string} options.alias the name of the alias which will send the message.
    * @param {string[]} options.recipientNames a list of recipients of the message.
-   * @param {string} options.payload the payload associated with the message.
+   * @param {Object} options.data the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
-  sendMessage({alias, recipientNames, payload} = {}) {
+  sendMessage({alias, recipientNames, data} = {}) {
     alias = alias ?? this.account.username;
-    return this.messages.sendMessage(alias, recipientNames, payload);
+    return this.messages.sendMessage(alias, recipientNames, data);
   }
 
   /**
@@ -210,12 +210,12 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string} options.alias the name of the alias which sent the message.
    * @param {string} options.messageId the id associated with the message.
-   * @param {string} options.payload the new payload for the message.
+   * @param {Object} options.data the new payload for the message.
    * @returns {Promise<Message>} The model of the updated message.
    */
-  updateMessage({alias, messageId, payload} = {}) {
+  updateMessage({alias, messageId, data} = {}) {
     alias = alias ?? this.account.username;
-    return this.messages.updateMessage(alias, messageId, payload);
+    return this.messages.updateMessage(alias, messageId, data);
   }
 
   /**
