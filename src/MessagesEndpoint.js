@@ -1,7 +1,5 @@
-import {
-	request,
-	createMessageFromMessageDTO,
-  } from "./util.js";
+import Message from "./Message.js";
+import { request } from "./util.js";
 
 /**
  * The messages endpoint of the chat server.
@@ -50,9 +48,9 @@ export default class MessagesEndpoint {
 			headers["since-time"] = sinceTime.getTime();
 		}
 
-		let messagesDTO = await request(`${this.store.host}/${route}`, {headers});
+		let messagesDTO = await request(`${this.store.host}/${route}`, { headers });
 
-		return messagesDTO.map(messageDTO => createMessageFromMessageDTO(messageDTO));
+		return messagesDTO.map((messageDTO) => new Message(messageDTO));
 	}
 
 	/**
@@ -95,7 +93,7 @@ export default class MessagesEndpoint {
 			}
 		});
 
-		return createMessageFromMessageDTO(messageDTO);
+		return new Message(messageDTO);
 	}
 
 	/**

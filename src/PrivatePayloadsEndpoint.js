@@ -1,7 +1,5 @@
-import {
-	request,
-	createPrivatePayloadFromPayloadDTO,
-  } from "./util.js";
+import PrivatePayload from "./PrivatePayload.js";
+import { request } from "./util.js";
 
 /**
  * The Private Payload endpoint of the chat server
@@ -39,7 +37,7 @@ export default class PrivatePayloadsEndpoint {
 		});
 
 		const payloadDTO = resultDTO.data;
-		return createPrivatePayloadFromPayloadDTO(payloadDTO);
+		return new PrivatePayload(payloadDTO);
 	}
 
 	/**
@@ -54,10 +52,10 @@ export default class PrivatePayloadsEndpoint {
 		let payloadDTO = await request(`${this.store.host}/${route}`, {
 			headers: {
 				"user-alias-name": ownAlias,
-			}
+			},
 		});
 
-		return createPrivatePayloadFromPayloadDTO(payloadDTO);
+		return new PrivatePayload(payloadDTO);
 	}
 
 	/**
@@ -79,7 +77,7 @@ export default class PrivatePayloadsEndpoint {
 		});
 
 		const payloadDTO = resultDTO.data;
-		return createPrivatePayloadFromPayloadDTO(payloadDTO);
+		return new PrivatePayload(payloadDTO);
 	}
 
 	/**
