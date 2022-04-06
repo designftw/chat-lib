@@ -18,13 +18,13 @@ export default class Alias extends BaseModel {
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
 	 * @param {string} options.name see [Alias's name property]{@link Alias#name}
-	 * @param {string} options.payload see [Alias's payload property]{@link Alias#payload}
+	 * @param {string} options.data see [Alias's data property]{@link Alias#data}
 	 */
 	constructor(options = {}) {
 		if (options instanceof Alias) {
 			return options;
 		}
-		const { id, createdAt, updatedAt, name, payload } = options;
+		const { id, createdAt, updatedAt, name, data } = options;
     super({ id, createdAt, updatedAt });
 
 		/**
@@ -43,8 +43,8 @@ export default class Alias extends BaseModel {
 		 * with objects used in the chat application. For example a user
 		 * could publicly assign availability to their alias, or provide a public
 		 * link to an avatar.
-		 * @type {string}
+		 * @type {Object}
 		 */
-		this.payload = payload;
+		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
 }

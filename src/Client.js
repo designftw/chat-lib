@@ -257,11 +257,11 @@ export default class Client extends EventTarget {
    * Create a new alias with the passed in alias and payload.
    * @param {Object} options
    * @param {string} options.alias the name of the new alias
-   * @param {string} options.payload the payload on the new alias.
+   * @param {Object} options.data the payload on the new alias.
    * @returns {Promise<Alias>} The Alias model of the newly created alias.
    */
-  createAlias({alias, payload} = {}) {
-    return this.aliases.createAlias(alias, payload);
+  createAlias({alias, data} = {}) {
+    return this.aliases.createAlias(alias, data);
   }
 
   /**
@@ -269,11 +269,11 @@ export default class Client extends EventTarget {
    * @param {string} alias the name of the alias to update.
    * @param {Object} updates object containing the updates to the alias.
    * @param {string} [updates.name] the optional new name for the alias
-   * @param {string} [updates.payload] the optional new payload for the alias
+   * @param {Object} [updates.data] the optional new payload for the alias
    * @returns {Promise<Alias>} The Alias model of the newly updated alias.
    */
-  updateAlias(alias, { name: newName, payload: newPayload } = {}) {
-    return this.aliases.updateAlias(alias, {newName, newPayload});
+  updateAlias(alias, { name: newName, data: newData } = {}) {
+    return this.aliases.updateAlias(alias, {newName, newData});
   }
 
   /**
