@@ -70,7 +70,7 @@ export default class WebSocketEndpoint extends EventTarget {
 					let e = new CustomEvent(messageEvent, {
 						detail: {
 							messageId: data.messageId,
-							aliasName,
+							alias,
 						},
 					});
 					this.dispatchEvent(e);
@@ -80,7 +80,7 @@ export default class WebSocketEndpoint extends EventTarget {
 					let e = new CustomEvent("autherror", {
 						detail: {
 							message: data.message,
-							aliasName
+							alias
 						},
 					});
 					this.dispatchEvent(e);

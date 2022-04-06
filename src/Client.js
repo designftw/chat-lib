@@ -11,14 +11,14 @@ import PrivatePayloadsEndpoint from "./endpoints/PrivatePayloadsEndpoint.js";
 import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
 /**
- * autherror: detail is {message, aliasName}
+ * autherror: detail is {message, alias}
  */
 
 /**
  * Object passed to details on CustomEvents about messages fired by the Client.
  * @typedef {object} messageEventDetails
  * @property {string} messageId the id of the message the event is referring to
- * @property {string} aliasName the alias the event is associated with.
+ * @property {string} alias the name of the alias the event is associated with.
  */
 
 /**
@@ -123,13 +123,13 @@ export default class Client extends EventTarget {
 
   /**
    * Sign up for a new account with a single initial alias.
-   * @param {string} aliasName The name of the initial alias if signup is successful.
+   * @param {string} alias The name of the initial alias if signup is successful.
    * @param {string} email The email address associated with the account.
    * @param {string} password The password associated with the account.
    * @returns {Promise<{message: string}>} A validation message
    */
-  signup(aliasName, email, password) {
-    return this.auth.signup(aliasName, email, password);
+  signup(alias, email, password) {
+    return this.auth.signup(alias, email, password);
   }
 
   /**
@@ -164,70 +164,70 @@ export default class Client extends EventTarget {
   /**
    * Get all the messages for the passed in alias
    *
-   * Note the currently logged in account must own the alias associated with the aliasName.
+   * Note the currently logged in account must own the alias associated with the alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias to get messages for.
+   * @param {string} options.alias the name of the alias to get messages for.
    * @param {string[]} [options.interlocutors] an optional list of the senders and recipients of the messages.
    * @param {Date} [options.sinceTime] an optional date to limit the request by. only receive messages since this date.
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  getMessages({ aliasName, interlocutors, sinceTime } = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.messages.getMessagesForAlias(aliasName, interlocutors, sinceTime);
+  getMessages({ alias, interlocutors, sinceTime } = {}) {
+    alias = alias ?? this.account.username;
+    return this.messages.getMessagesForAlias(alias, interlocutors, sinceTime);
   }
 
   /**
-   * Get a message which has the passed in messageId, and was sent or received by the passed in aliasName.
+   * Get a message which has the passed in messageId, and was sent or received by the passed in alias.
    *
-   * Note the currently logged in account must own the alias associated with the aliasName.
+   * Note the currently logged in account must own the alias associated with the alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias which sent or received the message.
+   * @param {string} options.alias the name of the alias which sent or received the message.
    * @param {string} options.messageId the id of the message to get.
    * @returns {Promise<Message>} The model of the message with the associated id.
    */
-  getMessageById({ aliasName, messageId } = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.messages.getMessage(aliasName, messageId);
+  getMessageById({ alias, messageId } = {}) {
+    alias = alias ?? this.account.username;
+    return this.messages.getMessage(alias, messageId);
   }
 
   /**
    * Send a message from the passed in alias to the passed in recipients with the passed in payload.
    *
-   * Note the currently logged in account must own the alias associated with the aliasName.
+   * Note the currently logged in account must own the alias associated with the alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias which will send the message.
+   * @param {string} options.alias the name of the alias which will send the message.
    * @param {string[]} options.recipientNames a list of recipients of the message.
    * @param {string} options.payload the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
-  sendMessage({aliasName, recipientNames, payload} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.messages.sendMessage(aliasName, recipientNames, payload);
+  sendMessage({alias, recipientNames, payload} = {}) {
+    alias = alias ?? this.account.username;
+    return this.messages.sendMessage(alias, recipientNames, payload);
   }
 
   /**
-   * Update a message with the passed in messageId which was sent by the passed in aliasName.
+   * Update a message with the passed in messageId which was sent by the passed in alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias which sent the message.
+   * @param {string} options.alias the name of the alias which sent the message.
    * @param {string} options.messageId the id associated with the message.
    * @param {string} options.payload the new payload for the message.
    * @returns {Promise<Message>} The model of the updated message.
    */
-  updateMessage({aliasName, messageId, payload} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.messages.updateMessage(aliasName, messageId, payload);
+  updateMessage({alias, messageId, payload} = {}) {
+    alias = alias ?? this.account.username;
+    return this.messages.updateMessage(alias, messageId, payload);
   }
 
   /**
-   * Delete a message with the passed in messageId which was sent by the passed in aliasName.
+   * Delete a message with the passed in messageId which was sent by the passed in alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias which sent the message.
+   * @param {string} options.alias the name of the alias which sent the message.
    * @param {string} options.messageId the id associated with the message.
    * @returns {Promise<any>} a validation message.
    */
-  deleteMessage({aliasName, messageId} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.messages.deleteMessage(aliasName, messageId);
+  deleteMessage({alias, messageId} = {}) {
+    alias = alias ?? this.account.username;
+    return this.messages.deleteMessage(alias, messageId);
   }
 
   /**
@@ -246,82 +246,82 @@ export default class Client extends EventTarget {
 
   /**
    * Get an alias by its name
-   * @param {string} aliasName the name of the alias to get
+   * @param {string} alias the name of the alias to get
    * @returns {Promise<Alias>} The Alias model associated with the passed in name
    */
-  getAlias(aliasName) {
-    return this.aliases.getAlias(aliasName);
+  getAlias(alias) {
+    return this.aliases.getAlias(alias);
   }
 
   /**
-   * Create a new alias with the passed in aliasName and payload.
+   * Create a new alias with the passed in alias and payload.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the new alias
+   * @param {string} options.alias the name of the new alias
    * @param {string} options.payload the payload on the new alias.
    * @returns {Promise<Alias>} The Alias model of the newly created alias.
    */
-  createAlias({aliasName, payload} = {}) {
-    return this.aliases.createAlias(aliasName, payload);
+  createAlias({alias, payload} = {}) {
+    return this.aliases.createAlias(alias, payload);
   }
 
   /**
    * Update an existing alias.
-   * @param {string} aliasName the name of the alias to update.
+   * @param {string} alias the name of the alias to update.
    * @param {Object} updates object containing the updates to the alias.
-   * @param {string} [updates.aliasName] the optional new name for the alias
+   * @param {string} [updates.name] the optional new name for the alias
    * @param {string} [updates.payload] the optional new payload for the alias
    * @returns {Promise<Alias>} The Alias model of the newly updated alias.
    */
-  updateAlias(aliasName, { aliasName: newName, payload: newPayload } = {}) {
-    return this.aliases.updateAlias(aliasName, {newName, newPayload});
+  updateAlias(alias, { name: newName, payload: newPayload } = {}) {
+    return this.aliases.updateAlias(alias, {newName, newPayload});
   }
 
   /**
    * Delete the alias associated with the passed in alias name.
-   * @param {string} aliasName the name of the alias to delete.
+   * @param {string} alias the name of the alias to delete.
    * @returns {Promise<any>} A validation message.
    */
-  deleteAlias(aliasName) {
-    return this.aliases.deleteAlias(aliasName);
+  deleteAlias(alias) {
+    return this.aliases.deleteAlias(alias);
   }
 
   /**
    * Create a new private payload for the passed in entity, private to the passed in alias.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias which is creating the payload.
+   * @param {string} options.alias the name of the alias which is creating the payload.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload is attached to.
    * @param {string} options.payload the payload to attach to the entity associated with the passed in entityId, private to the alias associated with the passed in alias name.
    * @returns {Promise<PrivatePayload>} the new private payload.
    */
-  createPrivatePayload({aliasName, entityId, payload} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.privatePayloads.createPayload(aliasName, entityId, payload);
+  createPrivatePayload({alias, entityId, payload} = {}) {
+    alias = alias ?? this.account.username;
+    return this.privatePayloads.createPayload(alias, entityId, payload);
   }
 
   /**
    * Get the private payload associated with the passed in alias and entity.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias associated with the payload to get.
+   * @param {string} options.alias the name of the alias associated with the payload to get.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to get is attached to.
    * @returns {Promise<PrivatePayload>} the private payload associated with the passed in alias and entity.
    */
-  getPrivatePayload({aliasName, entityId} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.privatePayloads.getPayload(aliasName, entityId);
+  getPrivatePayload({alias, entityId} = {}) {
+    alias = alias ?? this.account.username;
+    return this.privatePayloads.getPayload(alias, entityId);
   }
 
   /**
    * Update the private payload associated with the passed in alias and entity.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias associated with the payload to update.
+   * @param {string} options.alias the name of the alias associated with the payload to update.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to update is attached to.
    * @param {string} options.newPayload the new private payload.
    * @returns {Promise<PrivatePayload>} the updated private payload.
    */
-  updatePrivatePayload({aliasName, entityId, newPayload} = {}) {
-    aliasName = aliasName ?? this.account.username;
+  updatePrivatePayload({alias, entityId, newPayload} = {}) {
+    alias = alias ?? this.account.username;
     return this.privatePayloads.updatePayload(
-      aliasName,
+      alias,
       entityId,
       newPayload
     );
@@ -330,41 +330,45 @@ export default class Client extends EventTarget {
   /**
    * Delete the private payload associated with the passed in alias and entity.
    * @param {Object} options
-   * @param {string} options.aliasName the name of the alias associated with the payload to delete.
+   * @param {string} options.alias the name of the alias associated with the payload to delete.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to delete is attached to.
    * @returns {Promise<any>} A validation message.
    */
-  deletePrivatePayload({aliasName, entityId} = {}) {
-    aliasName = aliasName ?? this.account.username;
-    return this.privatePayloads.deletePayload(aliasName, entityId);
+  deletePrivatePayload({alias, entityId} = {}) {
+    alias = alias ?? this.account.username;
+    return this.privatePayloads.deletePayload(alias, entityId);
   }
 
   /**
    * Get all the friends of the passed in alias.
-   * @param {string} aliasName the name of the alias whose friends will be retrieved.
+   * @param {string} alias the name of the alias whose friends will be retrieved.
    * @returns {Promise<Alias[]>} an array of aliases. These are the passed in alias's friends.
    */
-  getFriends(aliasName = this.account.username) {
-    return this.friends.getFriendsForAlias(aliasName);
+  getFriends(alias = this.account.username) {
+    return this.friends.getFriendsForAlias(alias);
   }
 
   /**
    * Add a new friend to the friend list of the passed in alias.
    * @param {string} friendAlias the name of the alias which is going to be added to ownAlias's friend list.
-   * @param {string} ownAlias the name of the alias adding a friend.
+   * @param {Object} options
+   * @param {string} options.ownAlias the name of the alias adding a friend.
    * @returns {Promise<any>} a validation message.
    */
-  addFriend(friendAlias, ownAlias=this.account.username) {
+  addFriend(friendAlias, {ownAlias} = {}) {
+    ownAlias = ownAlias ?? this.account.username;
     return this.friends.addFriend(ownAlias, friendAlias);
   }
 
   /**
    * Remove a friend from the friend list of the passed in alias.
    * @param {string} friendAlias the name of the alias which is going to be removed from ownAlias's friend list.
-   * @param {string} ownAlias the name of the alias removing a friend.
+   * @param {Object} options
+   * @param {string} options.ownAlias the name of the alias removing a friend.
    * @returns {Promise<any>} a validation message.
    */
-  removeFriend(friendAlias, ownAlias=this.account.username) {
+  removeFriend(friendAlias, {ownAlias}) {
+    ownAlias = ownAlias ?? this.account.username;
     return this.friends.removeFriend(ownAlias, friendAlias);
   }
 
