@@ -1,5 +1,3 @@
-import ClientStore from "./ClientStore.js";
-
 /**
  * Helper class for communicating with web sockets on the chat server.
  */
@@ -13,16 +11,15 @@ export default class WebSocketEndpoint extends EventTarget {
 	/**
 	 * WebSocketEndpoint constructor.
 	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client The client using this endpoint
 	 */
-	constructor(store) {
+	constructor(client) {
 		super();
 
 		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
+		 * @type {Client}
 		 */
-		this.store = store;
+		this.client = client;
 	}
 
 	/**
@@ -37,7 +34,7 @@ export default class WebSocketEndpoint extends EventTarget {
 		}
 
 		return new Promise((resolve, reject) => {
-			let url = new URL(`/realtime?alias=${aliasName}`, this.store.host);
+			let url = new URL(`/realtime?alias=${aliasName}`, this.client.host);
 			url.protocol = "wss:";
 
 			let socket = new WebSocket(url);

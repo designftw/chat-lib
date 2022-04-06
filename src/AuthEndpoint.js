@@ -1,21 +1,16 @@
+import Endpoint from "./Endpoint.js";
 import Account from "./Account.js";
-import { request } from "./util.js";
 
 /**
  * Helper class for authentication routes.
  */
-export default class AuthEndpoint {
+export default class AuthEndpoint extends Endpoint {
 	/**
 	 * AuthEndpoint constructor.
-	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
-	constructor(store) {
-		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
-		 */
-		this.store = store;
+	 constructor(client) {
+		super(client);
 	}
 
 	/**
@@ -26,9 +21,7 @@ export default class AuthEndpoint {
 	 * @returns {Promise<any>} A success message upon successful login
 	 */
 	async signup(alias, email, password) {
-		let route = "signup";
-
-		return request(`${this.store.host}/${route}`, {
+		return this.request("signup", {
 			method: "POST",
 			body: { alias, email, password },
 		});
@@ -41,9 +34,7 @@ export default class AuthEndpoint {
 	 * @returns {Promise<Account>} Upon success returns the account which was logged in.
 	 */
 	async login(email, password) {
-		let route = "login";
-
-		let json = await request(`${this.store.host}/${route}`, {
+		let json = await this.request("login", {
 			method: "POST",
 			body: { email, password },
 		});
@@ -56,9 +47,7 @@ export default class AuthEndpoint {
 	 * @returns {Promise<void>} Upon success returns nothing.
 	 */
 	async logout() {
-		let route = "logout";
-
-		return request(`${this.store.host}/${route}`, {
+		return this.request("logout", {
 			responseType: "text",
 			method: "POST"
 		});
@@ -72,9 +61,7 @@ export default class AuthEndpoint {
 	 * false then account is undefined.
 	 */
 	async isLoggedIn() {
-		let route = "isloggedin";
-
-		let json = await request(`${this.store.host}/${route}`);
+		let json = await this.request("isloggedin");
 
 		return {
 			isLoggedIn: json.response,

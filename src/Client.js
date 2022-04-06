@@ -1,4 +1,3 @@
-import ClientStore from "./ClientStore.js";
 import Account from "./Account.js";
 import Alias from "./Alias.js";
 import Message from "./Message.js";
@@ -62,47 +61,52 @@ import FriendsEndpoint from "./FriendsEndpoint.js";
 export default class Client extends EventTarget {
   /**
    * Client constructor.
-   * @param {string} host see [ClientStore's host property]{@link ClientStore#host}
+   * @param {string} host see [Client's host property]{@link Client#host}
    */
   constructor(host) {
     super();
+
     /**
-     * A reference to the [ClientStore]{@link ClientStore} which contains global state of the chat application.
-     * @type {ClientStore}
+     * The host of the chat server. Includes the hostname and port.
+     * For example https://mozilla.org:4000.
+     * Read-only.
+     *
+     * See https://developer.mozilla.org/en-US/docs/Web/API/URL/host
+     * @type {string}
      */
-    this.store = new ClientStore(host);
+    Object.defineProperty(this, "host", {value: host});
 
      /**
       * Helper class for authorization routes.
       * @type {AuthEndpoint}
       */
-     this.auth = new AuthEndpoint(this.store);
+     this.auth = new AuthEndpoint(this);
 
      /**
       * Helper class for alias routes.
       * @type {AliasesEndpoint}
       */
-     this.aliases = new AliasesEndpoint(this.store);
+     this.aliases = new AliasesEndpoint(this);
 
      /**
       * Helper class for message routes.
       * @type {MessagesEndpoint}
       */
-     this.messages = new MessagesEndpoint(this.store);
+     this.messages = new MessagesEndpoint(this);
 
      /**
       * Helper class for private payload routes.
       * @type {PrivatePayloadsEndpoint}
       */
-     this.privatePayloads = new PrivatePayloadsEndpoint(this.store);
+     this.privatePayloads = new PrivatePayloadsEndpoint(this);
 
      /**
       * Helper class for friends routes.
       * @type {FriendsEndpoint}
       */
-     this.friends = new FriendsEndpoint(this.store);
+     this.friends = new FriendsEndpoint(this);
 
-     this.webSocket = new WebSocketEndpoint(this.store);
+     this.webSocket = new WebSocketEndpoint(this);
 
     for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
       this.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));

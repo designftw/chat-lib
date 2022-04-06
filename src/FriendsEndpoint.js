@@ -1,22 +1,16 @@
-import {
-	request,
-  } from "./util.js";
+import Endpoint from "./Endpoint.js";
 
 /**
  * The Friends endpoint of the chat server
  */
-export default class FriendsEndpoint {
+export default class FriendsEndpoint extends Endpoint {
 	/**
 	 * FriendsEndpoint constructor.
 	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
-	constructor(store) {
-		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
-		 */
-		this.store = store;
+	constructor(client) {
+		super(client);
 	}
 
 	/**
@@ -25,9 +19,7 @@ export default class FriendsEndpoint {
 	 * @returns {Promise<Alias[]>} an array of aliases which are friends with the passed in alias
 	 */
 	async getFriendsForAlias(ownAlias) {
-		let route = `friends`;
-
-		let friendsListDTO = await request(`${this.store.host}/${route}`, {
+		let friendsListDTO = await this.request("friends", {
 			headers: {
 				"user-alias-name": ownAlias,
 			}
@@ -43,9 +35,7 @@ export default class FriendsEndpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	async addFriend(ownAlias, newFriend) {
-		let route = `friends`;
-
-		return request(`${this.store.host}/${route}`, {
+		return this.request("friends", {
 			method: "POST",
 			body: {
 				alias_name: newFriend,
@@ -63,9 +53,7 @@ export default class FriendsEndpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	async removeFriend(ownAlias, friendToRemove) {
-		let route = `friends`;
-
-		return request(`${this.store.host}/${route}`,{
+		return this.request("friends",{
 			method: "DELETE",
 			body: {
 				alias_name: friendToRemove,
