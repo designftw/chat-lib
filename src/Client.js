@@ -123,13 +123,13 @@ export default class Client extends EventTarget {
 
   /**
    * Sign up for a new account with a single initial alias.
-   * @param {string} alias The name of the initial alias if signup is successful.
+   * @param {string} username The name of the initial alias if signup is successful.
    * @param {string} email The email address associated with the account.
    * @param {string} password The password associated with the account.
    * @returns {Promise<{message: string}>} A validation message
    */
-  signup(alias, email, password) {
-    return this.auth.signup(alias, email, password);
+  signup(username, email, password) {
+    return this.auth.signup(username, email, password);
   }
 
   /**
