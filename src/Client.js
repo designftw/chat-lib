@@ -1,14 +1,14 @@
-import Account from "./Account.js";
-import Alias from "./Alias.js";
-import Message from "./Message.js";
-import PrivatePayload from "./PrivatePayload.js";
+import Account from "./models/Account.js";
+import Alias from "./models/Alias.js";
+import Message from "./models/Message.js";
+import PrivatePayload from "./models/PrivatePayload.js";
 
-import WebSocketEndpoint from "./WebSocketEndpoint.js";
-import AuthEndpoint from "./AuthEndpoint.js";
-import AliasesEndpoint from "./AliasesEndpoint.js";
-import MessagesEndpoint from "./MessagesEndpoint.js";
-import PrivatePayloadsEndpoint from "./PrivatePayloadsEndpoint.js";
-import FriendsEndpoint from "./FriendsEndpoint.js";
+import WebSocketEndpoint from "./endpoints/WebSocketEndpoint.js";
+import AuthEndpoint from "./endpoints/AuthEndpoint.js";
+import AliasesEndpoint from "./endpoints/AliasesEndpoint.js";
+import MessagesEndpoint from "./endpoints/MessagesEndpoint.js";
+import PrivatePayloadsEndpoint from "./endpoints/PrivatePayloadsEndpoint.js";
+import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
 /**
  * autherror: detail is {message, aliasName}

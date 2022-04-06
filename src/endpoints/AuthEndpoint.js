@@ -1,5 +1,5 @@
 import Endpoint from "./Endpoint.js";
-import Account from "./Account.js";
+import Account from "../models/Account.js";
 
 /**
  * Helper class for authentication routes.

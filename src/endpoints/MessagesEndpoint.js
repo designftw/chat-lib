@@ -1,5 +1,5 @@
 import Endpoint from "./Endpoint.js";
-import Message from "./Message.js";
+import Message from "../models/Message.js";
 
 /**
  * The messages endpoint of the chat server.

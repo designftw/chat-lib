@@ -1,5 +1,5 @@
 import Endpoint from "./Endpoint.js";
-import PrivatePayload from "./PrivatePayload.js";
+import PrivatePayload from "../models/PrivatePayload.js";
 
 /**
  * The Private Payload endpoint of the chat server

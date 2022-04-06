@@ -1,4 +1,4 @@
-import { request } from "./util.js";
+import { request } from "../util.js";
 
 /**
  * Abstract base class for all endpoints.

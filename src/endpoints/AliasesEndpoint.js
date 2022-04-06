@@ -1,5 +1,5 @@
 import Endpoint from "./Endpoint.js";
-import Alias from "./Alias.js";
+import Alias from "../models/Alias.js";
 
 /**
  * The aliases endpoint of the chat server.
