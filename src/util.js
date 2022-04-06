@@ -1,8 +1,3 @@
-import Account from "./Account.js";
-import Alias from "./Alias.js";
-import Message from "./Message.js";
-import PrivatePayload from "./PrivatePayload.js";
-
 /**
  * Options for creating the request init
  * @typedef {Object} CreateDefaultRequestInitOptions
@@ -92,49 +87,4 @@ export function getErrorFromResponse(response) {
     }
     throw responseOrError;
   });
-}
-
-/**
- * Create an account account from parsed json of an account returned from the ChatServer.
- * @param {any} accountDTO parsed json account returned from the ChatServer
- * @returns {Account} an alias model
- */
-export function createAccountFromAccountDTO(accountDTO) {
-  return new Account(
-    accountDTO.id,
-    new Date(accountDTO.createdAt),
-    new Date(accountDTO.updatedAt),
-    accountDTO.email
-  );
-}
-
-/**
- * Create a message model from parsed json of a message returned from the ChatServer.
- * @param {any} messageDTO parsed json message returned from the ChatServer.
- * @returns {Message} a message model
- */
-export function createMessageFromMessageDTO(messageDTO) {
-  return new Message(
-    messageDTO.id,
-    new Date(messageDTO.createdAt),
-    new Date(messageDTO.updatedAt),
-    new Alias(messageDTO.sender),
-    messageDTO.recipients.map(recipient => new Alias(recipient)),
-    messageDTO.payload
-  );
-}
-
-/**
- * Create a privatePayload model from parsed json of a privatePayload returned from the ChatServer.
- * @param {any} privatePayloadDTO parsed json privatePayload returned from the ChatServer.
- * @returns {PrivatePayload} a privatePayload model.
- */
-export function createPrivatePayloadFromPayloadDTO(privatePayloadDTO) {
-  return new PrivatePayload(
-    privatePayloadDTO.id,
-    new Date(privatePayloadDTO.createdAt),
-    new Date(privatePayloadDTO.updatedAt),
-    privatePayloadDTO.entityId,
-    privatePayloadDTO.payload
-  );
 }
