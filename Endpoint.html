@@ -31,7 +31,7 @@
 
 
     <title>
-      AliasesEndpoint.js
+      Endpoint
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        AliasesEndpoint.js
+        Endpoint
       </h1>
       
 
@@ -106,99 +106,274 @@
 
 
 
+
+<section>
+
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import Endpoint from "./Endpoint.js";
-import Alias from "./Alias.js";
+        
+        <h2>
+        
+        Endpoint
+        
+        </h2>
+        
+        
+            <div class="class-description">Abstract base class for all endpoints.</div>
+        
+    
+</header>
 
-/**
- * The aliases endpoint of the chat server.
- */
- export default class AliasesEndpoint extends Endpoint {
-	/**
-	 * AliasesEndpoint constructor.
-	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
-	 */
-	constructor(client) {
-		super(client);
-	}
 
-	/**
-	 * Get all the aliases associated with the currently logged in account.
-	 * @returns {Promise&lt;Alias[]>} the aliases associated with the currently logged in account
-	 */
-	async getAliasesForAccount() {
-		let aliasesArray = await this.request("aliases");
+<article>
+    <div class="container-overview">
+    
+        
 
-		return aliasesArray.map(aliasDTO => new Alias(aliasDTO));
-	}
+    
+        <h2>Constructor</h2>
+    
 
-	/**
-	 * Create a new alias associated with the currently logged in account.
-	 *
-	 * Raises an error if the alias already exists.
-	 * @param {string} name the name of the alias to create
-	 * @param {string } payload payload to attach to the new alias
-	 * @returns {Promise&lt;Alias>}
-	 */
-	async createAlias(name, payload) {
-		let newAliasDTO = await this.request("aliases", {
-				method: "POST",
-				body: {
-					name,
-					payload,
-				},
-			});
+    <h4 class="name" id="Endpoint">
+        <a href="#Endpoint">#</a>
+        <span class="type-signature"></span>new Endpoint<span class="signature">(client)</span><span class="type-signature"></span>
+    </h4>
 
-		const aliasDTO = newAliasDTO.data;
-		return new Alias(aliasDTO);
-	}
+    
 
-	/**
-	 * Get an existing alias by its name.
-	 *
-	 * Raises an error if the alias does not exist.
-	 * @param {string} aliasName the name of the alias to get.
-	 * @returns {Promise&lt;Alias>}
-	 */
-	async getAlias(aliasName) {
-		let json = await this.request(`aliases/${aliasName}`);
 
-		return new Alias(json);
-	}
 
-	/**
-	 * Update an existing alias by its name.
-	 *
-	 * Raises an error if the alias does not exist or belong to the currently logged in account.
-	 * @param {Alias} alias the alias to update.
-	 * @param {string} [newName] optional updated name of the alias. if not included alias retains the same name.
-	 * @param {string} [newPayload] optional updated payload of the alias. if not included alias retains the same payload.
-	 * @returns {Promise&lt;Alias>}
-	 */
-	async updateAlias(alias, newName = alias.name, newPayload = alias.payload) {
-		let updatedAliasDTO = await this.request(`aliases/${alias.name}`, {
-			method: "PUT",
-			body: { name: newName, payload: newPayload },
-		});
 
-		return new Alias(updatedAliasDTO.data);
-	}
 
-	/**
-	 * Delete an existing alias by its name
-	 *
-	 * Raises an error if the alias does not exist or belong to the currently logged in account.
-	 * @param {string} aliasName the alias to delete.
-	 * @returns {Promise&lt;any>} a validation message.
-	 */
-	deleteAlias(aliasName) {
-		return this.request(`aliases/${aliasName}`, { method: "DELETE" });
-	}
-}</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The client using this endpoint</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="Endpoint.js.html">Endpoint.js</a>, <a href="Endpoint.js.html#line7">line 7</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="client">
+    <a href="#client">#</a>
+    <span class="type-signature"></span>client<span class="type-signature"> :<a href="Client.html">Client</a></span>
+</h4>
+
+
+
+
+
+
+    <div class="member-item-container flex">
+        <strong>Type: </strong>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="Endpoint.js.html">Endpoint.js</a>, <a href="Endpoint.js.html#line15">line 15</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

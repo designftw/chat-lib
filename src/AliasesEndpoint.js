@@ -1,24 +1,16 @@
+import Endpoint from "./Endpoint.js";
 import Alias from "./Alias.js";
-
-import {
-	request,
-	} from "./util.js";
 
 /**
  * The aliases endpoint of the chat server.
  */
- export default class AliasesEndpoint {
+ export default class AliasesEndpoint extends Endpoint {
 	/**
 	 * AliasesEndpoint constructor.
-	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
-	constructor(store) {
-		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
-		 */
-		this.store = store;
+	constructor(client) {
+		super(client);
 	}
 
 	/**
@@ -26,9 +18,7 @@ import {
 	 * @returns {Promise<Alias[]>} the aliases associated with the currently logged in account
 	 */
 	async getAliasesForAccount() {
-		let route = "aliases";
-
-		let aliasesArray = await request(`${this.store.host}/${route}`);
+		let aliasesArray = await this.request("aliases");
 
 		return aliasesArray.map(aliasDTO => new Alias(aliasDTO));
 	}
@@ -42,9 +32,7 @@ import {
 	 * @returns {Promise<Alias>}
 	 */
 	async createAlias(name, payload) {
-		let route = "aliases";
-
-		let newAliasDTO = await request(`${this.store.host}/${route}`, {
+		let newAliasDTO = await this.request("aliases", {
 				method: "POST",
 				body: {
 					name,
@@ -64,9 +52,7 @@ import {
 	 * @returns {Promise<Alias>}
 	 */
 	async getAlias(aliasName) {
-		let route = `aliases/${aliasName}`;
-
-		let json = await request(`${this.store.host}/${route}`);
+		let json = await this.request(`aliases/${aliasName}`);
 
 		return new Alias(json);
 	}
@@ -81,12 +67,10 @@ import {
 	 * @returns {Promise<Alias>}
 	 */
 	async updateAlias(alias, newName = alias.name, newPayload = alias.payload) {
-		let route = `aliases/${alias.name}`;
-
-		let updatedAliasDTO = await request(`${this.store.host}/${route}`, {
-				method: "PUT",
-				body: { name: newName, payload: newPayload },
-			});
+		let updatedAliasDTO = await this.request(`aliases/${alias.name}`, {
+			method: "PUT",
+			body: { name: newName, payload: newPayload },
+		});
 
 		return new Alias(updatedAliasDTO.data);
 	}
@@ -99,8 +83,6 @@ import {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	deleteAlias(aliasName) {
-		let route = `aliases/${aliasName}`;
-
-		return request(`${this.store.host}/${route}`, { method: "DELETE" });
+		return this.request(`aliases/${aliasName}`, { method: "DELETE" });
 	}
 }

@@ -1,21 +1,17 @@
+import Endpoint from "./Endpoint.js";
 import PrivatePayload from "./PrivatePayload.js";
-import { request } from "./util.js";
 
 /**
  * The Private Payload endpoint of the chat server
  */
-export default class PrivatePayloadsEndpoint {
+export default class PrivatePayloadsEndpoint extends Endpoint {
 	/**
 	 * PrivatePayloadEndpoint constructor.
 	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
-	constructor(store) {
-		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
-		 */
-		this.store = store;
+	constructor(client) {
+		super(client);
 	}
 
 	/**
@@ -26,9 +22,7 @@ export default class PrivatePayloadsEndpoint {
 	 * @returns {Promise<PrivatePayload>} the newly created private payload.
 	 */
 	async createPayload(ownAlias, entityId, payload) {
-		let route = `payloads`;
-
-		let resultDTO = await request(`${this.store.host}/${route}`, {
+		let resultDTO = await this.request("payloads", {
 			method: "POST",
 			body: { payload, entity_id: entityId },
 			headers: {
@@ -47,9 +41,7 @@ export default class PrivatePayloadsEndpoint {
 	 * @returns {Promise<PrivatePayload>} the requested PrivatePayload model.
 	 */
 	async getPayload(ownAlias, entityId) {
-		let route = `payloads/${entityId}`;
-
-		let payloadDTO = await request(`${this.store.host}/${route}`, {
+		let payloadDTO = await this.request(`payloads/${entityId}`, {
 			headers: {
 				"user-alias-name": ownAlias,
 			},
@@ -66,9 +58,7 @@ export default class PrivatePayloadsEndpoint {
 	 * @returns {Promise<PrivatePayload>} the updated private payload model.
 	 */
 	async updatePayload(ownAlias, entityId, newPayload) {
-		let route = `payloads/${entityId}`;
-
-		let resultDTO = await request(`${this.store.host}/${route}`, {
+		let resultDTO = await this.request(`payloads/${entityId}`, {
 			method: "PUT",
 			body: { payload: newPayload },
 			headers: {
@@ -87,9 +77,7 @@ export default class PrivatePayloadsEndpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	deletePayload(ownAlias, entityId) {
-		let route = `payloads/${entityId}`;
-
-		return request(`${this.store.host}/${route}`, {
+		return this.request(`payloads/${entityId}`, {
 			method: "DELETE",
 			headers: {
 				"user-alias-name": ownAlias,

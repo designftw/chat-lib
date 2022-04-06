@@ -1,21 +1,17 @@
+import Endpoint from "./Endpoint.js";
 import Message from "./Message.js";
-import { request } from "./util.js";
 
 /**
  * The messages endpoint of the chat server.
  */
-export default class MessagesEndpoint {
+export default class MessagesEndpoint extends Endpoint {
 	/**
 	 * AliasesEndpoint constructor.
 	 *
-	 * @param {ClientStore} store see [Client's store property]{@link Client#store}
+	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
-	constructor(store) {
-		/**
-		 * See [Client's store property]{@link Client#store}
-		 * @type {ClientStore}
-		 */
-		this.store = store;
+	constructor(client) {
+		super(client);
 	}
 
 	/**
@@ -34,8 +30,6 @@ export default class MessagesEndpoint {
 	 * @returns {Promise<Message[]>} The messages which pass the filters.
 	 */
 	async getMessagesForAlias(ownAlias, interlocutors, sinceTime) {
-		let route = `messages`;
-
 		let headers = {
 			"user-alias-name": ownAlias,
 		};
@@ -48,7 +42,7 @@ export default class MessagesEndpoint {
 			headers["since-time"] = sinceTime.getTime();
 		}
 
-		let messagesDTO = await request(`${this.store.host}/${route}`, { headers });
+		let messagesDTO = await this.request("messages", { headers });
 
 		return messagesDTO.map((messageDTO) => new Message(messageDTO));
 	}
@@ -61,9 +55,7 @@ export default class MessagesEndpoint {
 	 * @returns {Promise<Message>} The sent message.
 	 */
 	async sendMessage(ownAlias, recipientNames, messagePayload) {
-		let route = `messages`;
-
-		let responseDTO = await request(`${this.store.host}/${route}`, {
+		let responseDTO = await this.request("messages", {
 			method: "POST",
 			body: {
 				payload: messagePayload,
@@ -85,9 +77,7 @@ export default class MessagesEndpoint {
 	 * @returns {Promise<Message>} The message associated with the passed in id.
 	 */
 	async getMessage(ownAlias, messageId) {
-		let route = `messages/${messageId}`;
-
-		let messageDTO = await request(`${this.store.host}/${route}`, {
+		let messageDTO = await this.request(`messages/${messageId}`, {
 			headers: {
 				"user-alias-name": ownAlias,
 			}
@@ -104,9 +94,7 @@ export default class MessagesEndpoint {
 	 * @returns {Promise<Message>} The updated message
 	 */
 	async updateMessage(ownAlias, messageId, payload) {
-		let route = `messages/${messageId}`;
-
-		let resultDTO = await request(`${this.store.host}/${route}`, {
+		let resultDTO = await this.request(`messages/${messageId}`, {
 			method: "PUT",
 			body: { payload },
 			headers: {
@@ -125,9 +113,7 @@ export default class MessagesEndpoint {
 	 * @returns {Promise<any>} A validation message.
 	 */
 	deleteMessage(ownAlias, messageId) {
-		let route = `messages/${messageId}`;
-
-		return request(`${this.store.host}/${route}`, {
+		return this.request(`messages/${messageId}`, {
 			method: "DELETE",
 			headers: {
 				"user-alias-name": ownAlias,
