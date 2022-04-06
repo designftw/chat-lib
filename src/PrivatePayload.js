@@ -19,7 +19,7 @@ export default class PrivatePayload extends BaseModel {
 			return options;
 		}
 		const { id, createdAt, updatedAt, entityId, payload } = options;
-    super({ id, createdAt, updatedAt });
+		super({ id, createdAt, updatedAt });
 
 		/**
 		 * The id of the object this payload is attached to.
