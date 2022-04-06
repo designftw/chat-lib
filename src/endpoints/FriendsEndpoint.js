@@ -53,7 +53,7 @@ export default class FriendsEndpoint extends Endpoint {
 	 * @returns {Promise<any>} a validation message.
 	 */
 	async removeFriend(ownAlias, friendToRemove) {
-		return this.request("friends",{
+		return this.request("friends", {
 			method: "DELETE",
 			body: {
 				alias_name: friendToRemove,
