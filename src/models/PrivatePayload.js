@@ -12,13 +12,13 @@ export default class PrivatePayload extends BaseModel {
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
 	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
-	 * @param {string} options.payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
+	 * @param {Object} options.data see [PrivatePayload's payload property]{@link PrivatePayload#data}
 	 */
 	constructor(options = {}) {
 		if (options instanceof PrivatePayload) {
 			return options;
 		}
-		const { id, createdAt, updatedAt, entityId, payload } = options;
+		const { id, createdAt, updatedAt, entityId, data } = options;
 		super({ id, createdAt, updatedAt });
 
 		/**
@@ -29,8 +29,8 @@ export default class PrivatePayload extends BaseModel {
 
 		/**
 		 * The data associated with the private payload.
-		 * @type {string}
+		 * @type {Object}
 		 */
-		this.payload = payload;
+		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
 }

@@ -290,12 +290,12 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string} options.alias the name of the alias which is creating the payload.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload is attached to.
-   * @param {string} options.payload the payload to attach to the entity associated with the passed in entityId, private to the alias associated with the passed in alias name.
+   * @param {Object} options.data the payload to attach to the entity associated with the passed in entityId, private to the alias associated with the passed in alias name.
    * @returns {Promise<PrivatePayload>} the new private payload.
    */
-  createPrivatePayload({alias, entityId, payload} = {}) {
+  createPrivatePayload({alias, entityId, data} = {}) {
     alias = alias ?? this.account.username;
-    return this.privatePayloads.createPayload(alias, entityId, payload);
+    return this.privatePayloads.createPayload(alias, entityId, data);
   }
 
   /**
@@ -315,15 +315,15 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string} options.alias the name of the alias associated with the payload to update.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to update is attached to.
-   * @param {string} options.newPayload the new private payload.
+   * @param {Object} options.newData the new private payload.
    * @returns {Promise<PrivatePayload>} the updated private payload.
    */
-  updatePrivatePayload({alias, entityId, newPayload} = {}) {
+  updatePrivatePayload({alias, entityId, newData} = {}) {
     alias = alias ?? this.account.username;
     return this.privatePayloads.updatePayload(
       alias,
       entityId,
-      newPayload
+      newData
     );
   }
 

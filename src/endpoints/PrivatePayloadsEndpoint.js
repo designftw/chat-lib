@@ -18,20 +18,20 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 	 * Create a new private payload.
 	 * @param {string} ownAlias the alias associated with the private payload.
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload is attached to.
-	 * @param {string} payload the payload, private to the passed in alias, to be attached to the passed in model.
+	 * @param {Object} data the payload, private to the passed in alias, to be attached to the passed in model.
 	 * @returns {Promise<PrivatePayload>} the newly created private payload.
 	 */
-	async createPayload(ownAlias, entityId, payload) {
+	async createPayload(ownAlias, entityId, data) {
 		let resultDTO = await this.request("payloads", {
 			method: "POST",
-			body: { payload, entity_id: entityId },
+			body: { payload: JSON.stringify(data), entity_id: entityId },
 			headers: {
 				"user-alias-name": ownAlias,
 			},
 		});
 
 		const payloadDTO = resultDTO.data;
-		return new PrivatePayload(payloadDTO);
+		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
@@ -47,27 +47,27 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 			},
 		});
 
-		return new PrivatePayload(payloadDTO);
+		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
 	 * Update the payload associated with the passed in alias and entity.
 	 * @param {string} ownAlias the alias associated with the private payload.
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload to update is attached to.
-	 * @param {string} newPayload the new payload to attach to the alias and model
+	 * @param {Object} newData the new payload to attach to the alias and model
 	 * @returns {Promise<PrivatePayload>} the updated private payload model.
 	 */
-	async updatePayload(ownAlias, entityId, newPayload) {
+	async updatePayload(ownAlias, entityId, newData) {
 		let resultDTO = await this.request(`payloads/${entityId}`, {
 			method: "PUT",
-			body: { payload: newPayload },
+			body: { payload: JSON.stringify(newData) },
 			headers: {
 				"user-alias-name": ownAlias,
 			},
 		});
 
 		const payloadDTO = resultDTO.data;
-		return new PrivatePayload(payloadDTO);
+		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
