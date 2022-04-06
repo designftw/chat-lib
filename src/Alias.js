@@ -25,7 +25,7 @@ export default class Alias extends BaseModel {
 			return options;
 		}
 		const { id, createdAt, updatedAt, name, payload } = options;
-		super(id, createdAt, updatedAt);
+    super({ id, createdAt, updatedAt });
 
 		/**
 		 * The name associated with the alias. This is used to display

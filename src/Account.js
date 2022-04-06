@@ -21,7 +21,7 @@ export default class Account extends BaseModel {
 			return options;
 		}
 		const { id, createdAt, updatedAt, email } = options;
-		super(id, createdAt, updatedAt);
+    super({ id, createdAt, updatedAt });
 		/**
 		 * The email address associated with the account.
 		 *

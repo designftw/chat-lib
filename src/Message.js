@@ -21,7 +21,7 @@ export default class Message extends BaseModel {
 			return options;
 		}
 		const { id, createdAt, updatedAt, sender, recipients, payload } = options;
-		super(id, createdAt, updatedAt);
+    super({ id, createdAt, updatedAt });
 
 		/**
 		 * The id of the Alias which sent the message. See [Alias's id Property]{@link Alias#id}
