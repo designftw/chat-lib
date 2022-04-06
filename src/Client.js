@@ -108,6 +108,14 @@ export default class Client extends EventTarget {
 
      this.webSocket = new WebSocketEndpoint(this);
 
+     /**
+      * Default alias for the client. Set in [login]{@link Client#login} and
+      * unset in [logout]{@link Client#logout}.
+      * @type {Alias | undefined}
+      */
+     this.defaultAlias = undefined;
+
+
     for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
       this.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
     }
@@ -131,17 +139,20 @@ export default class Client extends EventTarget {
    * @returns {Promise<Account>} Upon success returns the account which was logged in.
    */
   async login(email, password) {
-    let response = await this.auth.login(email, password);
-    this.dispatchEvent(new CustomEvent("login", { detail: response }));
-    return response;
+    let account = await this.auth.login(email, password);
+    this.defaultAlias = (await this.getAliasesForAccount())[0];
+    this.dispatchEvent(new CustomEvent("login", { detail: { account, alias: this.defaultAlias } }));
+    return account;
   }
 
   /**
    * Logout of an existing account
    */
-  logout() {
+  async logout() {
+    await this.auth.logout();
+    this.defaultAlias = undefined;
     this.dispatchEvent(new CustomEvent("logout"));
-    return this.auth.logout();
+    return
   }
 
   /**
@@ -155,12 +166,14 @@ export default class Client extends EventTarget {
    * Get all the messages for the passed in alias
    *
    * Note the currently logged in account must own the alias associated with the aliasName.
-   * @param {string} aliasName the name of the alias to get messages for.
-   * @param {string[]} [interlocutors] an optional list of the senders and recipients of the messages.
-   * @param {Date} [sinceTime] an optional date to limit the request by. only receive messages since this date.
+   * @param {Object} options
+   * @param {string} options.aliasName the name of the alias to get messages for.
+   * @param {string[]} [options.interlocutors] an optional list of the senders and recipients of the messages.
+   * @param {Date} [options.sinceTime] an optional date to limit the request by. only receive messages since this date.
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  getMessagesForAlias(aliasName, interlocutors, sinceTime) {
+  getMessagesForAlias({ aliasName, interlocutors, sinceTime } = {}) {
+    aliasName = aliasName ?? this.defaultAlias.name;
     return this.messages.getMessagesForAlias(aliasName, interlocutors, sinceTime);
   }
 
@@ -168,11 +181,13 @@ export default class Client extends EventTarget {
    * Get a message which has the passed in messageId, and was sent or received by the passed in aliasName.
    *
    * Note the currently logged in account must own the alias associated with the aliasName.
-   * @param {string} aliasName the name of the alias which sent or received the message.
-   * @param {string} messageId the id of the message to get.
+   * @param {Object} options
+   * @param {string} options.aliasName the name of the alias which sent or received the message.
+   * @param {string} options.messageId the id of the message to get.
    * @returns {Promise<Message>} The model of the message with the associated id.
    */
-  getMessageById(aliasName, messageId) {
+  getMessageById({ aliasName, messageId } = {}) {
+    aliasName = aliasName ?? this.defaultAlias.name;
     return this.messages.getMessage(aliasName, messageId);
   }
 
@@ -180,33 +195,39 @@ export default class Client extends EventTarget {
    * Send a message from the passed in alias to the passed in recipients with the passed in payload.
    *
    * Note the currently logged in account must own the alias associated with the aliasName.
-   * @param {string} aliasName the name of the alias which will send the message.
-   * @param {string[]} recipientNames a list of recipients of the message.
-   * @param {string} payload the payload associated with the message.
+   * @param {Object} options
+   * @param {string} options.aliasName the name of the alias which will send the message.
+   * @param {string[]} options.recipientNames a list of recipients of the message.
+   * @param {string} options.payload the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
-  sendMessage(aliasName, recipientNames, payload) {
+  sendMessage({aliasName, recipientNames, payload}) {
+    aliasName = aliasName ?? this.defaultAlias.name;
     return this.messages.sendMessage(aliasName, recipientNames, payload);
   }
 
   /**
    * Update a message with the passed in messageId which was sent by the passed in aliasName.
-   * @param {string} aliasName the name of the alias which sent the message.
-   * @param {string} messageId the id associated with the message.
-   * @param {string} payload the new payload for the message.
+   * @param {Object} options
+   * @param {string} options.aliasName the name of the alias which sent the message.
+   * @param {string} options.messageId the id associated with the message.
+   * @param {string} options.payload the new payload for the message.
    * @returns {Promise<Message>} The model of the updated message.
    */
-  updateMessage(aliasName, messageId, payload) {
+  updateMessage({aliasName, messageId, payload}) {
+    aliasName = aliasName ?? this.defaultAlias.name;
     return this.messages.updateMessage(aliasName, messageId, payload);
   }
 
   /**
    * Delete a message with the passed in messageId which was sent by the passed in aliasName.
-   * @param {string} aliasName the name of the alias which sent the message.
-   * @param {string} messageId the id associated with the message.
+   * @param {Object} options
+   * @param {string} options.aliasName the name of the alias which sent the message.
+   * @param {string} options.messageId the id associated with the message.
    * @returns {Promise<any>} a validation message.
    */
-  deleteMessage(aliasName, messageId) {
+  deleteMessage({aliasName, messageId}) {
+    aliasName = aliasName ?? this.defaultAlias.name;
     return this.messages.deleteMessage(aliasName, messageId);
   }
 
