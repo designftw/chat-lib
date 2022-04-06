@@ -1,11 +1,12 @@
 {
-	"parser": "babel-eslint",
+	"parser": "@babel/eslint-parser",
 	"parserOptions": {
 		"ecmaVersion": 6,
-		"sourceType": "script",
+		"sourceType": "module",
 		"ecmaFeatures": {
 			"impliedStrict": true
-		}
+		},
+		"requireConfigFile": false
 	},
 	"env": {
 		"browser": true,
