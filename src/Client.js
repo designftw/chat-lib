@@ -1,13 +1,13 @@
 import Account from "./models/Account.js";
 import Alias from "./models/Alias.js";
 import Message from "./models/Message.js";
-import PrivatePayload from "./models/PrivatePayload.js";
+import PrivateData from "./models/PrivateData.js";
 
 import WebSocketEndpoint from "./endpoints/WebSocketEndpoint.js";
 import AuthEndpoint from "./endpoints/AuthEndpoint.js";
 import AliasesEndpoint from "./endpoints/AliasesEndpoint.js";
 import MessagesEndpoint from "./endpoints/MessagesEndpoint.js";
-import PrivatePayloadsEndpoint from "./endpoints/PrivatePayloadsEndpoint.js";
+import PrivateDataEndpoint from "./endpoints/PrivateDataEndpoint.js";
 import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
 /**
@@ -96,9 +96,9 @@ export default class Client extends EventTarget {
 
      /**
       * Helper class for private payload routes.
-      * @type {PrivatePayloadsEndpoint}
+      * @type {PrivateDataEndpoint}
       */
-     this.privatePayloads = new PrivatePayloadsEndpoint(this);
+     this.privateData = new PrivateDataEndpoint(this);
 
      /**
       * Helper class for friends routes.
@@ -291,11 +291,11 @@ export default class Client extends EventTarget {
    * @param {string} options.alias the name of the alias which is creating the payload.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload is attached to.
    * @param {Object} options.data the payload to attach to the entity associated with the passed in entityId, private to the alias associated with the passed in alias name.
-   * @returns {Promise<PrivatePayload>} the new private payload.
+   * @returns {Promise<PrivateData>} the new private payload.
    */
-  createPrivatePayload({alias, entityId, data} = {}) {
+  createPrivateData({alias, entityId, data} = {}) {
     alias = alias ?? this.account.username;
-    return this.privatePayloads.createPayload(alias, entityId, data);
+    return this.privateData.createPayload(alias, entityId, data);
   }
 
   /**
@@ -303,11 +303,11 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string} options.alias the name of the alias associated with the payload to get.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to get is attached to.
-   * @returns {Promise<PrivatePayload>} the private payload associated with the passed in alias and entity.
+   * @returns {Promise<PrivateData>} the private payload associated with the passed in alias and entity.
    */
-  getPrivatePayload({alias, entityId} = {}) {
+  getPrivateData({alias, entityId} = {}) {
     alias = alias ?? this.account.username;
-    return this.privatePayloads.getPayload(alias, entityId);
+    return this.privateData.getPayload(alias, entityId);
   }
 
   /**
@@ -316,11 +316,11 @@ export default class Client extends EventTarget {
    * @param {string} options.alias the name of the alias associated with the payload to update.
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to update is attached to.
    * @param {Object} options.newData the new private payload.
-   * @returns {Promise<PrivatePayload>} the updated private payload.
+   * @returns {Promise<PrivateData>} the updated private payload.
    */
-  updatePrivatePayload({alias, entityId, newData} = {}) {
+  updatePrivateData({alias, entityId, newData} = {}) {
     alias = alias ?? this.account.username;
-    return this.privatePayloads.updatePayload(
+    return this.privateData.updatePayload(
       alias,
       entityId,
       newData
@@ -334,9 +334,9 @@ export default class Client extends EventTarget {
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to delete is attached to.
    * @returns {Promise<any>} A validation message.
    */
-  deletePrivatePayload({alias, entityId} = {}) {
+  deletePrivateData({alias, entityId} = {}) {
     alias = alias ?? this.account.username;
-    return this.privatePayloads.deletePayload(alias, entityId);
+    return this.privateData.deletePayload(alias, entityId);
   }
 
   /**

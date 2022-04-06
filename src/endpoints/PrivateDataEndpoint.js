@@ -1,12 +1,12 @@
 import Endpoint from "./Endpoint.js";
-import PrivatePayload from "../models/PrivatePayload.js";
+import PrivateData from "../models/PrivateData.js";
 
 /**
  * The Private Payload endpoint of the chat server
  */
-export default class PrivatePayloadsEndpoint extends Endpoint {
+export default class PrivateDataEndpoint extends Endpoint {
 	/**
-	 * PrivatePayloadEndpoint constructor.
+	 * PrivateDataEndpoint constructor.
 	 *
 	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
 	 */
@@ -19,7 +19,7 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 	 * @param {string} ownAlias the alias associated with the private payload.
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload is attached to.
 	 * @param {Object} data the payload, private to the passed in alias, to be attached to the passed in model.
-	 * @returns {Promise<PrivatePayload>} the newly created private payload.
+	 * @returns {Promise<PrivateData>} the newly created private payload.
 	 */
 	async createPayload(ownAlias, entityId, data) {
 		let resultDTO = await this.request("payloads", {
@@ -31,14 +31,14 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 		});
 
 		const payloadDTO = resultDTO.data;
-		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
+		return new PrivateData({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
 	 * Get the payload associated with the passed in alias and entity.
 	 * @param {string} ownAlias the alias associated with the private payload.
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the returned payload is attached to.
-	 * @returns {Promise<PrivatePayload>} the requested PrivatePayload model.
+	 * @returns {Promise<PrivateData>} the requested PrivatePayload model.
 	 */
 	async getPayload(ownAlias, entityId) {
 		let payloadDTO = await this.request(`payloads/${entityId}`, {
@@ -47,7 +47,7 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 			},
 		});
 
-		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
+		return new PrivateData({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
@@ -55,7 +55,7 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 	 * @param {string} ownAlias the alias associated with the private payload.
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload to update is attached to.
 	 * @param {Object} newData the new payload to attach to the alias and model
-	 * @returns {Promise<PrivatePayload>} the updated private payload model.
+	 * @returns {Promise<PrivateData>} the updated private payload model.
 	 */
 	async updatePayload(ownAlias, entityId, newData) {
 		let resultDTO = await this.request(`payloads/${entityId}`, {
@@ -67,7 +67,7 @@ export default class PrivatePayloadsEndpoint extends Endpoint {
 		});
 
 		const payloadDTO = resultDTO.data;
-		return new PrivatePayload({...payloadDTO, data: payloadDTO.payload});
+		return new PrivateData({...payloadDTO, data: payloadDTO.payload});
 	}
 
 	/**
