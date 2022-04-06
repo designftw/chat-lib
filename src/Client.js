@@ -128,7 +128,7 @@ export default class Client extends EventTarget {
    */
   async login(email, password) {
     let response = await this.auth.login(email, password);
-    this.dispatchEvent(new CustomEvent("login", { detail: res }));
+    this.dispatchEvent(new CustomEvent("login", { detail: response }));
     return response;
   }
 
