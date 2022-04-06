@@ -75,7 +75,8 @@ export function getErrorFromResponse(response) {
   return new Promise((resolve, reject) => {
     if (response.ok) {
       resolve(response);
-    } else {
+    }
+    else {
       reject(response);
     }
   }).catch((responseOrError) => {
