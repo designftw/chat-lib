@@ -28,12 +28,12 @@ export default class BaseModel {
 		 * The date that the model was created.
 		 * @type {Date}
 		 */
-		this.createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
+		this.createdAt = new Date(createdAt);
 
 		/**
 		 * The date that the model was last updated.
 		 * @type {Date}
 		 */
-		this.updatedAt = updatedAt instanceof Date ? updatedAt : new Date(updatedAt);
+		this.updatedAt = new Date(updatedAt);
 	}
 }
