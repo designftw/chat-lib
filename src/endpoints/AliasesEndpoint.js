@@ -61,13 +61,14 @@ import Alias from "../models/Alias.js";
 	 * Update an existing alias by its name.
 	 *
 	 * Raises an error if the alias does not exist or belong to the currently logged in account.
-	 * @param {Alias} alias the alias to update.
-	 * @param {string} [newName] optional updated name of the alias. if not included alias retains the same name.
-	 * @param {string} [newPayload] optional updated payload of the alias. if not included alias retains the same payload.
+	 * @param {string} aliasName the alias to update.
+	 * @param {Object} updates
+	 * @param {string} [updates.newName] optional updated name of the alias. if not included alias retains the same name.
+	 * @param {string} [updates.newPayload] optional updated payload of the alias. if not included alias retains the same payload.
 	 * @returns {Promise<Alias>}
 	 */
-	async updateAlias(alias, newName = alias.name, newPayload = alias.payload) {
-		let updatedAliasDTO = await this.request(`aliases/${alias.name}`, {
+	async updateAlias(aliasName, {newName, newPayload}) {
+		let updatedAliasDTO = await this.request(`aliases/${aliasName}`, {
 			method: "PUT",
 			body: { name: newName, payload: newPayload },
 		});
