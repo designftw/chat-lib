@@ -157,6 +157,7 @@ export default class Client extends EventTarget {
    */
   async login(email, password) {
     this.account = await this.#auth.login(email, password);
+    this.subscribe(this.account.handle);
     this.dispatchEvent(new CustomEvent("login", { detail: { account: this.account } }));
     return this.account;
   }
@@ -166,6 +167,7 @@ export default class Client extends EventTarget {
    */
   async logout() {
     await this.#auth.logout();
+    this.unsubscribe(this.account.handle);
     this.account = undefined;
     this.dispatchEvent(new CustomEvent("logout"));
     return;
@@ -253,11 +255,6 @@ export default class Client extends EventTarget {
    */
   async getIdentities() {
     let identities = await this.#identities.getAliasesForAccount();
-
-    for (let identity of identities) {
-      await this.#webSocket.openWebSocketFor(identity.handle);
-    }
-
     return identities;
   }
 
@@ -414,5 +411,13 @@ export default class Client extends EventTarget {
     );
 
     return Object.values(msgKeyedByInterlocutorSets);
+  }
+
+  async subscribe(handle) {
+    await this.#webSocket.openWebSocketFor(handle);
+  }
+
+  unsubscribe(handle) {
+    this.#webSocket.closeWebSocketFor(handle);
   }
 }

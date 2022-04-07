@@ -100,4 +100,11 @@ export default class WebSocketEndpoint extends EventTarget {
 			message: "successfully opened web socket",
 		};
 	}
+
+	closeWebSocketFor(aliasName) {
+		if (this.#aliasNameToWebSocket.hasOwnProperty(aliasName)) {
+			const socket = this.#aliasNameToWebSocket[aliasName];
+			socket.close();
+		}
+	}
 }
