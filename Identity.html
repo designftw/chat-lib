@@ -31,7 +31,7 @@
 
 
     <title>
-      PrivateDataEndpoint
+      Identity
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        PrivateDataEndpoint
+        Identity
       </h1>
       
 
@@ -115,12 +115,18 @@
         
         <h2>
         
-        PrivateDataEndpoint
+        Identity
         
         </h2>
         
         
-            <div class="class-description">The Private Payload endpoint of the chat server</div>
+            <div class="class-description">The alias is the recipient or sender of messages.
+
+One account can have multiple aliases, for example an account could
+have a personal and work alias. The chat UI could allow the user
+to send and receive messages from multiple aliases at once. Similar to
+associating multiple email addresses with on gmail account, or having
+multiple slack workspaces logged in.</div>
         
     
 </header>
@@ -135,9 +141,9 @@
         <h2>Constructor</h2>
     
 
-    <h4 class="name" id="PrivateDataEndpoint">
-        <a href="#PrivateDataEndpoint">#</a>
-        <span class="type-signature"></span>new PrivateDataEndpoint<span class="signature">(client)</span><span class="type-signature"></span>
+    <h4 class="name" id="Identity">
+        <a href="#Identity">#</a>
+        <span class="type-signature"></span>new Identity<span class="signature">(options)</span><span class="type-signature"></span>
     </h4>
 
     
@@ -145,7 +151,7 @@
 
 
     <div class="description">
-        PrivateDataEndpoint constructor.
+        Alias model constructor.
     </div>
 
 
@@ -182,13 +188,13 @@
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Client.html">Client</a></span>
+<span class="param-type">Object</span>
 
 
             
@@ -198,7 +204,148 @@
 
             
 
-            <td class="description last">see <a href="Endpoint.html#client">Endpoint's client property</a></td>
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#id">BaseModel's id property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#createdAt">BaseModel's createdAt property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updatedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="BaseModel.html#updatedAt">BaseModel's updatedAt property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Identity.html#handle">Alias's name property</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">see <a href="Identity.html#data">Alias's data property</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -243,7 +390,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="endpoints_PrivateDataEndpoint.js.html">endpoints/PrivateDataEndpoint.js</a>, <a href="endpoints_PrivateDataEndpoint.js.html#line7">line 7</a>
+                <a href="models_Identity.js.html">models/Identity.js</a>, <a href="models_Identity.js.html#line12">line 12</a>
             </li></ul></dd>
         </div>
     
@@ -286,131 +433,39 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title">Members</h3>
 
         
             
-
-    
-
-    <h4 class="name" id="createPayload">
-        <a href="#createPayload">#</a>
-        <span class="type-signature">(async) </span>createPayload<span class="signature">(ownAlias, entityId, data)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivateData.html">PrivateData</a>>}</span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        Create a new private payload.
-    </div>
+<h4 class="name" id="data">
+    <a href="#data">#</a>
+    <span class="type-signature"></span>data<span class="type-signature"> :Object</span>
+</h4>
 
 
 
 
+<div class="description">
+    Public arbitrary metadata about an alias stored as a string.
+
+The payload is used so that users can store arbitrary metadata
+with objects used in the chat application. For example a user
+could publicly assign availability to their alias, or provide a public
+link to an avatar.
+</div>
 
 
 
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ownAlias</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the alias associated with the private payload.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>entityId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload is attached to.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
+    <div class="member-item-container flex">
+        <strong>Type: </strong>
+        <ul>
+            <li>
                 
 <span class="param-type">Object</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the payload, private to the passed in alias, to be attached to the passed in model.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+            </li>
+        </ul>
     </div>
 
 
@@ -449,7 +504,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="endpoints_PrivateDataEndpoint.js.html">endpoints/PrivateDataEndpoint.js</a>, <a href="endpoints_PrivateDataEndpoint.js.html#line24">line 24</a>
+                <a href="models_Identity.js.html">models/Identity.js</a>, <a href="models_Identity.js.html#line48">line 48</a>
             </li></ul></dd>
         </div>
     
@@ -468,139 +523,35 @@
 
 
 
-
-
-
-
-
-
-
-    <div class="method-member-container mt-20">
-    <strong>Returns:</strong>
         
             
-<div class="param-desc">
-    the newly created private payload.
+<h4 class="name" id="handle">
+    <a href="#handle">#</a>
+    <span class="type-signature"></span>handle<span class="type-signature"> :string</span>
+</h4>
+
+
+
+
+<div class="description">
+    The name associated with the alias. This is used to display
+the alias in the UI.
+
+Unique across all aliases.
 </div>
 
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="PrivateData.html">PrivateData</a>></span>
-
-
-    </dd>
-</dl>
-
-            
-    </div>
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deletePayload">
-        <a href="#deletePayload">#</a>
-        <span class="type-signature"></span>deletePayload<span class="signature">(ownAlias, entityId)</span><span class="type-signature"> &rarr; {Promise.&lt;any>}</span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        Delete the payload associated with the passed in alias and entity.
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ownAlias</code></td>
-            
-
-            <td class="type">
-            
+    <div class="member-item-container flex">
+        <strong>Type: </strong>
+        <ul>
+            <li>
                 
 <span class="param-type">string</span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the alias associated with the private payload.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>entityId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload to delete is attached to.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+            </li>
+        </ul>
     </div>
 
 
@@ -639,7 +590,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="endpoints_PrivateDataEndpoint.js.html">endpoints/PrivateDataEndpoint.js</a>, <a href="endpoints_PrivateDataEndpoint.js.html#line79">line 79</a>
+                <a href="models_Identity.js.html">models/Identity.js</a>, <a href="models_Identity.js.html#line37">line 37</a>
             </li></ul></dd>
         </div>
     
@@ -658,445 +609,9 @@
 
 
 
-
-
-
-
-
-
-
-    <div class="method-member-container mt-20">
-    <strong>Returns:</strong>
         
-            
-<div class="param-desc">
-    a validation message.
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;any></span>
-
-
-    </dd>
-</dl>
-
-            
-    </div>
-
-
-
-
-        
-            
-
     
 
-    <h4 class="name" id="getPayload">
-        <a href="#getPayload">#</a>
-        <span class="type-signature">(async) </span>getPayload<span class="signature">(ownAlias, entityId)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivateData.html">PrivateData</a>>}</span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        Get the payload associated with the passed in alias and entity.
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ownAlias</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the alias associated with the private payload.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>entityId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the returned payload is attached to.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="endpoints_PrivateDataEndpoint.js.html">endpoints/PrivateDataEndpoint.js</a>, <a href="endpoints_PrivateDataEndpoint.js.html#line43">line 43</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container mt-20">
-    <strong>Returns:</strong>
-        
-            
-<div class="param-desc">
-    the requested PrivatePayload model.
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="PrivateData.html">PrivateData</a>></span>
-
-
-    </dd>
-</dl>
-
-            
-    </div>
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="updatePayload">
-        <a href="#updatePayload">#</a>
-        <span class="type-signature">(async) </span>updatePayload<span class="signature">(ownAlias, entityId, newData)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="PrivateData.html">PrivateData</a>>}</span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        Update the payload associated with the passed in alias and entity.
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Parameters:</strong>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ownAlias</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the alias associated with the private payload.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>entityId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the <a href="BaseModel.html#id">id</a> of the entity the payload to update is attached to.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>newData</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the new payload to attach to the alias and model</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="endpoints_PrivateDataEndpoint.js.html">endpoints/PrivateDataEndpoint.js</a>, <a href="endpoints_PrivateDataEndpoint.js.html#line60">line 60</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container mt-20">
-    <strong>Returns:</strong>
-        
-            
-<div class="param-desc">
-    the updated private payload model.
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="PrivateData.html">PrivateData</a>></span>
-
-
-    </dd>
-</dl>
-
-            
-    </div>
-
-
-
-
-        
     
 
     
