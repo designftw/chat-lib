@@ -17,7 +17,7 @@ export default class Account extends BaseModel {
 	 * @param {string} options.email see [Account's email property]{@link Account#email}
 	 * @param {string} options.handle see [Account's username property]{@link Account#handle}
 	 */
-	constructor(options = {}) {
+	constructor(options) {
 		if (options instanceof Account) {
 			return options;
 		}

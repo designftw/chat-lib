@@ -16,7 +16,7 @@ export default class Message extends BaseModel {
 	 * @param {Identity[]} options.recipients see [Message's recipients property]{@link Message#recipients}
 	 * @param {Object} options.data see [Message's data property]{@link Message#data}
 	 */
-	constructor(options = {}) {
+	constructor(options) {
 		if (options instanceof Message) {
 			return options;
 		}

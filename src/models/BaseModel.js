@@ -9,7 +9,7 @@ export default class BaseModel {
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
 	 */
-	constructor({ id, createdAt, updatedAt } = {}) {
+	constructor({ id, createdAt, updatedAt }) {
 		if (new.target === BaseModel) {
 			throw new Error("BaseModel is an abstract class and cannot be instantiated directly.");
 		}

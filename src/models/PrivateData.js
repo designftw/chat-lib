@@ -14,7 +14,7 @@ export default class PrivateData extends BaseModel {
 	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivateData#entityId}
 	 * @param {Object} options.data see [PrivatePayload's payload property]{@link PrivateData#data}
 	 */
-	constructor(options = {}) {
+	constructor(options) {
 		if (options instanceof PrivateData) {
 			return options;
 		}

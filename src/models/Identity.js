@@ -20,12 +20,12 @@ export default class Identity extends BaseModel {
 	 * @param {string} options.handle see [Alias's name property]{@link Identity#handle}
 	 * @param {string} options.data see [Alias's data property]{@link Identity#data}
 	 */
-	constructor(options = {}) {
+	constructor(options) {
 		if (options instanceof Identity) {
 			return options;
 		}
 		const { id, createdAt, updatedAt, handle, data } = options;
-    super({ id, createdAt, updatedAt });
+		super({ id, createdAt, updatedAt });
 
 		/**
 		 * The name associated with the alias. This is used to display
