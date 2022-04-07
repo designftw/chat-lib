@@ -55,11 +55,12 @@ import { toArray, intersection } from "./util.js";
  */
 
 /**
+ * ```js
+ * import Client from "https://designftw.github.io/chat-lib/src/Client.js";
+ * ```
+ *
  * The Client is the interface for interacting with the ChatServer.
  *
- * ```
- * import Client from "https://designftw.github.io/chat-lib/src/client.js";
- * ```
  *
  * @fires messagedelete
  * @fires messageupdate

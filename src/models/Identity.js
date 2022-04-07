@@ -11,7 +11,12 @@ import BaseModel from "./BaseModel.js";
  */
 export default class Identity extends BaseModel {
 	/**
+	 * ```js
+	 * import Identity from "https://designftw.github.io/chat-lib/src/models/Identity.js";
+	 * ```
+	 *
 	 * Alias model constructor.
+	 *
 	 *
 	 * @param {Object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}

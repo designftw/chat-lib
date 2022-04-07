@@ -1,9 +1,17 @@
 /**
+	 * ```js
+	 * // ⚠️ you probably do not need to import this directly it is an abstract base class implicity
+	 * // used by other models
+	 * import BaseModel from "https://designftw.github.io/chat-lib/src/models/BaseModel.js";
+	 * ```
+	 *
  * Base class for all models
  */
 export default class BaseModel {
+
 	/**
 	 * Constructor for the base model.
+	 *
 	 * @param {object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}

@@ -6,7 +6,12 @@ import BaseModel from "./BaseModel.js";
  */
 export default class Message extends BaseModel {
 	/**
+	 * ```js
+	 * import Message from "https://designftw.github.io/chat-lib/src/models/Message.js";
+	 * ```
+	 *
 	 * Message model constructor.
+	 *
 	 *
 	 * @param {Object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}

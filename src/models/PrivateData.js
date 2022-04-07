@@ -5,6 +5,10 @@ import BaseModel from "./BaseModel.js";
  */
 export default class PrivateData extends BaseModel {
 	/**
+	 * ```js
+	 * import PrivateData from "https://designftw.github.io/chat-lib/src/models/PrivateData.js";
+	 * ```
+	 *
 	 * PrivatePayload model constructor.
 	 *
 	 * @param {Object} options

@@ -8,7 +8,12 @@ import BaseModel from "./BaseModel.js";
  */
 export default class Account extends BaseModel {
 	/**
+	 * ```js
+	 * import Account from "https://designftw.github.io/chat-lib/src/models/Account.js";
+	 * ```
+	 *
 	 * Account model constructor.
+	 *
 	 *
 	 * @param {Object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
