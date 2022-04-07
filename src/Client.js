@@ -59,6 +59,43 @@ import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
  * @fires message
  */
 export default class Client extends EventTarget {
+
+  /**
+  * Helper class for authorization routes.
+  * @type {AuthEndpoint}
+  */
+  #auth;
+
+  /**
+  * Helper class for alias routes.
+  * @type {IdentitiesEndpoint}
+  */
+  #identities;
+
+  /**
+  * Helper class for message routes.
+  * @type {MessagesEndpoint}
+  */
+  #messages;
+
+  /**
+  * Helper class for private payload routes.
+  * @type {PrivateDataEndpoint}
+  */
+  #privateData;
+
+  /**
+  * Helper class for friends routes.
+  * @type {FriendsEndpoint}
+  */
+  #friends;
+
+  /**
+   * Helper class for web socket routes.
+   * @type {WebSocketEndpoint}
+   */
+  #webSocket;
+
   /**
    * Client constructor.
    * @param {string} host see [Client's host property]{@link Client#host}
@@ -76,48 +113,28 @@ export default class Client extends EventTarget {
      */
     Object.defineProperty(this, "host", {value: host});
 
-     /**
-      * Helper class for authorization routes.
-      * @type {AuthEndpoint}
-      */
-     this.auth = new AuthEndpoint(this);
+    this.#auth = new AuthEndpoint(this);
 
-     /**
-      * Helper class for alias routes.
-      * @type {IdentitiesEndpoint}
-      */
-     this.identities = new IdentitiesEndpoint(this);
+    this.#identities = new IdentitiesEndpoint(this);
 
-     /**
-      * Helper class for message routes.
-      * @type {MessagesEndpoint}
-      */
-     this.messages = new MessagesEndpoint(this);
+    this.#messages = new MessagesEndpoint(this);
 
-     /**
-      * Helper class for private payload routes.
-      * @type {PrivateDataEndpoint}
-      */
-     this.privateData = new PrivateDataEndpoint(this);
+    this.#privateData = new PrivateDataEndpoint(this);
 
-     /**
-      * Helper class for friends routes.
-      * @type {FriendsEndpoint}
-      */
-     this.friends = new FriendsEndpoint(this);
+    this.#friends = new FriendsEndpoint(this);
 
-     this.webSocket = new WebSocketEndpoint(this);
+    this.#webSocket = new WebSocketEndpoint(this);
 
-     /**
-      * The logged in client account. Set in [login]{@link Client#login} and
-      * unset in [logout]{@link Client#logout}.
-      * @type {Account | undefined}
-      */
-     this.account = undefined;
+    /**
+    * The logged in client account. Set in [login]{@link Client#login} and
+    * unset in [logout]{@link Client#logout}.
+    * @type {Account | undefined}
+    */
+    this.account = undefined;
 
 
     for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
-      this.webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
+      this.#webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
     }
   }
 
@@ -129,7 +146,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<{message: string}>} A validation message
    */
   signup(username, email, password) {
-    return this.auth.signup(username, email, password);
+    return this.#auth.signup(username, email, password);
   }
 
   /**
@@ -139,7 +156,8 @@ export default class Client extends EventTarget {
    * @returns {Promise<Account>} Upon success returns the account which was logged in.
    */
   async login(email, password) {
-    this.account = await this.auth.login(email, password);
+    this.account = await this.#auth.login(email, password);
+    this.subscribe(this.account.handle);
     this.dispatchEvent(new CustomEvent("login", { detail: { account: this.account } }));
     return this.account;
   }
@@ -148,7 +166,8 @@ export default class Client extends EventTarget {
    * Logout of an existing account
    */
   async logout() {
-    await this.auth.logout();
+    await this.#auth.logout();
+    this.unsubscribe(this.account.handle);
     this.account = undefined;
     this.dispatchEvent(new CustomEvent("logout"));
     return;
@@ -158,7 +177,7 @@ export default class Client extends EventTarget {
    * Check if the user is currently logged in
    */
   isLoggedIn() {
-    return this.auth.isLoggedIn();
+    return this.#auth.isLoggedIn();
   }
 
   /**
@@ -173,7 +192,7 @@ export default class Client extends EventTarget {
    */
   getMessages({ handle, interlocutors, sinceTime } = {}) {
     handle = handle ?? this.account.handle;
-    return this.messages.getMessagesForAlias(handle, interlocutors, sinceTime);
+    return this.#messages.getMessagesForAlias(handle, interlocutors, sinceTime);
   }
 
   /**
@@ -187,7 +206,7 @@ export default class Client extends EventTarget {
    */
   getMessageById({ handle, messageId } = {}) {
     handle = handle ?? this.account.handle;
-    return this.messages.getMessage(handle, messageId);
+    return this.#messages.getMessage(handle, messageId);
   }
 
   /**
@@ -202,7 +221,7 @@ export default class Client extends EventTarget {
    */
   sendMessage({handle, recipientNames, data} = {}) {
     handle = handle ?? this.account.handle;
-    return this.messages.sendMessage(handle, recipientNames, data);
+    return this.#messages.sendMessage(handle, recipientNames, data);
   }
 
   /**
@@ -215,7 +234,7 @@ export default class Client extends EventTarget {
    */
   updateMessage({handle, messageId, data} = {}) {
     handle = handle ?? this.account.handle;
-    return this.messages.updateMessage(handle, messageId, data);
+    return this.#messages.updateMessage(handle, messageId, data);
   }
 
   /**
@@ -227,7 +246,7 @@ export default class Client extends EventTarget {
    */
   deleteMessage({handle, messageId} = {}) {
     handle = handle ?? this.account.handle;
-    return this.messages.deleteMessage(handle, messageId);
+    return this.#messages.deleteMessage(handle, messageId);
   }
 
   /**
@@ -235,12 +254,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity[]>} An array of Alias models.
    */
   async getIdentities() {
-    let identities = await this.identities.getAliasesForAccount();
-
-    for (let identity of identities) {
-      await this.webSocket.openWebSocketFor(identity.handle);
-    }
-
+    let identities = await this.#identities.getAliasesForAccount();
     return identities;
   }
 
@@ -250,7 +264,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity>} The Alias model associated with the passed in name
    */
   getIdentity(handle) {
-    return this.identities.getAlias(handle);
+    return this.#identities.getAlias(handle);
   }
 
   /**
@@ -261,7 +275,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity>} The Alias model of the newly created alias.
    */
   createIdentity({ handle, data} = {}) {
-    return this.identities.createAlias(handle, data);
+    return this.#identities.createAlias(handle, data);
   }
 
   /**
@@ -273,7 +287,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity>} The Alias model of the newly updated alias.
    */
   updateIdentity(handle, { handle: newHandle, data: newData } = {}) {
-    return this.identities.updateAlias(handle, {newName: newHandle, newData});
+    return this.#identities.updateAlias(handle, {newName: newHandle, newData});
   }
 
   /**
@@ -282,7 +296,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} A validation message.
    */
   deleteIdentity(handle) {
-    return this.identities.deleteAlias(handle);
+    return this.#identities.deleteAlias(handle);
   }
 
   /**
@@ -295,7 +309,7 @@ export default class Client extends EventTarget {
    */
   createPrivateData({handle, entityId, data} = {}) {
     handle = handle ?? this.account.handle;
-    return this.privateData.createPayload(handle, entityId, data);
+    return this.#privateData.createPayload(handle, entityId, data);
   }
 
   /**
@@ -307,7 +321,7 @@ export default class Client extends EventTarget {
    */
   getPrivateData({handle, entityId} = {}) {
     handle = handle ?? this.account.handle;
-    return this.privateData.getPayload(handle, entityId);
+    return this.#privateData.getPayload(handle, entityId);
   }
 
   /**
@@ -320,7 +334,7 @@ export default class Client extends EventTarget {
    */
   updatePrivateData({handle, entityId, newData} = {}) {
     handle = handle ?? this.account.handle;
-    return this.privateData.updatePayload(
+    return this.#privateData.updatePayload(
       handle,
       entityId,
       newData
@@ -336,7 +350,7 @@ export default class Client extends EventTarget {
    */
   deletePrivateData({handle, entityId} = {}) {
     handle = handle ?? this.account.handle;
-    return this.privateData.deletePayload(handle, entityId);
+    return this.#privateData.deletePayload(handle, entityId);
   }
 
   /**
@@ -345,7 +359,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity[]>} an array of aliases. These are the passed in alias's friends.
    */
   getFriends(handle = this.account.handle) {
-    return this.friends.getFriendsForAlias(handle);
+    return this.#friends.getFriendsForAlias(handle);
   }
 
   /**
@@ -357,7 +371,7 @@ export default class Client extends EventTarget {
    */
   addFriend(friendHandle, {ownHandle} = {}) {
     ownHandle = ownHandle ?? this.account.handle;
-    return this.friends.addFriend(ownHandle, friendHandle);
+    return this.#friends.addFriend(ownHandle, friendHandle);
   }
 
   /**
@@ -369,7 +383,7 @@ export default class Client extends EventTarget {
    */
   removeFriend(friendHandle, {ownHandle}) {
     ownHandle = ownHandle ?? this.account.handle;
-    return this.friends.removeFriend(ownHandle, friendHandle);
+    return this.#friends.removeFriend(ownHandle, friendHandle);
   }
 
   /**
@@ -397,5 +411,13 @@ export default class Client extends EventTarget {
     );
 
     return Object.values(msgKeyedByInterlocutorSets);
+  }
+
+  async subscribe(handle) {
+    await this.#webSocket.openWebSocketFor(handle);
+  }
+
+  unsubscribe(handle) {
+    this.#webSocket.closeWebSocketFor(handle);
   }
 }
