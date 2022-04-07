@@ -3,7 +3,7 @@ import BaseModel from "./BaseModel.js";
 /**
  * Represents a private payload attached to an entity in the database.
  */
-export default class PrivatePayload extends BaseModel {
+export default class PrivateData extends BaseModel {
 	/**
 	 * PrivatePayload model constructor.
 	 *
@@ -11,14 +11,14 @@ export default class PrivatePayload extends BaseModel {
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivatePayload#entityId}
-	 * @param {string} options.payload see [PrivatePayload's payload property]{@link PrivatePayload#payload}
+	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivateData#entityId}
+	 * @param {Object} options.data see [PrivatePayload's payload property]{@link PrivateData#data}
 	 */
 	constructor(options = {}) {
-		if (options instanceof PrivatePayload) {
+		if (options instanceof PrivateData) {
 			return options;
 		}
-		const { id, createdAt, updatedAt, entityId, payload } = options;
+		const { id, createdAt, updatedAt, entityId, data } = options;
 		super({ id, createdAt, updatedAt });
 
 		/**
@@ -29,8 +29,8 @@ export default class PrivatePayload extends BaseModel {
 
 		/**
 		 * The data associated with the private payload.
-		 * @type {string}
+		 * @type {Object}
 		 */
-		this.payload = payload;
+		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
 }

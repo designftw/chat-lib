@@ -20,7 +20,7 @@ import Alias from "../models/Alias.js";
 	async getAliasesForAccount() {
 		let aliasesArray = await this.request("aliases");
 
-		return aliasesArray.map(aliasDTO => new Alias(aliasDTO));
+		return aliasesArray.map(aliasDTO => new Alias({...aliasDTO, data: aliasDTO.payload}));
 	}
 
 	/**
@@ -28,20 +28,20 @@ import Alias from "../models/Alias.js";
 	 *
 	 * Raises an error if the alias already exists.
 	 * @param {string} name the name of the alias to create
-	 * @param {string } payload payload to attach to the new alias
+	 * @param {Object} data payload to attach to the new alias
 	 * @returns {Promise<Alias>}
 	 */
-	async createAlias(name, payload) {
+	async createAlias(name, data) {
 		let newAliasDTO = await this.request("aliases", {
 				method: "POST",
 				body: {
 					name,
-					payload,
+					payload: JSON.stringify(data),
 				},
 			});
 
 		const aliasDTO = newAliasDTO.data;
-		return new Alias(aliasDTO);
+		return new Alias({...aliasDTO, data: aliasDTO.payload});
 	}
 
 	/**
@@ -54,7 +54,7 @@ import Alias from "../models/Alias.js";
 	async getAlias(aliasName) {
 		let json = await this.request(`aliases/${aliasName}`);
 
-		return new Alias(json);
+		return new Alias({...json, data: json.payload});
 	}
 
 	/**
@@ -64,16 +64,16 @@ import Alias from "../models/Alias.js";
 	 * @param {string} aliasName the alias to update.
 	 * @param {Object} updates
 	 * @param {string} [updates.newName] optional updated name of the alias. if not included alias retains the same name.
-	 * @param {string} [updates.newPayload] optional updated payload of the alias. if not included alias retains the same payload.
+	 * @param {Object} [updates.newData] optional updated payload of the alias. if not included alias retains the same payload.
 	 * @returns {Promise<Alias>}
 	 */
-	async updateAlias(aliasName, {newName, newPayload}) {
+	async updateAlias(aliasName, {newName, newData}) {
 		let updatedAliasDTO = await this.request(`aliases/${aliasName}`, {
 			method: "PUT",
-			body: { name: newName, payload: newPayload },
+			body: { name: newName, payload: JSON.stringify(newData) },
 		});
 
-		return new Alias(updatedAliasDTO.data);
+		return new Alias({...updatedAliasDTO.data, data: updatedAliasDTO.data.payload});
 	}
 
 	/**

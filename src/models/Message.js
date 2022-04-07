@@ -14,14 +14,14 @@ export default class Message extends BaseModel {
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
 	 * @param {Alias} options.sender see [Message's sender property]{@link Message#sender}
 	 * @param {Alias[]} options.recipients see [Message's recipients property]{@link Message#recipients}
-	 * @param {string} options.payload see [Message's payload property]{@link Message#payload}
+	 * @param {Object} options.data see [Message's data property]{@link Message#data}
 	 */
 	constructor(options = {}) {
 		if (options instanceof Message) {
 			return options;
 		}
 
-		const { id, createdAt, updatedAt, sender, recipients, payload } = options;
+		const { id, createdAt, updatedAt, sender, recipients, data } = options;
 		super({ id, createdAt, updatedAt });
 
 		/**
@@ -40,8 +40,8 @@ export default class Message extends BaseModel {
 		 * The data associated with the message.
 		 *
 		 * This could be just message text but could also be arbitrary JSON.
-		 * @type {string}
+		 * @type {Object}
 		 */
-		this.payload = payload;
+		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
 }

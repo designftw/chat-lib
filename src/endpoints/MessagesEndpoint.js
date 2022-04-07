@@ -44,21 +44,21 @@ export default class MessagesEndpoint extends Endpoint {
 
 		let messagesDTO = await this.request("messages", { headers });
 
-		return messagesDTO.map((messageDTO) => new Message(messageDTO));
+		return messagesDTO.map((messageDTO) => new Message({...messageDTO, data: messageDTO.payload}));
 	}
 
 	/**
 	 * Send a new message from ownAlias to recipients. The payload is a potentially jsonified string.
 	 * @param {string} ownAlias an alias associated with the currently logged in account.
 	 * @param {string[]} recipientNames the recipients of the message
-	 * @param {string} messagePayload the payload of the message
+	 * @param {Object} messageData the data of the message
 	 * @returns {Promise<Message>} The sent message.
 	 */
-	async sendMessage(ownAlias, recipientNames, messagePayload) {
+	async sendMessage(ownAlias, recipientNames, messageData) {
 		let responseDTO = await this.request("messages", {
 			method: "POST",
 			body: {
-				payload: messagePayload,
+				payload: JSON.stringify(messageData),
 				recipients: recipientNames,
 			},
 			headers: {
@@ -83,20 +83,20 @@ export default class MessagesEndpoint extends Endpoint {
 			}
 		});
 
-		return new Message(messageDTO);
+		return new Message({...messageDTO, data: messageDTO.payload});
 	}
 
 	/**
 	 * Update a single message by it's id.
 	 * @param {string} ownAlias the alias associated with the message id. Must be the sender of the message.
 	 * @param {string} messageId The Message Id. see [Message's id property]{@link Message#id}
-	 * @param {string} payload The new payload to be associated with the message. See [Message's payload property]{@link Message#payload}
+	 * @param {Object} data The new payload to be associated with the message. See [Message's payload property]{@link Message#payload}
 	 * @returns {Promise<Message>} The updated message
 	 */
-	async updateMessage(ownAlias, messageId, payload) {
+	async updateMessage(ownAlias, messageId, data) {
 		let resultDTO = await this.request(`messages/${messageId}`, {
 			method: "PUT",
-			body: { payload },
+			body: { payload: JSON.stringify(data) },
 			headers: {
 				"user-alias-name": ownAlias,
 			},
