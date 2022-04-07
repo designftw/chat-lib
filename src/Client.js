@@ -59,6 +59,11 @@ import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
  * @fires message
  */
 export default class Client extends EventTarget {
+  /**
+   * The host of the chat server. Includes the hostname and port.
+   * @type {string}
+   */
+  #host;
 
   /**
   * Helper class for authorization routes.
@@ -103,26 +108,12 @@ export default class Client extends EventTarget {
   constructor(host) {
     super();
 
-    /**
-     * The host of the chat server. Includes the hostname and port.
-     * For example https://mozilla.org:4000.
-     * Read-only.
-     *
-     * See https://developer.mozilla.org/en-US/docs/Web/API/URL/host
-     * @type {string}
-     */
-    Object.defineProperty(this, "host", {value: host});
-
+    this.#host = host;
     this.#auth = new AuthEndpoint(this);
-
     this.#identities = new IdentitiesEndpoint(this);
-
     this.#messages = new MessagesEndpoint(this);
-
     this.#privateData = new PrivateDataEndpoint(this);
-
     this.#friends = new FriendsEndpoint(this);
-
     this.#webSocket = new WebSocketEndpoint(this);
 
     /**
@@ -132,10 +123,22 @@ export default class Client extends EventTarget {
     */
     this.account = undefined;
 
-
+    // Redirect all events from private objects to the Client object
     for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
       this.#webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
     }
+  }
+
+  /**
+   * The host of the chat server. Includes the hostname and port.
+   * For example https://mozilla.org:4000.
+   * Read-only.
+   *
+   * See https://developer.mozilla.org/en-US/docs/Web/API/URL/host
+   * @type {string}
+   */
+  get host() {
+    return this.#host;
   }
 
   /**
