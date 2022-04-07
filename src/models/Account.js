@@ -15,14 +15,14 @@ export default class Account extends BaseModel {
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
 	 * @param {string} options.email see [Account's email property]{@link Account#email}
-	 * @param {string} options.username see [Account's username property]{@link Account#username}
+	 * @param {string} options.handle see [Account's username property]{@link Account#handle}
 	 */
 	constructor(options = {}) {
 		if (options instanceof Account) {
 			return options;
 		}
 
-		const { id, createdAt, updatedAt, email, username } = options;
+		const { id, createdAt, updatedAt, email, handle } = options;
 		super({ id, createdAt, updatedAt });
 		/**
 		 * The email address associated with the account.
@@ -38,6 +38,6 @@ export default class Account extends BaseModel {
 		 * Unique across all accounts.
 		 * @type {string}
 		 */
-		this.username = username;
+		this.handle = handle;
 	}
 }

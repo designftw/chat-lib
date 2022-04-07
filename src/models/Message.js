@@ -1,4 +1,4 @@
-import Alias from "./Alias.js";
+import Identity from "./Identity.js";
 import BaseModel from "./BaseModel.js";
 
 /**
@@ -12,8 +12,8 @@ export default class Message extends BaseModel {
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {Alias} options.sender see [Message's sender property]{@link Message#sender}
-	 * @param {Alias[]} options.recipients see [Message's recipients property]{@link Message#recipients}
+	 * @param {Identity} options.sender see [Message's sender property]{@link Message#sender}
+	 * @param {Identity[]} options.recipients see [Message's recipients property]{@link Message#recipients}
 	 * @param {Object} options.data see [Message's data property]{@link Message#data}
 	 */
 	constructor(options = {}) {
@@ -26,15 +26,15 @@ export default class Message extends BaseModel {
 
 		/**
 		 * The id of the Alias which sent the message. See [Alias's id Property]{@link Alias#id}
-		 * @type {Alias}
+		 * @type {Identity}
 		 */
-		this.sender = new Alias(sender);
+		this.sender = new Identity(sender);
 
 		/**
 		 * The ids of the Aliases which received the message. See [Alias's id Property]{@link Alias#id}
-		 * @type {Alias[]}
+		 * @type {Identity[]}
 		 */
-		this.recipients = recipients.map((recipient) => new Alias(recipient));
+		this.recipients = recipients.map((recipient) => new Identity(recipient));
 
 		/**
 		 * The data associated with the message.
