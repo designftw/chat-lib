@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "docs": "rimraf docs && jsdoc --configure .jsdoc.config.js && copyfiles src/* docs",
+    "docs:watch": "nodemon --exec 'npm run docs' --ignore docs node_modules --ext js,md",
+    "docs:serve": "browser-sync start --server docs --files docs --port 3000",
+    "docs:dev": "concurrently \"npm:docs:watch\" \"npm:docs:serve\"",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
@@ -22,10 +25,13 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@ckeditor/jsdoc-plugins": "^30.1.0",
+    "browser-sync": "^2.27.9",
     "clean-jsdoc-theme": "^3.3.4",
+    "concurrently": "^7.1.0",
     "copyfiles": "^2.4.1",
     "eslint": "^8.12.0",
     "jsdoc": "^3.6.10",
+    "nodemon": "^2.0.15",
     "rimraf": "^3.0.2"
   }
 }

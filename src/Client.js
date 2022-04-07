@@ -54,6 +54,11 @@ import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
 /**
  * The Client is the interface for interacting with the ChatServer.
+ *
+ * ```
+ * import Client from "https://designftw.github.io/chat-lib/src/client.js";
+ * ```
+ *
  * @fires messagedelete
  * @fires messageupdate
  * @fires message

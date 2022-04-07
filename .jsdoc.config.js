@@ -12,12 +12,13 @@ module.exports = {
     // use clean-jsdoc theme for a better user experience
     template: "node_modules/clean-jsdoc-theme",
     // show what jsdoc is doing
-    verbose: true,
+    verbose: false,
   },
   plugins: [
     // fix for https://github.com/jsdoc/jsdoc/issues/1132
     // jsdoc doesn't parse export default statements correctly
     // for classes that extend other classes
     "./node_modules/@ckeditor/jsdoc-plugins/lib/export-fixer/export-fixer.js",
+    "plugins/markdown"
   ],
 };
