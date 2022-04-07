@@ -31,7 +31,7 @@
 
 
     <title>
-      models/BaseModel.js
+      models/PrivateData.js
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        models/BaseModel.js
+        models/PrivateData.js
       </h1>
       
 
@@ -109,41 +109,40 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Base class for all models
+            <pre class="prettyprint source linenums"><code>import BaseModel from "./BaseModel.js";
+
+/**
+ * Represents a private payload attached to an entity in the database.
  */
-export default class BaseModel {
+export default class PrivateData extends BaseModel {
 	/**
-	 * Constructor for the base model.
-	 * @param {object} options
+	 * PrivatePayload model constructor.
+	 *
+	 * @param {Object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
+	 * @param {string} options.entityId see [PrivatePayload's entityId property]{@link PrivateData#entityId}
+	 * @param {Object} options.data see [PrivatePayload's payload property]{@link PrivateData#data}
 	 */
-	constructor({ id, createdAt, updatedAt } = {}) {
-		if (new.target === BaseModel) {
-			throw new Error("BaseModel is an abstract class and cannot be instantiated directly.");
+	constructor(options = {}) {
+		if (options instanceof PrivateData) {
+			return options;
 		}
+		const { id, createdAt, updatedAt, entityId, data } = options;
+		super({ id, createdAt, updatedAt });
 
 		/**
-		 * The id of the model.
-		 *
-		 * Unique across all models of the same type.
+		 * The id of the object this payload is attached to.
 		 * @type {string}
 		 */
-		this.id = id;
+		this.entityId = entityId;
 
 		/**
-		 * The date that the model was created.
-		 * @type {Date}
+		 * The data associated with the private payload.
+		 * @type {Object}
 		 */
-		this.createdAt = new Date(createdAt);
-
-		/**
-		 * The date that the model was last updated.
-		 * @type {Date}
-		 */
-		this.updatedAt = new Date(updatedAt);
+		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
 }
 </code></pre>
