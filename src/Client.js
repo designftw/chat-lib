@@ -203,6 +203,7 @@ export default class Client extends EventTarget {
   }
 
   /**
+   * Get a message object for a message id or
    * Get a message which has the passed in messageId, and was sent or received by the passed in handle.
    *
    * Note the currently logged in account must own the handle associated with the handle.
@@ -220,13 +221,14 @@ export default class Client extends EventTarget {
    *
    * Note the currently logged in account must own the handle associated with the handle.
    * @param {Object} options
-   * @param {string} options.handle the handle which will send the message.
-   * @param {string[]} options.to a list of recipients of the message.
+   * @param {string | Identity} options.from the sender, either a handle or Identity object
+   * @param {string[]} options.to a list of recipients or of the message.
    * @param {Object} options.data the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
-  sendMessage({handle = this.account.handle, to, data}) {
-    return this.#messages.sendMessage(handle, to, data);
+  sendMessage({from = this.account.handle, to, data}) {
+    from = from instanceof Identity? from.handle : from;
+    return this.#messages.sendMessage(from, to, data);
   }
 
   /**
