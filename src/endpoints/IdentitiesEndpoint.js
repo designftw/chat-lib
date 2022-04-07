@@ -1,10 +1,10 @@
 import Endpoint from "./Endpoint.js";
-import Alias from "../models/Alias.js";
+import Identity from "../models/Identity.js";
 
 /**
  * The aliases endpoint of the chat server.
  */
- export default class AliasesEndpoint extends Endpoint {
+ export default class IdentitiesEndpoint extends Endpoint {
 	/**
 	 * AliasesEndpoint constructor.
 	 * @param {Client} client see [Endpoint's client property]{@link Endpoint#client}
@@ -15,12 +15,12 @@ import Alias from "../models/Alias.js";
 
 	/**
 	 * Get all the aliases associated with the currently logged in account.
-	 * @returns {Promise<Alias[]>} the aliases associated with the currently logged in account
+	 * @returns {Promise<Identity[]>} the aliases associated with the currently logged in account
 	 */
 	async getAliasesForAccount() {
 		let aliasesArray = await this.request("aliases");
 
-		return aliasesArray.map(aliasDTO => new Alias({...aliasDTO, data: aliasDTO.payload}));
+		return aliasesArray.map(aliasDTO => new Identity({...aliasDTO, data: aliasDTO.payload}));
 	}
 
 	/**
@@ -29,7 +29,7 @@ import Alias from "../models/Alias.js";
 	 * Raises an error if the alias already exists.
 	 * @param {string} name the name of the alias to create
 	 * @param {Object} data payload to attach to the new alias
-	 * @returns {Promise<Alias>}
+	 * @returns {Promise<Identity>}
 	 */
 	async createAlias(name, data) {
 		let newAliasDTO = await this.request("aliases", {
@@ -41,7 +41,7 @@ import Alias from "../models/Alias.js";
 			});
 
 		const aliasDTO = newAliasDTO.data;
-		return new Alias({...aliasDTO, data: aliasDTO.payload});
+		return new Identity({...aliasDTO, data: aliasDTO.payload});
 	}
 
 	/**
@@ -49,12 +49,12 @@ import Alias from "../models/Alias.js";
 	 *
 	 * Raises an error if the alias does not exist.
 	 * @param {string} aliasName the name of the alias to get.
-	 * @returns {Promise<Alias>}
+	 * @returns {Promise<Identity>}
 	 */
 	async getAlias(aliasName) {
 		let json = await this.request(`aliases/${aliasName}`);
 
-		return new Alias({...json, data: json.payload});
+		return new Identity({...json, data: json.payload});
 	}
 
 	/**
@@ -65,7 +65,7 @@ import Alias from "../models/Alias.js";
 	 * @param {Object} updates
 	 * @param {string} [updates.newName] optional updated name of the alias. if not included alias retains the same name.
 	 * @param {Object} [updates.newData] optional updated payload of the alias. if not included alias retains the same payload.
-	 * @returns {Promise<Alias>}
+	 * @returns {Promise<Identity>}
 	 */
 	async updateAlias(aliasName, {newName, newData}) {
 		let updatedAliasDTO = await this.request(`aliases/${aliasName}`, {
@@ -73,7 +73,7 @@ import Alias from "../models/Alias.js";
 			body: { name: newName, payload: JSON.stringify(newData) },
 		});
 
-		return new Alias({...updatedAliasDTO.data, data: updatedAliasDTO.data.payload});
+		return new Identity({...updatedAliasDTO.data, data: updatedAliasDTO.data.payload});
 	}
 
 	/**

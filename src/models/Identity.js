@@ -9,7 +9,7 @@ import BaseModel from "./BaseModel.js";
  * associating multiple email addresses with on gmail account, or having
  * multiple slack workspaces logged in.
  */
-export default class Alias extends BaseModel {
+export default class Identity extends BaseModel {
 	/**
 	 * Alias model constructor.
 	 *
@@ -17,14 +17,14 @@ export default class Alias extends BaseModel {
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} options.name see [Alias's name property]{@link Alias#name}
-	 * @param {string} options.data see [Alias's data property]{@link Alias#data}
+	 * @param {string} options.handle see [Alias's name property]{@link Identity#handle}
+	 * @param {string} options.data see [Alias's data property]{@link Identity#data}
 	 */
 	constructor(options = {}) {
-		if (options instanceof Alias) {
+		if (options instanceof Identity) {
 			return options;
 		}
-		const { id, createdAt, updatedAt, name, data } = options;
+		const { id, createdAt, updatedAt, handle, data } = options;
     super({ id, createdAt, updatedAt });
 
 		/**
@@ -34,7 +34,7 @@ export default class Alias extends BaseModel {
 		 * Unique across all aliases.
 		 * @type {string}
 		 */
-		this.name = name;
+		this.handle = handle;
 
 		/**
 		 * Public arbitrary metadata about an alias stored as a string.

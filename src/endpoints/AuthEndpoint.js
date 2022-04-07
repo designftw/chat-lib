@@ -1,6 +1,6 @@
 import Endpoint from "./Endpoint.js";
 import Account from "../models/Account.js";
-import Alias from "../models/Alias.js";
+import Identity from "../models/Identity.js";
 
 /**
  * Helper class for authentication routes.
@@ -41,7 +41,7 @@ export default class AuthEndpoint extends Endpoint {
 		});
 		const username = await this.#getUsername();
 
-		return new Account({...json.account, username});
+		return new Account({...json.account, handle: username});
 	}
 
 	/**
@@ -70,7 +70,7 @@ export default class AuthEndpoint extends Endpoint {
 
 		return {
 			isLoggedIn,
-			account: json.data ? new Account({...json.data, username}) : undefined
+			account: json.data ? new Account({...json.data, handle: username}) : undefined
 		};
 	}
 
@@ -79,6 +79,6 @@ export default class AuthEndpoint extends Endpoint {
 	 */
 	async #getUsername() {
 			let aliasesArray = await this.request("aliases");
-			return new Alias(aliasesArray[0]).name;
+			return new Identity(aliasesArray[0]).handle;
 	}
 }
