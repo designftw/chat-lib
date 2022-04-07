@@ -188,27 +188,25 @@ export default class Client extends EventTarget {
    *
    * Note the currently logged in account must own the alias associated with the alias.
    * @param {Object} options
-   * @param {string} options.handle the name of the alias to get messages for.
+   * @param {string} [options.handle] the name of the alias to get messages for.
    * @param {string[]} [options.interlocutors] an optional list of the senders and recipients of the messages.
-   * @param {Date} [options.sinceTime] an optional date to limit the request by. only receive messages since this date.
+   * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  getMessages({ handle, interlocutors, sinceTime } = {}) {
-    handle = handle ?? this.account.handle;
-    return this.#messages.getMessagesForAlias(handle, interlocutors, sinceTime);
+  getMessages({ handle = this.account.handle, interlocutors, since } = {}) {
+    return this.#messages.getMessagesForAlias(handle, interlocutors, since);
   }
 
   /**
    * Get a message which has the passed in messageId, and was sent or received by the passed in alias.
    *
    * Note the currently logged in account must own the alias associated with the alias.
+   * @param messageId The id of the message to get.
    * @param {Object} options
-   * @param {string} options.handle the name of the alias which sent or received the message.
-   * @param {string} options.messageId the id of the message to get.
+   * @param {string} [options.handle] the name of the alias which sent or received the message, as an optional safeguard against race conditions.
    * @returns {Promise<Message>} The model of the message with the associated id.
    */
-  getMessageById({ handle, messageId } = {}) {
-    handle = handle ?? this.account.handle;
+  getMessageById(messageId, { handle = this.account.handle } = {}) {
     return this.#messages.getMessage(handle, messageId);
   }
 
@@ -218,38 +216,35 @@ export default class Client extends EventTarget {
    * Note the currently logged in account must own the alias associated with the alias.
    * @param {Object} options
    * @param {string} options.handle the name of the alias which will send the message.
-   * @param {string[]} options.recipientNames a list of recipients of the message.
+   * @param {string[]} options.to a list of recipients of the message.
    * @param {Object} options.data the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
-  sendMessage({handle, recipientNames, data} = {}) {
-    handle = handle ?? this.account.handle;
-    return this.#messages.sendMessage(handle, recipientNames, data);
+  sendMessage({handle = this.account.handle, to, data}) {
+    return this.#messages.sendMessage(handle, to, data);
   }
 
   /**
-   * Update a message with the passed in messageId which was sent by the passed in alias.
+   * Update a message with the passed in message id which was sent by the passed in handle.
    * @param {Object} options
    * @param {string} options.handle the name of the alias which sent the message.
-   * @param {string} options.messageId the id associated with the message.
+   * @param {string} options.id the id associated with the message.
    * @param {Object} options.data the new payload for the message.
    * @returns {Promise<Message>} The model of the updated message.
    */
-  updateMessage({handle, messageId, data} = {}) {
-    handle = handle ?? this.account.handle;
-    return this.#messages.updateMessage(handle, messageId, data);
+  updateMessage({handle = this.account.handle, id, data}) {
+    return this.#messages.updateMessage(handle, id, data);
   }
 
   /**
    * Delete a message with the passed in messageId which was sent by the passed in alias.
    * @param {Object} options
    * @param {string} options.handle the name of the alias which sent the message.
-   * @param {string} options.messageId the id associated with the message.
+   * @param {string} options.id the id associated with the message.
    * @returns {Promise<any>} a validation message.
    */
-  deleteMessage({handle, messageId} = {}) {
-    handle = handle ?? this.account.handle;
-    return this.#messages.deleteMessage(handle, messageId);
+  deleteMessage({handle = this.account.handle, id}) {
+    return this.#messages.deleteMessage(handle, id);
   }
 
   /**
@@ -257,8 +252,7 @@ export default class Client extends EventTarget {
    * @returns {Promise<Identity[]>} An array of Alias models.
    */
   async getIdentities() {
-    let identities = await this.#identities.getAliasesForAccount();
-    return identities;
+    return this.#identities.getAliasesForAccount();
   }
 
   /**
@@ -277,7 +271,7 @@ export default class Client extends EventTarget {
    * @param {Object} options.data the payload on the new alias.
    * @returns {Promise<Identity>} The Alias model of the newly created alias.
    */
-  createIdentity({ handle, data} = {}) {
+  createIdentity({handle, data}) {
     return this.#identities.createAlias(handle, data);
   }
 
@@ -310,7 +304,7 @@ export default class Client extends EventTarget {
    * @param {Object} options.data the payload to attach to the entity associated with the passed in entityId, private to the alias associated with the passed in alias name.
    * @returns {Promise<PrivateData>} the new private payload.
    */
-  createPrivateData({handle, entityId, data} = {}) {
+  createPrivateData({handle, entityId, data}) {
     handle = handle ?? this.account.handle;
     return this.#privateData.createPayload(handle, entityId, data);
   }
@@ -322,7 +316,7 @@ export default class Client extends EventTarget {
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to get is attached to.
    * @returns {Promise<PrivateData>} the private payload associated with the passed in alias and entity.
    */
-  getPrivateData({handle, entityId} = {}) {
+  getPrivateData({handle, entityId}) {
     handle = handle ?? this.account.handle;
     return this.#privateData.getPayload(handle, entityId);
   }
@@ -335,13 +329,8 @@ export default class Client extends EventTarget {
    * @param {Object} options.newData the new private payload.
    * @returns {Promise<PrivateData>} the updated private payload.
    */
-  updatePrivateData({handle, entityId, newData} = {}) {
-    handle = handle ?? this.account.handle;
-    return this.#privateData.updatePayload(
-      handle,
-      entityId,
-      newData
-    );
+  updatePrivateData({handle = this.account.handle, entityId, newData}) {
+    return this.#privateData.updatePayload(handle, entityId, newData);
   }
 
   /**
@@ -351,8 +340,7 @@ export default class Client extends EventTarget {
    * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to delete is attached to.
    * @returns {Promise<any>} A validation message.
    */
-  deletePrivateData({handle, entityId} = {}) {
-    handle = handle ?? this.account.handle;
+  deletePrivateData({handle = this.account.handle, entityId}) {
     return this.#privateData.deletePayload(handle, entityId);
   }
 
@@ -369,7 +357,7 @@ export default class Client extends EventTarget {
    * Add a new friend to the friend list of the passed in alias.
    * @param {string} friendHandle the name of the alias which is going to be added to ownAlias's friend list.
    * @param {Object} options
-   * @param {string} options.ownHandle the name of the alias adding a friend.
+   * @param {string} [options.ownHandle] the name of the alias adding a friend.
    * @returns {Promise<any>} a validation message.
    */
   addFriend(friendHandle, {ownHandle} = {}) {
@@ -381,10 +369,10 @@ export default class Client extends EventTarget {
    * Remove a friend from the friend list of the passed in alias.
    * @param {string} friendHandle the name of the alias which is going to be removed from ownAlias's friend list.
    * @param {Object} options
-   * @param {string} options.ownHandle the name of the alias removing a friend.
+   * @param {string} [options.ownHandle] the name of the alias removing a friend.
    * @returns {Promise<any>} a validation message.
    */
-  removeFriend(friendHandle, {ownHandle}) {
+  removeFriend(friendHandle, {ownHandle} = {}) {
     ownHandle = ownHandle ?? this.account.handle;
     return this.#friends.removeFriend(ownHandle, friendHandle);
   }

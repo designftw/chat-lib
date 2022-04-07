@@ -24,7 +24,9 @@ export default class Identity extends BaseModel {
 		if (options instanceof Identity) {
 			return options;
 		}
+
 		const { id, createdAt, updatedAt, handle, data } = options;
+
 		super({ id, createdAt, updatedAt });
 
 		/**
