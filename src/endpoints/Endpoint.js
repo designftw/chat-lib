@@ -2,8 +2,8 @@ import { request } from "../util.js";
 
 /**
  * Abstract base class for all endpoints.
+ * @ignore
  */
-
 export default class Endpoint {
 	/**
 	 * @param {Client} client The client using this endpoint

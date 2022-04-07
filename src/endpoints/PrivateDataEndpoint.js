@@ -3,6 +3,7 @@ import PrivateData from "../models/PrivateData.js";
 
 /**
  * The Private Payload endpoint of the chat server
+ * @ignore
  */
 export default class PrivateDataEndpoint extends Endpoint {
 	/**

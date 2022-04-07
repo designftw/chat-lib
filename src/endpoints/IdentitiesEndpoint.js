@@ -3,6 +3,7 @@ import Identity from "../models/Identity.js";
 
 /**
  * The aliases endpoint of the chat server.
+ * @ignore
  */
  export default class IdentitiesEndpoint extends Endpoint {
 	/**

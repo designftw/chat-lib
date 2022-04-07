@@ -1,5 +1,6 @@
 /**
  * Helper class for communicating with web sockets on the chat server.
+ * @ignore
  */
 export default class WebSocketEndpoint extends EventTarget {
 	/**

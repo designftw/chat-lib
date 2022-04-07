@@ -3,6 +3,7 @@ import Message from "../models/Message.js";
 
 /**
  * The messages endpoint of the chat server.
+ * @ignore
  */
 export default class MessagesEndpoint extends Endpoint {
 	/**

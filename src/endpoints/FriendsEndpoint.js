@@ -2,6 +2,7 @@ import Endpoint from "./Endpoint.js";
 
 /**
  * The Friends endpoint of the chat server
+ * @ignore
  */
 export default class FriendsEndpoint extends Endpoint {
 	/**

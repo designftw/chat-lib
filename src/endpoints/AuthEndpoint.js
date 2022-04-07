@@ -4,6 +4,7 @@ import Identity from "../models/Identity.js";
 
 /**
  * Helper class for authentication routes.
+ * @ignore
  */
 export default class AuthEndpoint extends Endpoint {
 	/**
