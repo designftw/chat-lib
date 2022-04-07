@@ -257,24 +257,26 @@ export default class Client extends EventTarget {
 
   /**
    * Update a message with the passed in message id which was sent by the passed in handle.
+   * @param {Message | string} message Message object or message id
    * @param {Object} options
-   * @param {string} options.handle the handle which sent the message.
-   * @param {string} options.id the id associated with the message.
-   * @param {Object} options.data the new payload for the message.
-   * @returns {Promise<Message>} The model of the updated message.
+   * @param {string} [options.handle] the handle which sent the message.
+   * @param {Object} options.data the updated data associated with the message
+   * @returns {Promise<Message>} The Message object of the updated message.
    */
-  updateMessage({handle = this.account.handle, id, data}) {
+  updateMessage(message, {handle = this.account.handle, data}) {
+    let id = message instanceof Message? message.id : message;
     return this.#messages.updateMessage(handle, id, data);
   }
 
   /**
    * Delete a message with the passed in messageId which was sent by the passed in handle.
-   * @param {Object} options
-   * @param {string} options.handle the handle which sent the message.
-   * @param {string} options.id the id associated with the message.
+   * @param {Message | string} message Message object or message id
+   * @param {Object} [options]
+   * @param {string} [options.handle] the handle which sent the message.
    * @returns {Promise<any>} a validation message.
    */
-  deleteMessage({handle = this.account.handle, id}) {
+  deleteMessage(message, {handle = this.account.handle} = {}) {
+    let id = message instanceof Message? message.id : message;
     return this.#messages.deleteMessage(handle, id);
   }
 
