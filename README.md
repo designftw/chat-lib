@@ -1,6 +1,18 @@
-# DFTW Messaging Client
+# DFTW Chat Library
 
-The messaging client is designed to hide some of the complexity of sending and receiving messages while also retaining flexibility so students can implement their prototypes.
+The chat library is a simple but extensible library for building chat applications.
+This page of the documentation will explain some of the core concepts of the chat library to help you get started.
+We recommend that you read through this page before building your chat application.
+After reading through this page, if you need detailed documentation about a specific class or function, you can find it by clicking on the links in the sidebar or by using the documentation search.
+
+## Getting Started
+
+First, you will need to load the library into your project.
+
+```
+import Client from "https://designftw.github.io/chat-lib/src/Client.js"
+
+```
 
 ## Data Model
 
