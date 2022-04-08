@@ -320,12 +320,11 @@ export default class Client extends EventTarget {
    * Update an existing identity.
    * @param {string} handle the handle to update.
    * @param {Object} updates object containing the updates to the handle.
-   * @param {string} [updates.handle] the optional new name for the handle
    * @param {Object} [updates.data] the optional new payload for the handle
    * @returns {Promise<Identity>} The Identity object that was updated
    */
-  updateIdentity(handle, { handle: newHandle, data: newData } = {}) {
-    return this.#identities.updateAlias(handle, {newName: newHandle, newData});
+  updateIdentity(handle, { data: newData } = {}) {
+    return this.#identities.updateAlias(handle, {newData});
   }
 
   /**
@@ -334,6 +333,9 @@ export default class Client extends EventTarget {
    * @returns {Promise<any>} A validation message.
    */
   deleteIdentity(handle) {
+    if (handle === this.account.handle) {
+      throw new Error("Cannot delete the default identity for the logged in account");
+    }
     return this.#identities.deleteAlias(handle);
   }
 
