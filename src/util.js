@@ -111,3 +111,12 @@ export function intersection(arr1, arr2) {
 
   return new Set([...arr1].filter(x => arr2.has(x)));
 }
+
+/**
+ * Remove duplicate values from an array
+ * @param {Array} arr The array to operate on.
+ * @returns {Array} The array with duplicates removed.
+ */
+export function unique(arr) {
+  return [...new Set(arr)];
+}

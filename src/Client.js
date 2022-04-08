@@ -10,7 +10,7 @@ import MessagesEndpoint from "./endpoints/MessagesEndpoint.js";
 import PrivateDataEndpoint from "./endpoints/PrivateDataEndpoint.js";
 import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
-import { toArray, intersection } from "./util.js";
+import { toArray, intersection, unique } from "./util.js";
 
 /**
  * autherror: detail is {message, handle}
@@ -215,27 +215,65 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string | Identity | string[] | Identity[]} [options.from] Sender(s) of the messages, either as handle(s) or Identity object(s)
    * @param {string | Identity | string[] | Identity[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
+   * @param {string[] | Identity[]} [options.participants] Senders OR recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
+   * @param {Date} [options.exact = false] Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
+   * E.g. if we specify `to: ["A", "B"]`, do we want messages sent to either A, or B, or both, or both plus some other people, or messages sent to exactly A and B?
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  async getMessages({ from = [], to = [], since } = {}) {
+  async getMessages({ from = [], to = [], participants = [], since, exact = false } = {}) {
     // Normalize senders and recipients to arrays of handles
     from = toArray(from).map(sender => sender instanceof Identity? sender.handle : sender);
+    from = unique(from);
     to = toArray(to).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
+    to = unique(to);
+    participants = participants.map(recipient => recipient instanceof Identity? recipient.handle : recipient);
 
-    let messages = await this.#messages.getMessagesForAlias(this.account.handle, [...from, ...to], since);
+    if (from.length > 1 && exact) {
+      throw new Error("Cannot specify more than one sender in ‘from’ when we are looking for exact matches, since messages only have one sender.");
+    }
+
+    participants.push(...from, ...to);
+    participants = unique(participants);
+
+    let messages = await this.#messages.getMessagesForAlias(this.account.handle, participants, since);
 
     // Filter messages to only those that match the provided filters
     messages = messages.filter(message => {
-      if (from.length > 0 && !from.includes(message.sender.handle)) {
+      let sender = message.sender.handle;
+
+      if (from.length > 0 && !from.includes(sender)) {
         // Filtering by sender(s)
         return false;
       }
 
+      let recipients = message.recipients.map(recipient => recipient.handle);
+
       if (to.length > 0) {
         // Filtering by recipient(s)
-        let recipients = message.recipients.map(recipient => recipient.handle);
-        return intersection(recipients, to).size > 0;
+        let toIntersection = intersection(recipients, to);
+
+        if (exact) {
+          if (toIntersection.size !== to.length) {
+            return false;
+          }
+        }
+        else {
+          if (toIntersection.size === 0) {
+            return false;
+          }
+        }
+      }
+
+      if (participants.length > from.length + to.length) {
+        // We were also filtering by participants
+        // We only need to do something here if exact = true,
+        // otherwise the filtering is already done on the server
+        if (exact) {
+          let messageParticipants = unique([sender, ...recipients]);
+
+          return intersection(messageParticipants, participants).size === participants.length;
+        }
       }
 
       return true;
