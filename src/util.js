@@ -5,6 +5,7 @@
  * @property {Object.<string, string> | undefined} [headers] an optional object containing key values encoded in the headers of the request. The object should have string keys and string values.
  * @property {Object.<string, any> | undefined} [body] an optional object containing key values encoded in the body of the request. The object should have string keys and string values.
  * @property {"json" | "text"} [responseType="json"] the type of response expected. Defaults to json.
+ * @ignore
  */
 
 /**
@@ -12,6 +13,7 @@
  * @param {string} url
  * @param {CreateDefaultRequestInitOptions} options
  * @returns {Promise<any>}
+ * @ignore
  */
 export function request (url, {
     responseType = "json",
@@ -33,6 +35,7 @@ export function request (url, {
 
 /**
  * Create Headers from an object.
+ * @ignore
  * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  */
 function createHeadersFromObject(headers) {
@@ -48,6 +51,7 @@ function createHeadersFromObject(headers) {
 /**
  * Convert an object's keys and values into a json string for a json request
  * @param {Object} body the object to be url encoded
+ * @ignore
  */
 function createJSONEncodedBody(body) {
   return JSON.stringify(body);
@@ -57,6 +61,7 @@ function createJSONEncodedBody(body) {
  * Create the default headers used in GET and DELETE requests.
  * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  * @returns {Headers}
+ * @ignore
  */
 function createJSONEncodedHeaders(headers) {
   let defaultHeaders = createHeadersFromObject(headers);
@@ -68,6 +73,7 @@ function createJSONEncodedHeaders(headers) {
  * If the response is ok (status code in range 200-299) returns the response.
  * Otherwise the method attempts to parse the response and get an error message
  * from the server.
+ * @ignore
  * @param {Response} response a response from the ChatServer
  * @returns {Promise<Response>} the untransformed response
  */
