@@ -30,13 +30,13 @@ export default class Message extends BaseModel {
 		super({ id, createdAt, updatedAt });
 
 		/**
-		 * The id of the Alias which sent the message. See [Alias's id Property]{@link Alias#id}
+		 * The identity of the handle who sent the message
 		 * @type {Identity}
 		 */
 		this.sender = new Identity(sender);
 
 		/**
-		 * The ids of the Aliases which received the message. See [Alias's id Property]{@link Alias#id}
+		 * The identities of the handles who received the message
 		 * @type {Identity[]}
 		 */
 		this.recipients = recipients.map((recipient) => new Identity(recipient));
