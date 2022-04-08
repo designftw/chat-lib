@@ -4,7 +4,7 @@
   "description": "chat library for designftw.",
   "main": "src/index.js",
   "scripts": {
-    "docs": "rimraf docs && jsdoc --configure .jsdoc.config.js && copyfiles src/* docs",
+    "docs": "rimraf docs && jsdoc --configure .jsdoc.config.js && ncp src docs/src",
     "docs:watch": "nodemon --exec 'npm run docs' --ignore docs node_modules --ext js,md",
     "docs:serve": "browser-sync start --server docs --files docs --port 3000",
     "docs:dev": "concurrently \"npm:docs:watch\" \"npm:docs:serve\"",
@@ -28,9 +28,9 @@
     "browser-sync": "^2.27.9",
     "clean-jsdoc-theme": "^3.3.4",
     "concurrently": "^7.1.0",
-    "copyfiles": "^2.4.1",
     "eslint": "^8.12.0",
     "jsdoc": "^3.6.10",
+    "ncp": "^2.0.0",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2"
   }
