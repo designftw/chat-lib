@@ -232,7 +232,7 @@ export default class Client extends EventTarget {
       if (to.length > 0) {
         // Filtering by recipient(s)
         let recipients = message.recipients.map(recipient => recipient.handle);
-        return intersection(recipients, to).length > 0;
+        return intersection(recipients, to).size > 0;
       }
 
       return true;
