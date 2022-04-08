@@ -210,9 +210,9 @@ export default class Client extends EventTarget {
 
     // Filter messages to only those that match the provided filters
     messages = messages.filter(message => {
-      if (from.length > 0) {
+      if (from.length > 0 && !from.includes(message.sender.handle)) {
         // Filtering by sender(s)
-        return from.includes(message.sender.handle);
+        return false;
       }
 
       if (to.length > 0) {
