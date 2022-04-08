@@ -31,15 +31,15 @@ export default class Identity extends BaseModel {
 	 * import Identity from "https://designftw.github.io/chat-lib/src/models/Identity.js";
 	 * ```
 	 *
-	 * Alias model constructor.
+	 * Identity model constructor.
 	 *
 	 *
 	 * @param {Object} options
 	 * @param {string} options.id see [BaseModel's id property]{@link BaseModel#id}
 	 * @param {Date} options.createdAt see [BaseModel's createdAt property]{@link BaseModel#createdAt}
 	 * @param {Date} options.updatedAt see [BaseModel's updatedAt property]{@link BaseModel#updatedAt}
-	 * @param {string} options.handle see [Alias's name property]{@link Identity#handle}
-	 * @param {string} options.data see [Alias's data property]{@link Identity#data}
+	 * @param {string} options.handle see [Identity's handle property]{@link Identity#handle}
+	 * @param {string} options.data see [Identity's data property]{@link Identity#data}
 	 */
 	constructor(options) {
 		if (options instanceof Identity) {
@@ -57,7 +57,7 @@ export default class Identity extends BaseModel {
 		 * Must be unique across all identities.
 		 * @type {string}
 		 */
-		this.handle = handle;
+		this.handle = handle ?? options.name;
 
 		/**
 		 * Public readable object containing data associated with this identity.
