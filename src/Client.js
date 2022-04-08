@@ -133,7 +133,10 @@ export default class Client extends EventTarget {
 
     // Redirect all events from private objects to the Client object
     for (let event of ["message", "messageupdate", "messagedeletion", "autherror"]) {
-      this.#webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
+      this.#webSocket.addEventListener(event, evt => {
+        let evtCopy = new CustomEvent(evt.type, { detail: evt.detail });
+        this.dispatchEvent(evtCopy);
+      });
     }
   }
 
