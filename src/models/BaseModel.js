@@ -26,18 +26,41 @@ export default class BaseModel {
 		 * The id of the model.
 		 *
 		 * Unique across all models of the same type.
+		 * For example, the id of a [Message]{@link Message} is unique across all messages.
+		 * The id of an [Identity]{@link Identity} is unique across all identities.
+		 * However the id of a [Message]{@link Message} may coincidentally be the
+		 * same as the id of an [Identity]{@link Identity}.
+		 *
 		 * @type {string}
 		 */
 		this.id = id;
 
 		/**
 		 * The date that the model was created.
+		 * Handled by the server and does not need to be set by the client.
+		 *
+		 * *Practical Examples*
+		 *
+		 * Sort messages in ascending order by their createdAt date:
+		 *
+		 * ```js
+		 * messages.sort((a, b) => a.createdAt - b.createdAt);
+		 * ```
 		 * @type {Date}
 		 */
 		this.createdAt = new Date(createdAt);
 
 		/**
 		 * The date that the model was last updated.
+		 * Handled by the server and does not need to be set by the client.
+		 *
+		 * *Practical Examples*
+		 *
+		 * Sort messages in ascending order by when they were last edited:
+		 *
+		 * ```js
+		 * messages.sort((a, b) => a.createdAt - b.createdAt);
+		 * ```
 		 * @type {Date}
 		 */
 		this.updatedAt = new Date(updatedAt);
