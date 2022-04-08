@@ -64,7 +64,7 @@ export default class WebSocketEndpoint extends EventTarget {
 					messageEvent = "messageupdate";
 				}
 				else if (data.type === "message_delete") {
-					messageEvent = "messagedelete";
+					messageEvent = "messagedeletion";
 				}
 
 				if (messageEvent) {

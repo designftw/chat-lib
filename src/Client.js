@@ -28,7 +28,7 @@ import { toArray, intersection } from "./util.js";
  *
  * When a message is deleted it no longer exists on the server so you cannot call
  * [getMessageById]{@link Client#getMessageById} to get information about a deleted message.
- * @event messagedelete
+ * @event messagedeletion
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and handle name of the message which was deleted.
  */
@@ -62,7 +62,7 @@ import { toArray, intersection } from "./util.js";
  * The Client is the interface for interacting with the ChatServer.
  *
  *
- * @fires messagedelete
+ * @fires messagedeletion
  * @fires messageupdate
  * @fires message
  */
@@ -132,7 +132,7 @@ export default class Client extends EventTarget {
     this.account = undefined;
 
     // Redirect all events from private objects to the Client object
-    for (let event of ["message", "messageupdate", "messagedelete", "autherror"]) {
+    for (let event of ["message", "messageupdate", "messagedeletion", "autherror"]) {
       this.#webSocket.addEventListener(event, evt => this.dispatchEvent(evt));
     }
   }
