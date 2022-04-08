@@ -37,4 +37,16 @@ export default class PrivateData extends BaseModel {
 		 */
 		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
+
+	/**
+	 * Convert this identity to a JSON object that could be fed to its constructor to create another object with the same data
+	 * @returns {Object}
+	 */
+	 toJSON() {
+		return {
+			...super.toJSON(),
+			entityId: this.entityId,
+			data: this.data
+		}
+	}
 }

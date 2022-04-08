@@ -49,4 +49,17 @@ export default class Message extends BaseModel {
 		 */
 		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
+
+	/**
+	 * Convert this message to a JSON object that could be fed to its constructor to create another object with the same data
+	 * @returns {Object}
+	 */
+	 toJSON() {
+		return {
+			...super.toJSON(),
+			sender: this.sender.toJSON(),
+			recipients: this.recipients.map((recipient) => recipient.toJSON()),
+			data: this.data
+		}
+	}
 }

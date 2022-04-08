@@ -55,4 +55,16 @@ export default class Account extends BaseModel {
 		 */
 		this.handle = handle;
 	}
+
+	/**
+	 * Convert this identity to a JSON object that could be fed to its constructor to create another object with the same data
+	 * @returns {Object}
+	 */
+	 toJSON() {
+		return {
+			...super.toJSON(),
+			handle: this.handle,
+			email: this.email
+		}
+	}
 }

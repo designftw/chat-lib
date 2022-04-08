@@ -65,4 +65,16 @@ export default class BaseModel {
 		 */
 		this.updatedAt = new Date(updatedAt);
 	}
+
+	/**
+	 * Convert this entity to a JSON object that could be fed to its constructor to create another object with the same data
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			id: this.id,
+			createdAt: this.createdAt,
+			updatedAt: this.updatedAt
+		}
+	}
 }
