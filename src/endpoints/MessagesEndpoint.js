@@ -35,8 +35,8 @@ export default class MessagesEndpoint extends Endpoint {
 			"user-alias-name": ownAlias,
 		};
 
-		if (interlocutors !== undefined) {
-			headers[interlocutors] = JSON.stringify(interlocutors);
+		if (interlocutors?.length > 0) {
+			headers["interlocutors"] = JSON.stringify(interlocutors);
 		}
 
 		if (sinceTime !== undefined) {
