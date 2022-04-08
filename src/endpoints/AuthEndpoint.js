@@ -79,7 +79,15 @@ export default class AuthEndpoint extends Endpoint {
 	 * Helper method so that accounts store the first alias as the username.
 	 */
 	async #getUsername() {
-			let aliasesArray = await this.request("aliases");
-			return new Identity(aliasesArray[0]).handle;
+		let aliasesArray = await this.request("aliases");
+
+		if (aliasesArray.length === 0) {
+			console.warn("No aliases found for account");
+			return;
+		}
+
+		let firstIdentity = aliasesArray[0];
+		firstIdentity.handle = firstIdentity.name;
+		return new Identity(firstIdentity).handle;
 	}
 }
