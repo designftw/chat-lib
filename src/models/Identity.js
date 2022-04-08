@@ -90,4 +90,12 @@ export default class Identity extends BaseModel {
 		 */
 		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
 	}
+
+	/**
+	 * When this identity is coerced to a string, just return the handle.
+	 * @returns {string} This identity's handle
+	 */
+	toString() {
+		return this.handle;
+	}
 }
