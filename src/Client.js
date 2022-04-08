@@ -36,9 +36,9 @@ import { toArray, intersection } from "./util.js";
 /**
  * Update Message Event
  *
- * Called when a message is updated. For example if the payload changes. Use
+ * Called when a message is updated. For example if the data changes. Use
  * [getMessageById]{@link Client#getMessageById} to get information about the updatedMessage such as the
- * new payload.
+ * new data.
  * @event messageupdate
  * @type {CustomEvent}
  * @property {messageEventDetails} detail the detail contains a messageEventDetails with the id and handle name of the message which was updated.
@@ -92,7 +92,7 @@ export default class Client extends EventTarget {
   #messages;
 
   /**
-  * Helper class for private payload routes.
+  * Helper class for private data routes.
   * @type {PrivateDataEndpoint}
   */
   #privateData;
@@ -259,13 +259,13 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Send a message from the passed in handle to the passed in recipients with the passed in payload.
+   * Send a message from the passed in handle to the passed in recipients with the passed in data.
    *
    * Note the currently logged in account must own the handle associated with the handle.
    * @param {Object} options
    * @param {string | Identity} options.from the sender, either a handle or Identity object
    * @param {string | string[] | Identity | Identity[]} options.to One or more recipients of the message, either as handles or Identity objects
-   * @param {Object} options.data the payload associated with the message.
+   * @param {Object} options.data the data associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
   sendMessage({from = this.account.handle, to, data}) {
@@ -325,7 +325,7 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Create a new identity with the passed in handle and payload.
+   * Create a new identity with the passed in handle and data.
    * @param {Object} options
    * @param {string} options.handle the name of the new handle
    * @param {Object} [options.data] the data to associate with the handle
@@ -339,7 +339,7 @@ export default class Client extends EventTarget {
    * Update an existing identity.
    * @param {string} handle the handle to update.
    * @param {Object} updates object containing the updates to the handle.
-   * @param {Object} [updates.data] the optional new payload for the handle
+   * @param {Object} [updates.data] the optional new data for the handle
    * @returns {Promise<Identity>} The Identity object that was updated
    */
   updateIdentity(handle, { data: newData } = {}) {
@@ -359,12 +359,12 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Create a new private payload for the passed in entity, private to the passed in handle.
+   * Create a new private data for the passed in entity, private to the passed in handle.
    * @param {Object} options
-   * @param {string} options.handle the handle which is creating the payload.
-   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload is attached to.
-   * @param {Object} options.data the payload to attach to the entity associated with the passed in entityId, private to the handle associated with the passed in handle.
-   * @returns {Promise<PrivateData>} the new private payload.
+   * @param {string} options.handle the handle which is creating the data.
+   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the data is attached to.
+   * @param {Object} options.data the data to attach to the entity associated with the passed in entityId, private to the handle associated with the passed in handle.
+   * @returns {Promise<PrivateData>} the new private data.
    */
   createPrivateData({handle, entityId, data}) {
     handle = handle ?? this.account.handle;
@@ -372,11 +372,11 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Get the private payload associated with the passed in handle and entity.
+   * Get the private data associated with the passed in handle and entity.
    * @param {Object} options
-   * @param {string} options.handle the handle associated with the payload to get.
-   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to get is attached to.
-   * @returns {Promise<PrivateData>} the private payload associated with the passed in handle and entity.
+   * @param {string} options.handle the handle associated with the data to get.
+   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the data to get is attached to.
+   * @returns {Promise<PrivateData>} the private data associated with the passed in handle and entity.
    */
   getPrivateData({handle, entityId}) {
     handle = handle ?? this.account.handle;
@@ -384,22 +384,22 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Update the private payload associated with the passed in handle and entity.
+   * Update the private data associated with the passed in handle and entity.
    * @param {Object} options
-   * @param {string} options.handle the handle associated with the payload to update.
-   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to update is attached to.
-   * @param {Object} options.newData the new private payload.
-   * @returns {Promise<PrivateData>} the updated private payload.
+   * @param {string} options.handle the handle associated with the data to update.
+   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the data to update is attached to.
+   * @param {Object} options.newData the new private data.
+   * @returns {Promise<PrivateData>} the updated private data.
    */
   updatePrivateData({handle = this.account.handle, entityId, newData}) {
     return this.#privateData.updatePayload(handle, entityId, newData);
   }
 
   /**
-   * Delete the private payload associated with the passed in handle and entity.
+   * Delete the private data associated with the passed in handle and entity.
    * @param {Object} options
-   * @param {string} options.handle the handle associated with the payload to delete.
-   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the payload to delete is attached to.
+   * @param {string} options.handle the handle associated with the data to delete.
+   * @param {string} options.entityId the [id]{@link BaseModel#id} of the entity ({@link Message}, {@link Alias}, or {@link Account}) the data to delete is attached to.
    * @returns {Promise<any>} A validation message.
    */
   deletePrivateData({handle = this.account.handle, entityId}) {
