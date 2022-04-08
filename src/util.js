@@ -35,7 +35,7 @@ export function request (url, {
  * Create Headers from an object.
  * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  */
-function createHeadersFromObject(headers = undefined) {
+function createHeadersFromObject(headers) {
   let headersToAdd = new Headers();
   if (headers !== undefined) {
     for (let key of Object.keys(headers)) {
@@ -58,7 +58,7 @@ function createJSONEncodedBody(body) {
  * @param {Object.<string, string> | undefined} headers an object containing key values encoded in the headers.
  * @returns {Headers}
  */
-function createJSONEncodedHeaders(headers = undefined) {
+function createJSONEncodedHeaders(headers) {
   let defaultHeaders = createHeadersFromObject(headers);
   defaultHeaders.append("Content-Type", "application/json");
   return defaultHeaders;
