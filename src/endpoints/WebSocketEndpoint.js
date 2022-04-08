@@ -69,20 +69,14 @@ export default class WebSocketEndpoint extends EventTarget {
 
 				if (messageEvent) {
 					let e = new CustomEvent(messageEvent, {
-						detail: {
-							messageId: data.messageId,
-							alias,
-						},
+						detail: data,
 					});
 					this.dispatchEvent(e);
 				}
 
 				if (data.type === "unauthorized") {
 					let e = new CustomEvent("autherror", {
-						detail: {
-							message: data.message,
-							alias
-						},
+						detail: data,
 					});
 					this.dispatchEvent(e);
 				}
