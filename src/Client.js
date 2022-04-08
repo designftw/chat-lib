@@ -10,6 +10,8 @@ import MessagesEndpoint from "./endpoints/MessagesEndpoint.js";
 import PrivateDataEndpoint from "./endpoints/PrivateDataEndpoint.js";
 import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
 
+import { toArray, intersection } from "./util.js";
+
 /**
  * autherror: detail is {message, handle}
  */
@@ -53,11 +55,12 @@ import FriendsEndpoint from "./endpoints/FriendsEndpoint.js";
  */
 
 /**
+ * ```js
+ * import Client from "https://designftw.github.io/chat-lib/src/Client.js";
+ * ```
+ *
  * The Client is the interface for interacting with the ChatServer.
  *
- * ```
- * import Client from "https://designftw.github.io/chat-lib/src/client.js";
- * ```
  *
  * @fires messagedelete
  * @fires messageupdate
@@ -189,17 +192,39 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Get all the messages for the passed in handle
+   * Get an array of all messages that match the provided filters (see below).
+   * Note that regardless of the filters provided, only messages the currently logged in account has access to will be returned.
    *
-   * Note the currently logged in account must own the handle associated with the handle.
    * @param {Object} options
-   * @param {string} [options.handle] the handle to get messages for.
-   * @param {string[]} [options.interlocutors] an optional list of the senders and recipients of the messages.
+   * @param {string | Identity | string[] | Identity[]} [options.from] Sender(s) of the messages, either as handle(s) or Identity object(s)
+   * @param {string | Identity | string[] | Identity[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  getMessages({ handle = this.account.handle, interlocutors, since } = {}) {
-    return this.#messages.getMessagesForAlias(handle, interlocutors, since);
+  async getMessages({ from = [], to = [], since } = {}) {
+    // Normalize senders and recipients to arrays of handles
+    from = toArray(from).map(sender => sender instanceof Identity? sender.handle : sender);
+    to = toArray(to).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
+
+    let messages = await this.#messages.getMessagesForAlias(this.account.handle, [...from, ...to], since);
+
+    // Filter messages to only those that match the provided filters
+    messages = messages.filter(message => {
+      if (from.length > 0) {
+        // Filtering by sender(s)
+        return from.includes(message.sender.handle);
+      }
+
+      if (to.length > 0) {
+        // Filtering by recipient(s)
+        let recipients = message.recipients.map(recipient => recipient.handle);
+        return intersection(recipients, to).length > 0;
+      }
+
+      return true;
+    });
+
+    return messages;
   }
 
   /**
@@ -233,24 +258,26 @@ export default class Client extends EventTarget {
 
   /**
    * Update a message with the passed in message id which was sent by the passed in handle.
+   * @param {Message | string} message Message object or message id
    * @param {Object} options
-   * @param {string} options.handle the handle which sent the message.
-   * @param {string} options.id the id associated with the message.
-   * @param {Object} options.data the new payload for the message.
-   * @returns {Promise<Message>} The model of the updated message.
+   * @param {string} [options.handle] the handle which sent the message.
+   * @param {Object} options.data the updated data associated with the message
+   * @returns {Promise<Message>} The Message object of the updated message.
    */
-  updateMessage({handle = this.account.handle, id, data}) {
+  updateMessage(message, {handle = this.account.handle, data}) {
+    let id = message instanceof Message? message.id : message;
     return this.#messages.updateMessage(handle, id, data);
   }
 
   /**
    * Delete a message with the passed in messageId which was sent by the passed in handle.
-   * @param {Object} options
-   * @param {string} options.handle the handle which sent the message.
-   * @param {string} options.id the id associated with the message.
+   * @param {Message | string} message Message object or message id
+   * @param {Object} [options]
+   * @param {string} [options.handle] the handle which sent the message.
    * @returns {Promise<any>} a validation message.
    */
-  deleteMessage({handle = this.account.handle, id}) {
+  deleteMessage(message, {handle = this.account.handle} = {}) {
+    let id = message instanceof Message? message.id : message;
     return this.#messages.deleteMessage(handle, id);
   }
 
@@ -263,11 +290,18 @@ export default class Client extends EventTarget {
   }
 
   /**
-   * Get an identity by its handle
-   * @param {string} handle the handle to get
+   * Get an identity by its handle.
+   * If an Identity object is passed in, it will just be returned.
+   * This way this function can be used to normalize a handle | Identity object into an Identity object.
+   *
+   * @param {string | Identity} handle the handle to get
    * @returns {Promise<Identity>} The Alias model associated with the passed in name
    */
-  getIdentity(handle) {
+  async getIdentity(handle) {
+    if (handle instanceof Identity) {
+      return handle;
+    }
+
     return this.#identities.getAlias(handle);
   }
 

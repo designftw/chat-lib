@@ -89,3 +89,25 @@ export function getErrorFromResponse(response) {
     throw responseOrError;
   });
 }
+
+/**
+ * Normalize an object to an array.
+ * If the object is an array, it will be returned, otherwise it will be wrapped with an array.
+ * @param {*} obj
+ * @returns Array
+ */
+export function toArray(obj) {
+  return Array.isArray(obj)? obj : [obj];
+}
+
+/**
+ * Compute the intersection of two iterables and return it as a set.
+ * @param {Iterable.<*>} arr1
+ * @param {Iterable.<*>} arr2
+ */
+export function intersection(arr1, arr2) {
+  arr1 = new Set(arr1);
+  arr2 = new Set(arr2);
+
+  return new Set([...arr1].filter(x => arr2.has(x)));
+}
