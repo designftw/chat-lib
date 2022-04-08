@@ -30,13 +30,13 @@ export default class Message extends BaseModel {
 		super({ id, createdAt, updatedAt });
 
 		/**
-		 * The identity of the handle who sent the message
+		 * The identity who sent the message
 		 * @type {Identity}
 		 */
 		this.sender = new Identity(sender);
 
 		/**
-		 * The identities of the handles who received the message
+		 * The identities who received the message
 		 * @type {Identity[]}
 		 */
 		this.recipients = recipients.map((recipient) => new Identity(recipient));

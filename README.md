@@ -113,3 +113,8 @@ Instead, to receive updates, you listen to events on the `client` object, such a
 - [`messagedeletion`](https://designftw.github.io/chat-lib/global.html#event:messagedeletion) for deleted messages
 
 Then, `evt.detail` will contain relevant data about the message.
+
+## General advice
+
+- Each entity comes with a `toJSON()` method that will return a JSON object with the same data. This can be quite useful for debugging
+- If something in the docs is confusing, please reach out. Chances are other students will find it confusing too!
