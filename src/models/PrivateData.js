@@ -39,7 +39,7 @@ export default class PrivateData extends BaseModel {
 	}
 
 	/**
-	 * Convert this identity to a JSON object that could be fed to its constructor to create another object with the same data
+	 * Convert this entity to a JSON object that could be fed to its constructor to create another object with the same data
 	 * @returns {Object}
 	 */
 	 toJSON() {
