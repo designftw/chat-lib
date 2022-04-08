@@ -167,9 +167,8 @@ export default class Client extends EventTarget {
    * @returns {Promise<Account>} Upon success returns the account which was logged in.
    */
   async login(email, password) {
-    this.account = await this.#auth.login(email, password);
-    this.subscribe(this.account.handle);
-    this.dispatchEvent(new CustomEvent("login", { detail: { account: this.account } }));
+    let account = await this.#auth.login(email, password);
+    this.#postLogin(account);
     return this.account;
   }
 
@@ -186,9 +185,24 @@ export default class Client extends EventTarget {
 
   /**
    * Check if the user is currently logged in
+   * @returns {Promise<Account | null>} Returns the account if the user is logged in, otherwise returns undefined.
    */
-  isLoggedIn() {
-    return this.#auth.isLoggedIn();
+  async getLoggedInAccount() {
+    let {isLoggedIn, account} = await this.#auth.isLoggedIn();
+
+    if (!isLoggedIn) {
+      return null;
+    }
+
+    this.#postLogin(account);
+
+    return account;
+  }
+
+  #postLogin(account) {
+    this.account = account;
+    this.subscribe(this.account.handle);
+    this.dispatchEvent(new CustomEvent("login", { detail: { account: this.account } }));
   }
 
   /**
@@ -247,12 +261,14 @@ export default class Client extends EventTarget {
    * Note the currently logged in account must own the handle associated with the handle.
    * @param {Object} options
    * @param {string | Identity} options.from the sender, either a handle or Identity object
-   * @param {string[]} options.to a list of recipients or of the message.
+   * @param {string | string[] | Identity | Identity[]} options.to One or more recipients of the message, either as handles or Identity objects
    * @param {Object} options.data the payload associated with the message.
    * @returns {Promise<Message>} The model of the sent message.
    */
   sendMessage({from = this.account.handle, to, data}) {
     from = from instanceof Identity? from.handle : from;
+    to = toArray(to).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
+    console.log(from, to, data);
     return this.#messages.sendMessage(from, to, data);
   }
 
