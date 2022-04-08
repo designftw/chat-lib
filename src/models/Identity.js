@@ -1,13 +1,29 @@
 import BaseModel from "./BaseModel.js";
 
 /**
- * The alias is the recipient or sender of messages.
+ * The Identity is associated with a [handle]{@link Identity#handle}.
+ * The handle can be used as the sender or recipient of messages, and can be
+ * used to add friends.
  *
- * One account can have multiple aliases, for example an account could
- * have a personal and work alias. The chat UI could allow the user
- * to send and receive messages from multiple aliases at once. Similar to
- * associating multiple email addresses with on gmail account, or having
- * multiple slack workspaces logged in.
+ * During [signup]{@link Client#signup} the user provides a [handle]{@link
+ * Identity#handle} which is used to create a default [Identity]{@link Identity}
+ * for the user.
+ * That handle is accessible in the [Account]{@link * Account#handle} and is used
+ * as the default argument for [Client]{@link * Client} methods that expect a
+ * handle argument for the currently logged in user.
+ *
+ * Many chat applications will have a single [Identity]{@link Identity} for each
+ * [Account]{@link Account}.
+ * If your chat application uses one identity per account you can skip the rest
+ * of this paragraph.
+ * Some applications may have multiple [Identities]{@link Identity}
+ * for a single [Account]{@link Account}.
+ * For example, some email application allow users to login with a single set of
+ * credentials, but send and receive messages from multiple email addresses.
+ * For these types of applications, you can create multiple [Identities]{@link Identity}
+ * using the [Client]{@link Client}.
+ * Just be sure to sepcify the correct [handle]{@link Identity#handle} when
+ * calling methods such as [sendMessage]{@link Client#sendMessage}.
  */
 export default class Identity extends BaseModel {
 	/**
@@ -35,21 +51,41 @@ export default class Identity extends BaseModel {
 		super({ id, createdAt, updatedAt });
 
 		/**
-		 * The name associated with the alias. This is used to display
-		 * the alias in the UI.
+		 * The unique handle associated with the identity.
+		 * Used to specify the sender or recipient of messages and to add and remove friends.
 		 *
-		 * Unique across all aliases.
+		 * Must be unique across all identities.
 		 * @type {string}
 		 */
 		this.handle = handle;
 
 		/**
-		 * Public arbitrary metadata about an alias stored as a string.
+		 * Public readable object containing data associated with this identity.
+		 * The [Account]{@link Account} that owns this [Identity]{@link Identity} can
+		 * set this data using [Client#updateIdentity]{@link Client#updateIdentity}.
 		 *
-		 * The payload is used so that users can store arbitrary metadata
-		 * with objects used in the chat application. For example a user
-		 * could publicly assign availability to their alias, or provide a public
-		 * link to an avatar.
+		 * The data can be any shape but it must be an object.
+		 *
+		 * *Practical Examples*
+		 *
+		 * The data could be a user's profile picture:
+		 *
+		 * ```js
+		 * {image: "https://example.com/profile.png"}
+		 * ```
+		 *
+		 * The data could be a user's status:
+		 *
+		 * ```js
+		 * {status: "I'm online!"}
+		 * ```
+		 *
+		 * The data could be a user's location:
+		 *
+		 * ```js
+		 * {location: {lat: 42.3601, lng: 71.0942}}
+		 * ```
+		 *
 		 * @type {Object}
 		 */
 		this.data = typeof(data) === "string" ? JSON.parse(data) : data;
