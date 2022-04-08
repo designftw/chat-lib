@@ -55,6 +55,7 @@ export default class WebSocketEndpoint extends EventTarget {
 
 			socket.addEventListener("message", evt => {
 				const data = JSON.parse(evt.data);
+
 				let messageEvent;
 
 				if (data.type === "new_message") {
