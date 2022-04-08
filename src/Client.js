@@ -196,8 +196,8 @@ export default class Client extends EventTarget {
    * Note that regardless of the filters provided, only messages the currently logged in account has access to will be returned.
    *
    * @param {Object} options
-   * @param {string | Identity | (string | Identity)[]} [options.from] Sender(s) of the messages, either as handle(s) or Identity object(s)
-   * @param {string | Identity | (string | Identity)[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
+   * @param {string | Identity | string[] | Identity[]} [options.from] Sender(s) of the messages, either as handle(s) or Identity object(s)
+   * @param {string | Identity | string[] | Identity[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
