@@ -1,4 +1,5 @@
 import Endpoint from "./Endpoint.js";
+import Identity from "../models/Identity.js";
 
 /**
  * The Friends endpoint of the chat server
@@ -17,7 +18,7 @@ export default class FriendsEndpoint extends Endpoint {
 	/**
 	 * Get all the friends of the passed in alias.
 	 * @param {string} ownAlias the alias whose friends will be retrieved.
-	 * @returns {Promise<Alias[]>} an array of aliases which are friends with the passed in alias
+	 * @returns {Promise<Identity[]>} an array of aliases which are friends with the passed in alias
 	 */
 	async getFriendsForAlias(ownAlias) {
 		let friendsListDTO = await this.request("friends", {
@@ -26,7 +27,7 @@ export default class FriendsEndpoint extends Endpoint {
 			}
 		});
 
-		return friendsListDTO.map(aliasDTO => new Alias(aliasDTO));
+		return friendsListDTO.map(aliasDTO => new Identity(aliasDTO));
 	}
 
 	/**
