@@ -217,26 +217,38 @@ export default class Client extends EventTarget {
    * @param {string | Identity | string[] | Identity[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {string[] | Identity[]} [options.participants] Senders OR recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
-   * @param {Date} [options.exact = false] Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
+   * @param {"any"|"all"|"exact"} [options.match="any"] The policy to use when filtering messages by sender, recipient or participants.
+   * "any" would return messages with any of the parties specified
+   * "all" would return messages with all of the parties specified (but more are possible)
+   * "exact" would return messages with the exact parties specified
+   * @param {Date} [options.exact = false] Deprecated. Please use policy instead. Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
    * E.g. if we specify `to: ["A", "B"]`, do we want messages sent to either A, or B, or both, or both plus some other people, or messages sent to exactly A and B?
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
-  async getMessages({ from = [], to = [], participants = [], since, exact = false } = {}) {
+  async getMessages({ from = [], to = [], participants = [], since, match, exact } = {}) {
     // Normalize senders and recipients to arrays of handles
     from = toArray(from).map(sender => sender instanceof Identity? sender.handle : sender);
     from = unique(from);
     to = toArray(to).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
     to = unique(to);
     participants = participants.map(recipient => recipient instanceof Identity? recipient.handle : recipient);
+    participants = unique(participants);
 
-    if (from.length > 1 && exact) {
+    if (exact !== undefined && match === undefined) {
+      console.warn("[client.getMessages()] Warning: `exact` is deprecated. Please use `match` instead.");
+      match = exact ? "exact" : "any";
+    }
+
+    match = match || "any";
+
+    if (from.length > 1 && match !== "any") {
       throw new Error("Cannot specify more than one sender in ‘from’ when we are looking for exact matches, since messages only have one sender.");
     }
 
-    participants.push(...from, ...to);
-    participants = unique(participants);
+    // Actual filter for API
+    let interlocutors = unique([...from, ...to, ...participants]);
 
-    let messages = await this.#messages.getMessagesForAlias(this.account.handle, participants, since);
+    let messages = await this.#messages.getMessagesForAlias(this.account.handle, interlocutors, since);
 
     // Filter messages to only those that match the provided filters
     messages = messages.filter(message => {
@@ -253,23 +265,31 @@ export default class Client extends EventTarget {
         // Filtering by recipient(s)
         let toIntersection = intersection(recipients, to);
 
-        if (exact) {
-          if (toIntersection.size !== to.length) {
+        if (toIntersection.size === 0) {
+          // If the intersection is empty, we should return false regardless of the match policy
+          return false;
+        }
+
+        if (match !== "any") {
+          // Only if match == any the intserection can be smaller than the to array
+          if (toIntersection.size < to.length) {
             return false;
           }
-        }
-        else {
-          if (toIntersection.size === 0) {
-            return false;
+
+          if (match === "exact") {
+            // If we are looking for exact matches, we should return false there are more recipients than specified
+            if (to.length !== recipients.length) {
+              return false;
+            }
           }
         }
       }
 
-      if (participants.length > from.length + to.length) {
+      if (participants.length > 0) {
         // We were also filtering by participants
-        // We only need to do something here if exact = true,
+        // We only need to do something here if match != any,
         // otherwise the filtering is already done on the server
-        if (exact) {
+        if (match !== "any") {
           let messageParticipants = unique([sender, ...recipients]);
 
           return intersection(messageParticipants, participants).size === participants.length;
