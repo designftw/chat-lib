@@ -218,10 +218,10 @@ export default class Client extends EventTarget {
    * @param {string[] | Identity[]} [options.participants] Senders OR recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
    * @param {"any"|"all"|"exact"} [options.match="any"] The policy to use when filtering messages by sender, recipient or participants.
-   * "any" would return messages with any of the parties specified
-   * "all" would return messages with all of the parties specified (but more are possible)
-   * "exact" would return messages with the exact parties specified
-   * @param {Date} [options.exact = false] Deprecated. Please use `match` instead. Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
+   * - "any" would return messages with any of the parties specified
+   * - "all" would return messages with all of the parties specified (but more are possible)
+   * - "exact" would return messages with the exact parties specified
+   * @param {boolean} [options.exact = false] Deprecated. Please use `match` instead. Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
    * E.g. if we specify `to: ["A", "B"]`, do we want messages sent to either A, or B, or both, or both plus some other people, or messages sent to exactly A and B?
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
@@ -271,7 +271,7 @@ export default class Client extends EventTarget {
         }
 
         if (match !== "any") {
-          // Only if match == any the intserection can be smaller than the to array
+          // Only if match == any the intersection can be smaller than the to array
           if (toIntersection.size < to.length) {
             return false;
           }
