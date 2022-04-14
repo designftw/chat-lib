@@ -248,7 +248,11 @@ export default class Client extends EventTarget {
     // Actual filter for API
     let interlocutors = unique([...from, ...to, ...participants]);
 
+    // alias in this case is not a filter, the api just checks that the
+    // account owns the message
     let messages = await this.#messages.getMessagesForAlias(this.account.handle, interlocutors, since);
+
+    messages = await Promise.all(messages.map(message => this.#messages.getMessage(this.account.handle, message.id)));
 
     // Filter messages to only those that match the provided filters
     messages = messages.filter(message => {
