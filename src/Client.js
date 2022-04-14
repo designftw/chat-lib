@@ -236,7 +236,7 @@ export default class Client extends EventTarget {
 
     if (exact !== undefined && match === undefined) {
       console.warn("[client.getMessages()] Warning: `exact` is deprecated. Please use `match` instead.");
-      match = exact ? "exact" : "any";
+      match = exact ? "all" : "any";
     }
 
     match = match || "any";
