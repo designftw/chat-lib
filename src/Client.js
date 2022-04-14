@@ -292,7 +292,18 @@ export default class Client extends EventTarget {
         if (match !== "any") {
           let messageParticipants = unique([sender, ...recipients]);
 
-          return intersection(messageParticipants, participants).size === participants.length;
+          let participantIntersection = intersection(messageParticipants, participants);
+
+          if (participantIntersection.size < participants.length) {
+            return false;
+          }
+
+          if (match === "exact") {
+            // If we are looking for exact matches, we should return false there are more participants than specified
+            if (participants.length !== messageParticipants.length) {
+              return false;
+            }
+          }
         }
       }
 
