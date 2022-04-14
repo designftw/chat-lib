@@ -221,7 +221,7 @@ export default class Client extends EventTarget {
    * "any" would return messages with any of the parties specified
    * "all" would return messages with all of the parties specified (but more are possible)
    * "exact" would return messages with the exact parties specified
-   * @param {Date} [options.exact = false] Deprecated. Please use policy instead. Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
+   * @param {Date} [options.exact = false] Deprecated. Please use `match` instead. Do we want to return messages that match the `to` and `participants` params exactly, or messages that contain at least one handle in each of these arrays?
    * E.g. if we specify `to: ["A", "B"]`, do we want messages sent to either A, or B, or both, or both plus some other people, or messages sent to exactly A and B?
    * @returns {Promise<Message[]>} a list of messages which pass the filters.
    */
