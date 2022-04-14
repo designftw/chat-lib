@@ -215,7 +215,7 @@ export default class Client extends EventTarget {
    * @param {Object} options
    * @param {string | Identity | string[] | Identity[]} [options.from] Sender(s) of the messages, either as handle(s) or Identity object(s)
    * @param {string | Identity | string[] | Identity[]} [options.to] Recipient(s) of the messages, either as handle(s) or Identity object(s)
-   * @param {string[] | Identity[]} [options.participants] Senders OR recipient(s) of the messages, either as handle(s) or Identity object(s)
+   * @param {string | Identity | string[] | Identity[]} [options.participants] Senders OR recipient(s) of the messages, either as handle(s) or Identity object(s)
    * @param {Date} [options.since] an optional date to limit the request by. only receive messages since this date.
    * @param {"any"|"all"|"exact"} [options.match="any"] The policy to use when filtering messages by sender, recipient or participants.
    * - "any" would return messages with any of the parties specified
@@ -231,7 +231,7 @@ export default class Client extends EventTarget {
     from = unique(from);
     to = toArray(to).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
     to = unique(to);
-    participants = participants.map(recipient => recipient instanceof Identity? recipient.handle : recipient);
+    participants = toArray(participants).map(recipient => recipient instanceof Identity? recipient.handle : recipient);
     participants = unique(participants);
 
     if (exact !== undefined && match === undefined) {
