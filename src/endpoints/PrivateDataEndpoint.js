@@ -48,7 +48,7 @@ export default class PrivateDataEndpoint extends Endpoint {
 			},
 		});
 
-		return new PrivateData({...payloadDTO, data: payloadDTO.payload[0]});
+		return new PrivateData({...payloadDTO[0], data: payloadDTO[0].payload});
 	}
 
 	/**
