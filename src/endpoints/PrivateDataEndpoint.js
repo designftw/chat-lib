@@ -59,7 +59,8 @@ export default class PrivateDataEndpoint extends Endpoint {
 	 * @returns {Promise<PrivateData>} the updated private payload model.
 	 */
 	async updatePayload(ownAlias, entityId, newData) {
-		let resultDTO = await this.request(`payloads/${entityId}`, {
+		const {id: payloadId} = await this.getPayload(ownAlias, entityId);
+		let resultDTO = await this.request(`payloads/${payloadId}`, {
 			method: "PUT",
 			body: { payload: JSON.stringify(newData) },
 			headers: {
@@ -77,8 +78,9 @@ export default class PrivateDataEndpoint extends Endpoint {
 	 * @param {string} entityId the [id]{@link BaseModel#id} of the entity the payload to delete is attached to.
 	 * @returns {Promise<any>} a validation message.
 	 */
-	deletePayload(ownAlias, entityId) {
-		return this.request(`payloads/${entityId}`, {
+	async deletePayload(ownAlias, entityId) {
+		const {id: payloadId} = await this.getPayload(ownAlias, entityId);
+		return this.request(`payloads/${payloadId}`, {
 			method: "DELETE",
 			headers: {
 				"user-alias-name": ownAlias,
